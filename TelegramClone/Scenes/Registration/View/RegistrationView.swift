@@ -1,30 +1,31 @@
 //
-//  LoginView.swift
+//  RegistrationView.swift
 //  TelegramClone
 //
-//  Created by talgar osmonov on 3/6/21.
+//  Created by talgar osmonov on 4/6/21.
 //
+
 
 import SnapKit
 import UIKit
 
-protocol LoginViewLogic: UIView {
-    func getDHAccount() -> UIButton
+protocol RegistrationViewLogic: UIView {
+    func getHAccount() -> UIButton
 }
 
-final class LoginView: UIView {
+final class RegistrationView: UIView {
     
     // MARK: - Views
     
-    private lazy var dontHaveAnAcoountButton: UIButton = {
+    private lazy var haveAnAcoountButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Don't have an account? SignUp", for: .normal)
+        button.setTitle("Have an account? Login", for: .normal)
         return button
     }()
     
-    private lazy var loginButton: UIButton = {
+    private lazy var registrationButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("LOGIN", for: .normal)
+        button.setTitle("REGISTRATION", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = .systemBlue
         return button
@@ -43,8 +44,15 @@ final class LoginView: UIView {
         return tf
     }()
     
+    private lazy var repeatPasswordTF: UITextField = {
+        let tf = UITextField()
+        tf.placeholder = "repeat password"
+        tf.isSecureTextEntry = true
+        return tf
+    }()
+    
     private lazy var tfStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [emailTF, passwordTF])
+        let stackView = UIStackView(arrangedSubviews: [emailTF, passwordTF, repeatPasswordTF])
         stackView.axis = .vertical
         stackView.spacing = 3
         stackView.distribution = .fillEqually
@@ -74,16 +82,16 @@ final class LoginView: UIView {
     
     private func addSubviews() {
         addSubview(tfStackView)
-        addSubview(loginButton)
-        addSubview(dontHaveAnAcoountButton)
+        addSubview(registrationButton)
+        addSubview(haveAnAcoountButton)
     }
     
     private func addConstraints() {
-        dontHaveAnAcoountButton.snp.makeConstraints { make in
+        haveAnAcoountButton.snp.makeConstraints { make in
             make.bottom.equalTo(safeArea.bottom).inset(10)
             make.leading.trailing.equalToSuperview().inset(20)
         }
-        loginButton.snp.makeConstraints { make in
+        registrationButton.snp.makeConstraints { make in
             make.top.equalTo(tfStackView.snp.bottom).offset(10)
             make.leading.trailing.equalToSuperview().inset(20)
             make.height.equalTo(50)
@@ -91,15 +99,15 @@ final class LoginView: UIView {
         tfStackView.snp.makeConstraints { make in
             make.top.equalTo(safeArea.top)
             make.leading.trailing.equalToSuperview().inset(20)
-            make.height.equalTo(150)
+            make.height.equalTo(200)
         }
     }
 }
 
 // MARK: - ProfileViewLogic
 
-extension LoginView: LoginViewLogic {
-    func getDHAccount() -> UIButton {
-        return dontHaveAnAcoountButton
+extension RegistrationView: RegistrationViewLogic {
+    func getHAccount() -> UIButton {
+        return haveAnAcoountButton
     }
 }

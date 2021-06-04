@@ -17,11 +17,7 @@ protocol LoginInteractorOutput: AnyObject {
 }
 
 final class LoginInteractor: LoginInteractorProtocol {
-    private let dataProvider: LoginDataProviderProtocol?
+    private let dataProvider: LoginDataProviderProtocol = LoginDataProvider()
     weak var output: LoginInteractorOutput?
-
-    init(dataProvider: LoginDataProviderProtocol = LoginDataProvider()) {
-        self.dataProvider = dataProvider
-    }
 
 }

@@ -9,10 +9,10 @@
 import UIKit
 
 protocol LoginPresenterProtocol {
-    
+    func goToSignUp()
 }
 
-final class LoginPresenter: LoginPresenterProtocol {
+final class LoginPresenter {
 
     private let interactor: LoginInteractorProtocol?
     private let router: LoginRouterProtocol?
@@ -23,8 +23,17 @@ final class LoginPresenter: LoginPresenterProtocol {
         self.router = router
         self.view = view
     }
-
 }
+
+// MARK: - LoginPresenterProtocol
+
+extension LoginPresenter: LoginPresenterProtocol {
+    func goToSignUp() {
+        router?.navigateToSignup()
+    }
+}
+
+// MARK: - LoginInteractorOutput
 
 extension LoginPresenter: LoginInteractorOutput {
     

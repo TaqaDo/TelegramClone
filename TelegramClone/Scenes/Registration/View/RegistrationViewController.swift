@@ -1,22 +1,22 @@
 //
-//  LoginViewController.swift
+//  RegistrationViewController.swift
 //  TelegramClone
 //
-//  Created by talgar osmonov on 3/6/21.
+//  Created by talgar osmonov on 4/6/21.
 //  Copyright (c) 2021 ___ORGANIZATIONNAME___. All rights reserved.
 //
 
 import UIKit
 
-protocol LoginViewProtocol: AnyObject {
+
+protocol RegistrationViewProtocol: AnyObject {
+    
 }
 
-final class LoginViewController: UIViewController {
-    
-    // MARK: - Properties
+final class RegistrationViewController: UIViewController {
 
-    var presenter: LoginPresenterProtocol?
-    lazy var contentView: LoginViewLogic = LoginView()
+    var presenter: RegistrationPresenterProtocol?
+    lazy var contentView: RegistrationViewLogic = RegistrationView()
     
     
     // MARK: - Lifecycle
@@ -39,25 +39,23 @@ final class LoginViewController: UIViewController {
     
     // MARK: - UI Actions
     
-    @objc func handleDHAccount() {
-        presenter?.goToSignUp()
+    @objc func handleHAccount() {
+        presenter?.popToLogin()
     }
     
     // MARK: - Helpers
     
     private func navigationBar() {
-        navigationItem.title = "Login"
+        navigationItem.title = "Registration"
         navigationController?.navigationBar.prefersLargeTitles = true
     }
     
     private func configureUI() {
-        contentView.getDHAccount().addTarget(self, action: #selector(handleDHAccount), for: .touchUpInside)
+        contentView.getHAccount().addTarget(self, action: #selector(handleHAccount), for: .touchUpInside)
     }
+
 }
 
-
-// MARK: - LoginViewProtocol
-
-extension LoginViewController: LoginViewProtocol {
+extension RegistrationViewController: RegistrationViewProtocol {
 
 }

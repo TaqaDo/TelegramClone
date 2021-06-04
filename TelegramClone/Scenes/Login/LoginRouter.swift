@@ -9,12 +9,16 @@
 import UIKit
 
 protocol LoginRouterProtocol {
-    
+    func navigateToSignup()
 }
 
 final class LoginRouter: LoginRouterProtocol {
 
     weak var view: LoginViewController?
+    
+    func navigateToSignup() {
+        view?.navigationController?.pushViewController(RegistrationRouter.createModule(), animated: true)
+    }
 
 
     static func createModule() -> LoginViewController {
