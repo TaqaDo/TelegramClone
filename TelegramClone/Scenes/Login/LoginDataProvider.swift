@@ -9,9 +9,17 @@
 import UIKit
 
 protocol LoginDataProviderProtocol {
+    func loginUser(email: String, password: String, comlpeltion: @escaping(OnResult))
+}
+
+final class LoginDataProvider {
     
 }
 
-final class LoginDataProvider: LoginDataProviderProtocol {
-   
+// MARK: - LoginDataProviderProtocol
+
+extension LoginDataProvider: LoginDataProviderProtocol {
+    func loginUser(email: String, password: String, comlpeltion: @escaping (OnResult)) {
+        UserAPI.shared.loginUser(email: email, password: password, completion: comlpeltion)
+    }
 }

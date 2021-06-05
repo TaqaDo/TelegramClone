@@ -150,13 +150,6 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
-		A2238B52266B6ACA00896811 /* New Group */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = "New Group";
-			sourceTree = "<group>";
-		};
 		A2460EB2266A6214004AD7EA /* Utils */ = {
 			isa = PBXGroup;
 			children = (
@@ -291,12 +284,11 @@
 		A2E04D842669457E0075C640 /* Login */ = {
 			isa = PBXGroup;
 			children = (
-				A2238B52266B6ACA00896811 /* New Group */,
 				A2E04D91266948FE0075C640 /* View */,
 				A2E04D85266945950075C640 /* LoginPresenter.swift */,
+				A2E04D86266945950075C640 /* LoginRouter.swift */,
 				A2E04D88266945950075C640 /* LoginInteractor.swift */,
 				A2E04D89266945950075C640 /* LoginDataProvider.swift */,
-				A2E04D86266945950075C640 /* LoginRouter.swift */,
 			);
 			path = Login;
 			sourceTree = "<group>";

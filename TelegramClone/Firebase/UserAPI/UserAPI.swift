@@ -11,6 +11,7 @@ import Firebase
 
 protocol UserAPIProtocol {
     func registerUser(email: String, password: String, completion: @escaping(OnResult))
+    func loginUser(email: String, password: String, completion: @escaping(OnResult))
 }
 
 class UserAPI {
@@ -18,6 +19,20 @@ class UserAPI {
     
     
     // MARK: - Helpers
+    
+    private func downloadUserFromFirestore(userId: String, email: String? = nil) {
+        userCollection.document(userId).getDocument { snapshot, error in
+            guard let document =  try? snapshot?.data(as: User.self) else {return}
+            let result = Result {document}
+            switch result {
+            
+            case .success(let user):
+                self.saveUserToUserDefaults(user: user)
+            case .failure(let error):
+                print("Error decoding user \(error.localizedDescription)")
+            }
+        }
+    }
     
     private func saveUserToFirestore(user: User) {
         do {
@@ -36,6 +51,20 @@ class UserAPI {
 // MARK: - UserAPIProtocol
 
 extension UserAPI: UserAPIProtocol {
+    func loginUser(email: String, password: String, completion: @escaping (OnResult)) {
+        Auth.auth().signIn(withEmail: email, password: password) { [weak self] result, error in
+            if let error = error {
+                completion(.failure(error))
+                return
+            }
+            
+            if let result = result {
+                completion(.success(nil))
+                self?.downloadUserFromFirestore(userId: result.user.uid, email: email)
+            }
+        }
+    }
+    
     func registerUser(email: String, password: String, completion: @escaping (OnResult)) {
         Auth.auth().createUser(withEmail: email, password: password) { [weak self] result, error in
             if let error = error {

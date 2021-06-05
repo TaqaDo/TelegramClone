@@ -10,6 +10,7 @@ import UIKit
 
 protocol LoginPresenterProtocol {
     func goToSignUp()
+    func loginUser(email: String, password: String)
 }
 
 final class LoginPresenter {
@@ -31,10 +32,15 @@ extension LoginPresenter: LoginPresenterProtocol {
     func goToSignUp() {
         router?.navigateToSignup()
     }
+    func loginUser(email: String, password: String) {
+        interactor?.loginUser(email: email, password: password)
+    }
 }
 
 // MARK: - LoginInteractorOutput
 
 extension LoginPresenter: LoginInteractorOutput {
-    
+    func loginResult(result: ResultEnum) {
+        view?.loginResult(result: result)
+    }
 }

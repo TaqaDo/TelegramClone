@@ -9,6 +9,7 @@
 import UIKit
 
 protocol LoginViewProtocol: AnyObject {
+    func loginResult(result: ResultEnum)
 }
 
 final class LoginViewController: UIViewController {
@@ -37,10 +38,18 @@ final class LoginViewController: UIViewController {
     
     // MARK: - Requests
     
+    private func loginUser() {
+        presenter?.loginUser(email: contentView.getEmailTF().text!, password: contentView.getPasswordTF().text!)
+    }
+    
     // MARK: - UI Actions
     
     @objc func handleDHAccount() {
         presenter?.goToSignUp()
+    }
+    
+    @objc func handleLogin() {
+        loginUser()
     }
     
     // MARK: - Helpers
@@ -52,6 +61,7 @@ final class LoginViewController: UIViewController {
     
     private func configureUI() {
         contentView.getDHAccount().addTarget(self, action: #selector(handleDHAccount), for: .touchUpInside)
+        contentView.getLoginButton().addTarget(self, action: #selector(handleLogin), for: .touchUpInside)
     }
 }
 
@@ -59,5 +69,13 @@ final class LoginViewController: UIViewController {
 // MARK: - LoginViewProtocol
 
 extension LoginViewController: LoginViewProtocol {
-
+    func loginResult(result: ResultEnum) {
+        switch result {
+        
+        case .success:
+            print("login success \(UserSettings.shared.currentUser?.userEmail)")
+        case .error:
+            print("login error")
+        }
+    }
 }

@@ -8,3 +8,4 @@
 import Foundation
 
 typealias OnResult = (Result<Void?, Error>) -> ()
+typealias OnLoginResult = (Result<User?, Error>) -> ()

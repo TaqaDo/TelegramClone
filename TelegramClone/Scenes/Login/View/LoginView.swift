@@ -10,6 +10,9 @@ import UIKit
 
 protocol LoginViewLogic: UIView {
     func getDHAccount() -> UIButton
+    func getLoginButton() -> UIButton
+    func getEmailTF() -> UITextField
+    func getPasswordTF() -> UITextField
 }
 
 final class LoginView: UIView {
@@ -99,6 +102,18 @@ final class LoginView: UIView {
 // MARK: - ProfileViewLogic
 
 extension LoginView: LoginViewLogic {
+    func getLoginButton() -> UIButton {
+        return loginButton
+    }
+    
+    func getEmailTF() -> UITextField {
+        return emailTF
+    }
+    
+    func getPasswordTF() -> UITextField {
+        return passwordTF
+    }
+    
     func getDHAccount() -> UIButton {
         return dontHaveAnAcoountButton
     }

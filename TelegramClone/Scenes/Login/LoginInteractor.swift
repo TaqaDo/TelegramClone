@@ -9,15 +9,29 @@
 import UIKit
 
 protocol LoginInteractorProtocol {
-    
+    func loginUser(email: String, password: String)
 }
 
 protocol LoginInteractorOutput: AnyObject {
-
+    func loginResult(result: ResultEnum)
 }
 
-final class LoginInteractor: LoginInteractorProtocol {
+final class LoginInteractor {
     private let dataProvider: LoginDataProviderProtocol = LoginDataProvider()
     weak var output: LoginInteractorOutput?
 
+}
+
+extension LoginInteractor: LoginInteractorProtocol {
+    func loginUser(email: String, password: String) {
+        dataProvider.loginUser(email: email, password: password) { [weak self] result in
+            switch result {
+            
+            case .success(_):
+                self?.output?.loginResult(result: .success)
+            case .failure(_):
+                self?.output?.loginResult(result: .error)
+            }
+        }
+    }
 }
