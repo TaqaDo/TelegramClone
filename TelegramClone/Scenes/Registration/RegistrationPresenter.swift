@@ -10,12 +10,13 @@ import UIKit
 
 protocol RegistrationPresenterProtocol {
     func popToLogin()
+    func registerUser(email: String, password: String)
 }
 
 final class RegistrationPresenter {
 
-    private let interactor: RegistrationInteractorProtocol
-    private let router: RegistrationRouterProtocol
+    private let interactor: RegistrationInteractorProtocol?
+    private let router: RegistrationRouterProtocol?
     weak var view: RegistrationViewProtocol?
 
     init(interactor: RegistrationInteractorProtocol, router: RegistrationRouterProtocol, view: RegistrationViewProtocol) {
@@ -29,13 +30,19 @@ final class RegistrationPresenter {
 // MARK: - RegistrationPresenterProtocol
 
 extension RegistrationPresenter: RegistrationPresenterProtocol {
+    func registerUser(email: String, password: String) {
+        self.interactor?.registerUser(email: email, password: password)
+    }
+    
     func popToLogin() {
-        router.navigateToLogin()
+        router?.navigateToLogin()
     }
 }
 
 // MARK: - RegistrationInteractorOutput
 
 extension RegistrationPresenter: RegistrationInteractorOutput {
-    
+    func registerResult(result: ResultEnum) {
+        view?.registerResult(result: result)
+    }
 }

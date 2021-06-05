@@ -10,6 +10,8 @@
 		358196701FAE520F4E3FF372 /* Pods_TelegramClone_TelegramCloneUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B42FA32B854ED6DEB804C49 /* Pods_TelegramClone_TelegramCloneUITests.framework */; };
 		67D964D58053F8F044570157 /* Pods_TelegramCloneTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 660A8A724902EAA0E298C352 /* Pods_TelegramCloneTests.framework */; };
 		96CA18B5FD8E33E03849D853 /* Pods_TelegramClone.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BA2456CAD3A10FC1C7839D9A /* Pods_TelegramClone.framework */; };
+		A2238B54266B6B4B00896811 /* Typealiases.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2238B53266B6B4B00896811 /* Typealiases.swift */; };
+		A2238B56266B6C5700896811 /* EnumHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2238B55266B6C5700896811 /* EnumHelpers.swift */; };
 		A2460EB4266A6223004AD7EA /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2460EB3266A6223004AD7EA /* Extensions.swift */; };
 		A2460EBB266A6D2E004AD7EA /* RegistrationPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2460EB6266A6D2E004AD7EA /* RegistrationPresenter.swift */; };
 		A2460EBC266A6D2E004AD7EA /* RegistrationRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2460EB7266A6D2E004AD7EA /* RegistrationRouter.swift */; };
@@ -17,6 +19,10 @@
 		A2460EBE266A6D2E004AD7EA /* RegistrationInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2460EB9266A6D2E004AD7EA /* RegistrationInteractor.swift */; };
 		A2460EBF266A6D2E004AD7EA /* RegistrationDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2460EBA266A6D2E004AD7EA /* RegistrationDataProvider.swift */; };
 		A2460EC1266A6D46004AD7EA /* RegistrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2460EC0266A6D46004AD7EA /* RegistrationView.swift */; };
+		A2460EC4266ABD1A004AD7EA /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2460EC3266ABD19004AD7EA /* User.swift */; };
+		A2460EC7266AC052004AD7EA /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2460EC6266AC052004AD7EA /* Constants.swift */; };
+		A2460ECB266AC247004AD7EA /* UserAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2460ECA266AC247004AD7EA /* UserAPI.swift */; };
+		A2460EDA266ACC76004AD7EA /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2460ED9266ACC76004AD7EA /* UserSettings.swift */; };
 		A2DF4FD3266930C900E4412A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2DF4FD2266930C900E4412A /* AppDelegate.swift */; };
 		A2DF4FD5266930C900E4412A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2DF4FD4266930C900E4412A /* SceneDelegate.swift */; };
 		A2DF4FDC266930C900E4412A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A2DF4FDB266930C900E4412A /* Assets.xcassets */; };
@@ -56,6 +62,8 @@
 		660A8A724902EAA0E298C352 /* Pods_TelegramCloneTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TelegramCloneTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6D33AACFAC54C88C5705FA27 /* Pods-TelegramClone-TelegramCloneUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TelegramClone-TelegramCloneUITests.debug.xcconfig"; path = "Target Support Files/Pods-TelegramClone-TelegramCloneUITests/Pods-TelegramClone-TelegramCloneUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		9E0F8F2BBCABF17DF8EC2B26 /* Pods-TelegramClone.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TelegramClone.debug.xcconfig"; path = "Target Support Files/Pods-TelegramClone/Pods-TelegramClone.debug.xcconfig"; sourceTree = "<group>"; };
+		A2238B53266B6B4B00896811 /* Typealiases.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Typealiases.swift; sourceTree = "<group>"; };
+		A2238B55266B6C5700896811 /* EnumHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnumHelpers.swift; sourceTree = "<group>"; };
 		A2460EB3266A6223004AD7EA /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		A2460EB6266A6D2E004AD7EA /* RegistrationPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationPresenter.swift; sourceTree = "<group>"; };
 		A2460EB7266A6D2E004AD7EA /* RegistrationRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationRouter.swift; sourceTree = "<group>"; };
@@ -63,6 +71,10 @@
 		A2460EB9266A6D2E004AD7EA /* RegistrationInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationInteractor.swift; sourceTree = "<group>"; };
 		A2460EBA266A6D2E004AD7EA /* RegistrationDataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationDataProvider.swift; sourceTree = "<group>"; };
 		A2460EC0266A6D46004AD7EA /* RegistrationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationView.swift; sourceTree = "<group>"; };
+		A2460EC3266ABD19004AD7EA /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		A2460EC6266AC052004AD7EA /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		A2460ECA266AC247004AD7EA /* UserAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAPI.swift; sourceTree = "<group>"; };
+		A2460ED9266ACC76004AD7EA /* UserSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettings.swift; sourceTree = "<group>"; };
 		A2DF4FCF266930C900E4412A /* TelegramClone.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TelegramClone.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A2DF4FD2266930C900E4412A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A2DF4FD4266930C900E4412A /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -138,10 +150,20 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
+		A2238B52266B6ACA00896811 /* New Group */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = "New Group";
+			sourceTree = "<group>";
+		};
 		A2460EB2266A6214004AD7EA /* Utils */ = {
 			isa = PBXGroup;
 			children = (
 				A2460EB3266A6223004AD7EA /* Extensions.swift */,
+				A2460EC6266AC052004AD7EA /* Constants.swift */,
+				A2238B53266B6B4B00896811 /* Typealiases.swift */,
+				A2238B55266B6C5700896811 /* EnumHelpers.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -165,6 +187,38 @@
 				A2460EC0266A6D46004AD7EA /* RegistrationView.swift */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		A2460EC5266ABD23004AD7EA /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				A2460EC3266ABD19004AD7EA /* User.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		A2460EC8266AC219004AD7EA /* Firebase */ = {
+			isa = PBXGroup;
+			children = (
+				A2460EC9266AC232004AD7EA /* UserAPI */,
+			);
+			path = Firebase;
+			sourceTree = "<group>";
+		};
+		A2460EC9266AC232004AD7EA /* UserAPI */ = {
+			isa = PBXGroup;
+			children = (
+				A2460ECA266AC247004AD7EA /* UserAPI.swift */,
+			);
+			path = UserAPI;
+			sourceTree = "<group>";
+		};
+		A2460ED7266ACBF3004AD7EA /* UserDefaults */ = {
+			isa = PBXGroup;
+			children = (
+				A2460ED9266ACC76004AD7EA /* UserSettings.swift */,
+			);
+			path = UserDefaults;
 			sourceTree = "<group>";
 		};
 		A2DF4FC6266930C900E4412A = {
@@ -192,6 +246,9 @@
 		A2DF4FD1266930C900E4412A /* TelegramClone */ = {
 			isa = PBXGroup;
 			children = (
+				A2460EC5266ABD23004AD7EA /* Models */,
+				A2460ED7266ACBF3004AD7EA /* UserDefaults */,
+				A2460EC8266AC219004AD7EA /* Firebase */,
 				A2E04D83266945720075C640 /* Scenes */,
 				A2460EB2266A6214004AD7EA /* Utils */,
 				A2DF4FD2266930C900E4412A /* AppDelegate.swift */,
@@ -234,6 +291,7 @@
 		A2E04D842669457E0075C640 /* Login */ = {
 			isa = PBXGroup;
 			children = (
+				A2238B52266B6ACA00896811 /* New Group */,
 				A2E04D91266948FE0075C640 /* View */,
 				A2E04D85266945950075C640 /* LoginPresenter.swift */,
 				A2E04D88266945950075C640 /* LoginInteractor.swift */,
@@ -491,20 +549,26 @@
 			buildActionMask = 2147483647;
 			files = (
 				A2E04D8A266945950075C640 /* LoginPresenter.swift in Sources */,
+				A2460EC7266AC052004AD7EA /* Constants.swift in Sources */,
+				A2238B54266B6B4B00896811 /* Typealiases.swift in Sources */,
 				A2460EBB266A6D2E004AD7EA /* RegistrationPresenter.swift in Sources */,
 				A2460EB4266A6223004AD7EA /* Extensions.swift in Sources */,
 				A2DF4FD3266930C900E4412A /* AppDelegate.swift in Sources */,
+				A2238B56266B6C5700896811 /* EnumHelpers.swift in Sources */,
+				A2460EC4266ABD1A004AD7EA /* User.swift in Sources */,
 				A2460EBE266A6D2E004AD7EA /* RegistrationInteractor.swift in Sources */,
 				A2E04D8D266945950075C640 /* LoginInteractor.swift in Sources */,
 				A2E04D8E266945950075C640 /* LoginDataProvider.swift in Sources */,
 				A2460EBD266A6D2E004AD7EA /* RegistrationViewController.swift in Sources */,
 				A2460EBC266A6D2E004AD7EA /* RegistrationRouter.swift in Sources */,
+				A2460EDA266ACC76004AD7EA /* UserSettings.swift in Sources */,
 				A2460EC1266A6D46004AD7EA /* RegistrationView.swift in Sources */,
 				A2460EBF266A6D2E004AD7EA /* RegistrationDataProvider.swift in Sources */,
 				A2E04D8B266945950075C640 /* LoginRouter.swift in Sources */,
 				A2E04D8C266945950075C640 /* LoginViewController.swift in Sources */,
 				A2E04D90266948F40075C640 /* LoginView.swift in Sources */,
 				A2DF4FD5266930C900E4412A /* SceneDelegate.swift in Sources */,
+				A2460ECB266AC247004AD7EA /* UserAPI.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

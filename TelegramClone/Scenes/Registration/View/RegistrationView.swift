@@ -11,6 +11,10 @@ import UIKit
 
 protocol RegistrationViewLogic: UIView {
     func getHAccount() -> UIButton
+    func getRegistrationButton() -> UIButton
+    func getEmailTF() -> UITextField
+    func getPasswordTF() -> UITextField
+    func getRepeatTF() -> UITextField
 }
 
 final class RegistrationView: UIView {
@@ -107,6 +111,21 @@ final class RegistrationView: UIView {
 // MARK: - ProfileViewLogic
 
 extension RegistrationView: RegistrationViewLogic {
+    func getRegistrationButton() -> UIButton {
+        return registrationButton
+    }
+    func getEmailTF() -> UITextField {
+        return emailTF
+    }
+    
+    func getPasswordTF() -> UITextField {
+        return passwordTF
+    }
+    
+    func getRepeatTF() -> UITextField {
+        return repeatPasswordTF
+    }
+    
     func getHAccount() -> UIButton {
         return haveAnAcoountButton
     }

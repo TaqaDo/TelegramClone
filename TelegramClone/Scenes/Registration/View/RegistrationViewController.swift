@@ -10,7 +10,7 @@ import UIKit
 
 
 protocol RegistrationViewProtocol: AnyObject {
-    
+    func registerResult(result: ResultEnum)
 }
 
 final class RegistrationViewController: UIViewController {
@@ -37,7 +37,18 @@ final class RegistrationViewController: UIViewController {
     
     // MARK: - Requests
     
+    private func registerUser() {
+        if contentView.getPasswordTF().text == contentView.getRepeatTF().text {
+            presenter?.registerUser(email: contentView.getEmailTF().text!, password: contentView.getPasswordTF().text!)
+        } else {
+            print("Passord dont match")
+        }
+    }
+    
     // MARK: - UI Actions
+    @objc func handleRegistration() {
+        registerUser()
+    }
     
     @objc func handleHAccount() {
         presenter?.popToLogin()
@@ -52,10 +63,18 @@ final class RegistrationViewController: UIViewController {
     
     private func configureUI() {
         contentView.getHAccount().addTarget(self, action: #selector(handleHAccount), for: .touchUpInside)
+        contentView.getRegistrationButton().addTarget(self, action: #selector(handleRegistration), for: .touchUpInside)
     }
 
 }
 
 extension RegistrationViewController: RegistrationViewProtocol {
-
+    func registerResult(result: ResultEnum) {
+        switch result {
+        case .success:
+            print("success")
+        case .error:
+            print("error")
+        }
+    }
 }

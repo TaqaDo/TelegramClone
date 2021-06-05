@@ -9,9 +9,15 @@
 import UIKit
 
 protocol RegistrationDataProviderProtocol {
-
+    func registerUser(email: String, password: String, completion: @escaping(OnResult))
 }
 
-final class RegistrationDataProvider: RegistrationDataProviderProtocol {
+final class RegistrationDataProvider {
+    
+}
 
+extension RegistrationDataProvider: RegistrationDataProviderProtocol {
+    func registerUser(email: String, password: String, completion: @escaping (OnResult)) {
+        UserAPI.shared.registerUser(email: email, password: password, completion: completion)
+    }
 }
