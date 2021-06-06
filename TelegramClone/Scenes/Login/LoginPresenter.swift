@@ -10,6 +10,7 @@ import UIKit
 
 protocol LoginPresenterProtocol {
     func goToSignUp()
+    func navigateToMainView()
     func loginUser(email: String, password: String)
 }
 
@@ -29,6 +30,9 @@ final class LoginPresenter {
 // MARK: - LoginPresenterProtocol
 
 extension LoginPresenter: LoginPresenterProtocol {
+    func navigateToMainView() {
+        router?.navigateToMainView()
+    }
     func goToSignUp() {
         router?.navigateToSignup()
     }

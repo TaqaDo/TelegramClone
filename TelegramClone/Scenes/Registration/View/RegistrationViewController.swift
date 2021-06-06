@@ -27,7 +27,7 @@ final class RegistrationViewController: UIViewController {
   
     override func viewDidLoad() {
         super.viewDidLoad()
-        configureUI()
+        configure()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -61,7 +61,11 @@ final class RegistrationViewController: UIViewController {
         navigationController?.navigationBar.prefersLargeTitles = true
     }
     
-    private func configureUI() {
+    private func configure() {
+        UIConfigure()
+    }
+    
+    private func UIConfigure() {
         contentView.getHAccount().addTarget(self, action: #selector(handleHAccount), for: .touchUpInside)
         contentView.getRegistrationButton().addTarget(self, action: #selector(handleRegistration), for: .touchUpInside)
     }
@@ -72,7 +76,7 @@ extension RegistrationViewController: RegistrationViewProtocol {
     func registerResult(result: ResultEnum) {
         switch result {
         case .success:
-            print("success")
+            presenter?.popToLogin()
         case .error:
             print("error")
         }

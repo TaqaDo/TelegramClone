@@ -28,7 +28,7 @@ final class LoginViewController: UIViewController {
   
     override func viewDidLoad() {
         super.viewDidLoad()
-        configureUI()
+        configure()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -59,7 +59,11 @@ final class LoginViewController: UIViewController {
         navigationController?.navigationBar.prefersLargeTitles = true
     }
     
-    private func configureUI() {
+    private func configure() {
+        UIConfigure()
+    }
+    
+    private func UIConfigure() {
         contentView.getDHAccount().addTarget(self, action: #selector(handleDHAccount), for: .touchUpInside)
         contentView.getLoginButton().addTarget(self, action: #selector(handleLogin), for: .touchUpInside)
     }
@@ -73,7 +77,7 @@ extension LoginViewController: LoginViewProtocol {
         switch result {
         
         case .success:
-            print("login success \(UserSettings.shared.currentUser?.userEmail)")
+            presenter?.navigateToMainView()
         case .error:
             print("login error")
         }

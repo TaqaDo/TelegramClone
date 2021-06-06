@@ -10,16 +10,12 @@ import UIKit
 
 protocol LoginRouterProtocol {
     func navigateToSignup()
+    func navigateToMainView()
 }
 
-final class LoginRouter: LoginRouterProtocol {
+final class LoginRouter {
 
     weak var view: LoginViewController?
-    
-    func navigateToSignup() {
-        view?.navigationController?.pushViewController(RegistrationRouter.createModule(), animated: true)
-    }
-
 
     static func createModule() -> LoginViewController {
         let view = LoginViewController()
@@ -32,4 +28,17 @@ final class LoginRouter: LoginRouterProtocol {
         return view
     }
 
+}
+
+// MARK: - LoginRouterProtocol
+
+extension LoginRouter: LoginRouterProtocol {
+    func navigateToMainView() {
+        let viewTab = MainTabBar()
+        viewTab.modalPresentationStyle = .fullScreen
+        view?.navigationController?.present(viewTab, animated: true, completion: nil)
+    }
+    func navigateToSignup() {
+        view?.navigationController?.pushViewController(RegistrationRouter.createModule(), animated: true)
+    }
 }

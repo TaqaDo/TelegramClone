@@ -12,13 +12,9 @@ protocol RegistrationRouterProtocol {
     func navigateToLogin()
 }
 
-final class RegistrationRouter: RegistrationRouterProtocol {
+final class RegistrationRouter {
 
     weak var view: RegistrationViewController?
-
-    func navigateToLogin() {
-        view?.navigationController?.popViewController(animated: true)
-    }
     
     static func createModule() -> RegistrationViewController {
         let view = RegistrationViewController()
@@ -31,4 +27,10 @@ final class RegistrationRouter: RegistrationRouterProtocol {
         return view
     }
 
+}
+
+extension RegistrationRouter: RegistrationRouterProtocol {
+    func navigateToLogin() {
+        view?.navigationController?.popViewController(animated: true)
+    }
 }

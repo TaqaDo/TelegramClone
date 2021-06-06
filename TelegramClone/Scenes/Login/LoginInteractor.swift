@@ -22,6 +22,8 @@ final class LoginInteractor {
 
 }
 
+// MARK: - LoginInteractorProtocol
+
 extension LoginInteractor: LoginInteractorProtocol {
     func loginUser(email: String, password: String) {
         dataProvider.loginUser(email: email, password: password) { [weak self] result in

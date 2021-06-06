@@ -14,4 +14,5 @@ let userCollection = Firestore.firestore().collection("User")
 let recentCollection = Firestore.firestore().collection("Recent")
 
 //UserDafaults
+let userDefaults = UserDefaults.standard
 let kCURRENTUSER = "currentUser"
