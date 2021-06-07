@@ -24,6 +24,9 @@
 		A2460EC7266AC052004AD7EA /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2460EC6266AC052004AD7EA /* Constants.swift */; };
 		A2460ECB266AC247004AD7EA /* UserAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2460ECA266AC247004AD7EA /* UserAPI.swift */; };
 		A2460EDA266ACC76004AD7EA /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2460ED9266ACC76004AD7EA /* UserSettings.swift */; };
+		A25372FB266E054B00C749E3 /* ProfileCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A25372FA266E054B00C749E3 /* ProfileCell.swift */; };
+		A25372FD266EA14700C749E3 /* SectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A25372FC266EA14700C749E3 /* SectionCell.swift */; };
+		A25372FF266EA82100C749E3 /* SectionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A25372FE266EA82100C749E3 /* SectionModel.swift */; };
 		A2B36B40266D696900ACF6F7 /* ContactsPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B36B3B266D696900ACF6F7 /* ContactsPresenter.swift */; };
 		A2B36B41266D696900ACF6F7 /* ContactsRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B36B3C266D696900ACF6F7 /* ContactsRouter.swift */; };
 		A2B36B42266D696900ACF6F7 /* ContactsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B36B3D266D696900ACF6F7 /* ContactsViewController.swift */; };
@@ -101,6 +104,9 @@
 		A2460EC6266AC052004AD7EA /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		A2460ECA266AC247004AD7EA /* UserAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAPI.swift; sourceTree = "<group>"; };
 		A2460ED9266ACC76004AD7EA /* UserSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettings.swift; sourceTree = "<group>"; };
+		A25372FA266E054B00C749E3 /* ProfileCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCell.swift; sourceTree = "<group>"; };
+		A25372FC266EA14700C749E3 /* SectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionCell.swift; sourceTree = "<group>"; };
+		A25372FE266EA82100C749E3 /* SectionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionModel.swift; sourceTree = "<group>"; };
 		A2B36B3B266D696900ACF6F7 /* ContactsPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsPresenter.swift; sourceTree = "<group>"; };
 		A2B36B3C266D696900ACF6F7 /* ContactsRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsRouter.swift; sourceTree = "<group>"; };
 		A2B36B3D266D696900ACF6F7 /* ContactsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsViewController.swift; sourceTree = "<group>"; };
@@ -248,6 +254,7 @@
 			isa = PBXGroup;
 			children = (
 				A2460EC3266ABD19004AD7EA /* User.swift */,
+				A25372FE266EA82100C749E3 /* SectionModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -274,6 +281,15 @@
 				A2460ED9266ACC76004AD7EA /* UserSettings.swift */,
 			);
 			path = UserDefaults;
+			sourceTree = "<group>";
+		};
+		A25372F9266E053B00C749E3 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				A25372FA266E054B00C749E3 /* ProfileCell.swift */,
+				A25372FC266EA14700C749E3 /* SectionCell.swift */,
+			);
+			path = Cells;
 			sourceTree = "<group>";
 		};
 		A2B36B3A266D695600ACF6F7 /* Contacts */ = {
@@ -336,6 +352,7 @@
 		A2B36B6D266D788700ACF6F7 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				A25372F9266E053B00C749E3 /* Cells */,
 				A2B36B5E266D699300ACF6F7 /* SettingsViewController.swift */,
 				A2B36B6B266D788100ACF6F7 /* SettingsView.swift */,
 			);
@@ -389,7 +406,6 @@
 				A2460ED7266ACBF3004AD7EA /* UserDefaults */,
 				A2460EC8266AC219004AD7EA /* Firebase */,
 				A2E04D83266945720075C640 /* Scenes */,
-				A2238B57266BCD0F00896811 /* Main */,
 				A2460EB2266A6214004AD7EA /* Utils */,
 				A2DF4FD2266930C900E4412A /* AppDelegate.swift */,
 				A2DF4FD4266930C900E4412A /* SceneDelegate.swift */,
@@ -424,6 +440,7 @@
 			children = (
 				A2460EB5266A6CD1004AD7EA /* Registration */,
 				A2E04D842669457E0075C640 /* Login */,
+				A2238B57266BCD0F00896811 /* Main */,
 			);
 			path = Scenes;
 			sourceTree = "<group>";
@@ -698,6 +715,7 @@
 				A2B36B4F266D697800ACF6F7 /* CallsDataProvider.swift in Sources */,
 				A2238B59266BCD3900896811 /* MainTabBar.swift in Sources */,
 				A2B36B64266D699300ACF6F7 /* SettingsInteractor.swift in Sources */,
+				A25372FD266EA14700C749E3 /* SectionCell.swift in Sources */,
 				A2460EB4266A6223004AD7EA /* Extensions.swift in Sources */,
 				A2DF4FD3266930C900E4412A /* AppDelegate.swift in Sources */,
 				A2B36B56266D698500ACF6F7 /* ChatsPresenter.swift in Sources */,
@@ -705,6 +723,7 @@
 				A2460EC4266ABD1A004AD7EA /* User.swift in Sources */,
 				A2460EBE266A6D2E004AD7EA /* RegistrationInteractor.swift in Sources */,
 				A2E04D8D266945950075C640 /* LoginInteractor.swift in Sources */,
+				A25372FB266E054B00C749E3 /* ProfileCell.swift in Sources */,
 				A2B36B4E266D697800ACF6F7 /* CallsInteractor.swift in Sources */,
 				A2E04D8E266945950075C640 /* LoginDataProvider.swift in Sources */,
 				A2B36B65266D699300ACF6F7 /* SettingsDataProvider.swift in Sources */,
@@ -723,6 +742,7 @@
 				A2B36B61266D699300ACF6F7 /* SettingsPresenter.swift in Sources */,
 				A2E04D8C266945950075C640 /* LoginViewController.swift in Sources */,
 				A2E04D90266948F40075C640 /* LoginView.swift in Sources */,
+				A25372FF266EA82100C749E3 /* SectionModel.swift in Sources */,
 				A2DF4FD5266930C900E4412A /* SceneDelegate.swift in Sources */,
 				A2B36B4C266D697800ACF6F7 /* CallsRouter.swift in Sources */,
 				A2460ECB266AC247004AD7EA /* UserAPI.swift in Sources */,

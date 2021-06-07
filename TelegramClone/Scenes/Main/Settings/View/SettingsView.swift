@@ -17,12 +17,21 @@ import SnapKit
 import UIKit
 
 protocol SettingsViewLogic: UIView {
- 
+    func getSettingsTableView() -> UITableView
 }
 
 final class SettingsView: UIView {
     
     // MARK: - Views
+    
+    private lazy var settingsTableView: UITableView = {
+        let tableView = UITableView()
+        tableView.tableFooterView = UIView(frame: CGRect.zero)
+        tableView.register(ProfileCell.self, forCellReuseIdentifier: ProfileCell.cellID)
+        tableView.register(SectionCell.self, forCellReuseIdentifier: SectionCell.cellID)
+        tableView.backgroundColor = .clear
+        return tableView
+    }()
     
     //
     
@@ -46,17 +55,23 @@ final class SettingsView: UIView {
     }
     
     private func addSubviews() {
-        
+        addSubview(settingsTableView)
     }
     
     private func addConstraints() {
-        
+        settingsTableView.snp.makeConstraints { make in
+            make.top.equalTo(safeArea.top)
+            make.bottom.equalTo(safeArea.bottom)
+            make.leading.trailing.equalToSuperview()
+        }
     }
 }
 
 // MARK: - ProfileViewLogic
 
 extension SettingsView: SettingsViewLogic {
-
+    func getSettingsTableView() -> UITableView {
+        return settingsTableView
+    }
 }
 

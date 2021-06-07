@@ -10,7 +10,7 @@ import SnapKit
 import UIKit
 
 protocol ChatsViewLogic: UIView {
- 
+    
 }
 
 final class ChatsView: UIView {
@@ -50,6 +50,6 @@ final class ChatsView: UIView {
 // MARK: - ChatsViewLogic
 
 extension ChatsView: ChatsViewLogic {
-
+    
 }
 
