@@ -18,7 +18,7 @@
 import UIKit
 
 protocol SettingsViewProtocol: AnyObject {
-    
+    func getUserInfoResult(user: User)
 }
 
 final class SettingsViewController: UIViewController {
@@ -27,6 +27,7 @@ final class SettingsViewController: UIViewController {
     private let searchController = UISearchController(searchResultsController: nil)
     var presenter: SettingsPresenterProtocol?
     lazy var contentView: SettingsViewLogic = SettingsView()
+    var user: User? = nil
     
     
     // MARK: - Lifecycle
@@ -44,6 +45,11 @@ final class SettingsViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationBar()
+        getUserInfoFromDefaults()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
     }
     
     // MARK: - Delegates
@@ -55,12 +61,16 @@ final class SettingsViewController: UIViewController {
     
     // MARK: - Requests
     
-    private func getUserInfo() {
-       
+    private func getUserInfoFromDefaults() {
+        presenter?.getUserInfoFromDefaults()
     }
 
     
     // MARK: - UI Actions
+    
+    @objc func handleEdit() {
+        presenter?.navigateToEditProfile()
+    }
     
     
     // MARK: - Helpers
@@ -72,9 +82,14 @@ final class SettingsViewController: UIViewController {
     
     private func configure() {
         configureSearchController()
+        configureUI()
     }
     
-    func configureSearchController() {
+    private func configureUI() {
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(handleEdit))
+    }
+    
+    private func configureSearchController() {
         searchController.searchResultsUpdater = self
         searchController.obscuresBackgroundDuringPresentation =  false
         searchController.hidesNavigationBarDuringPresentation = false
@@ -89,7 +104,10 @@ final class SettingsViewController: UIViewController {
 // MARK: - LoginViewProtocol
 
 extension SettingsViewController: SettingsViewProtocol {
-
+    func getUserInfoResult(user: User) {
+        self.user = user
+        contentView.getSettingsTableView().reloadData()
+    }
 }
 
 // MARK: - UITableViewDel|DS
@@ -101,9 +119,12 @@ extension SettingsViewController: UITableViewDelegate, UITableViewDataSource {
         switch (indexPath as NSIndexPath).section {
         case 0:
             guard let profileCell = tableView.dequeueReusableCell(withIdentifier: ProfileCell.cellID,
-                                                           for: indexPath) as? ProfileCell else {return UITableViewCell()}
+                                                                  for: indexPath) as? ProfileCell else {return UITableViewCell()}
             profileCell.accessoryType = .disclosureIndicator
             profileCell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: .greatestFiniteMagnitude)
+            if let user = user {
+                profileCell.setupData(user: user)
+            }
             return profileCell
         case 1:
             guard let sectionCell = tableView.dequeueReusableCell(withIdentifier: SectionCell.cellID,
@@ -133,7 +154,7 @@ extension SettingsViewController: UITableViewDelegate, UITableViewDataSource {
         
         switch (indexPath as NSIndexPath).section {
         case 0:
-            print("Profile")
+            presenter?.navigateToEditProfile()
         case 1:
             switch (indexPath as NSIndexPath).row {
             case 0:
@@ -200,30 +221,15 @@ extension SettingsViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        switch section {
-        case 0:
-            return nil
-        default:
-            return " "
-        }
+        return section == 0 ? nil : " "
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        switch section {
-        case 0:
-            return 0
-        default:
-            return 35
-        }
+        return section == 0 ? 0 : 35
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        switch (indexPath as NSIndexPath).section {
-        case 0:
-            return 148
-        default:
-            return 55
-        }
+        return (indexPath as NSIndexPath).section == 0 ? 138 : 55
     }
 
     

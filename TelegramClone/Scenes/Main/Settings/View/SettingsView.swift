@@ -30,6 +30,7 @@ final class SettingsView: UIView {
         tableView.register(ProfileCell.self, forCellReuseIdentifier: ProfileCell.cellID)
         tableView.register(SectionCell.self, forCellReuseIdentifier: SectionCell.cellID)
         tableView.backgroundColor = .clear
+        tableView.showsVerticalScrollIndicator = false
         return tableView
     }()
     

@@ -18,7 +18,7 @@ class MainTabBar: UITabBarController {
     }
     
     func configureViewControllers() {
-        view.backgroundColor = .red
+        view.backgroundColor = .white
         let messageImage = UIImage(systemName: "bubble.middle.bottom")
         let contactsImage = UIImage(systemName: "person.circle")
         let callsImage = UIImage(systemName: "phone")

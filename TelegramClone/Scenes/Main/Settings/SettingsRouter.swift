@@ -10,6 +10,7 @@
 import UIKit
 
 protocol SettingsRouterProtocol {
+    func navigateToEditProfile()
 }
 
 final class SettingsRouter {
@@ -32,5 +33,9 @@ final class SettingsRouter {
 // MARK: - SettingsRouterProtocol
 
 extension SettingsRouter: SettingsRouterProtocol {
-    
+    func navigateToEditProfile() {
+        let editVC = EditProfileRouter.createModule()
+        editVC.hidesBottomBarWhenPushed = true
+        view?.navigationController?.pushViewController(editVC, animated: true)
+    }
 }

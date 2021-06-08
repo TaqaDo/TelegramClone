@@ -10,7 +10,8 @@
 import UIKit
 
 protocol SettingsPresenterProtocol {
-    
+    func getUserInfoFromDefaults()
+    func navigateToEditProfile()
 }
 
 final class SettingsPresenter {
@@ -30,11 +31,19 @@ final class SettingsPresenter {
 // MARK: - SettingsPresenterProtocol
 
 extension SettingsPresenter: SettingsPresenterProtocol {
+    func navigateToEditProfile() {
+        router?.navigateToEditProfile()
+    }
     
+    func getUserInfoFromDefaults() {
+        interactor?.getUserInfoFromDefaults()
+    }
 }
 
 // MARK: - ChatsInteractorOutput
 
 extension SettingsPresenter: SettingsInteractorOutput {
-    
+    func getUserInfoResult(user: User) {
+        view?.getUserInfoResult(user: user)
+    }
 }

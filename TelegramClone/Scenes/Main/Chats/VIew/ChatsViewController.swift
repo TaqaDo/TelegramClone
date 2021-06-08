@@ -38,6 +38,10 @@ final class ChatsViewController: UIViewController {
         navigationBar()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+    }
+    
     // MARK: - Requests
 
     

@@ -1,18 +1,19 @@
 //
-//  ProfileCell.swift
+//  EditProfileCell.swift
 //  TelegramClone
 //
-//  Created by talgar osmonov on 7/6/21.
+//  Created by talgar osmonov on 8/6/21.
 //
 
 
 import UIKit
 
 
-final class ProfileCell: UITableViewCell {
+final class EditProfileCell: UITableViewCell {
 
     
     // MARK: - Views
+    
     
     private lazy var profileImage: UIImageView = {
         let imageView = UIImageView()
@@ -23,28 +24,42 @@ final class ProfileCell: UITableViewCell {
         return imageView
     }()
     
-    private lazy var usernameLabel: UILabel = {
-        let label = UILabel()
-        label.numberOfLines = 2
-        label.font = UIFont.systemFont(ofSize: 18, weight: .regular)
-        label.textColor = .black
-        return label
+    lazy var usernameTF: UITextField = {
+        let tf = UITextField()
+        tf.placeholder = "Username"
+        tf.autocapitalizationType = .words
+        tf.clearButtonMode = .always
+        tf.returnKeyType = .done
+        return tf
     }()
     
-    private lazy var bioLabel: UILabel = {
-        let label = UILabel()
-        label.numberOfLines = 2
-        label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
-        label.textColor = .gray
-        return label
+    private lazy var addImage: UIImageView = {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
+        imageView.image = UIImage(systemName: "camera.fill")?.withRenderingMode(.alwaysOriginal).withTintColor(.white)
+        return imageView
     }()
     
     private lazy var labelStack: UIStackView = {
-       let stack = UIStackView(arrangedSubviews: [usernameLabel, bioLabel])
+       let stack = UIStackView(arrangedSubviews: [usernameTF])
         stack.axis = .vertical
         stack.spacing = 5
         stack.distribution = .fillProportionally
         return stack
+    }()
+    
+    private lazy var blackView: UIView = {
+       let view = UIView()
+        view.layer.cornerRadius = 84/2
+        view.backgroundColor = .init(hex: "#50000000")
+        view.clipsToBounds = true
+        view.addSubview(addImage)
+        addImage.snp.makeConstraints { make in
+            make.center.equalToSuperview()
+            make.size.equalTo(25)
+        }
+        return view
     }()
     
     //
@@ -73,13 +88,17 @@ final class ProfileCell: UITableViewCell {
     private func addSubviews() {
         contentView.addSubview(profileImage)
         contentView.addSubview(labelStack)
+        contentView.addSubview(blackView)
     }
     
     private func addConstraints() {
+        blackView.snp.makeConstraints { make in
+            make.edges.equalTo(profileImage.snp.edges)
+        }
         labelStack.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
             make.leading.equalTo(profileImage.snp.trailing).offset(20)
-            make.trailing.equalToSuperview().inset(30)
+            make.trailing.equalToSuperview().inset(20)
             make.height.equalTo(74)
         }
         profileImage.snp.makeConstraints { make in
@@ -90,8 +109,7 @@ final class ProfileCell: UITableViewCell {
     }
     
     func setupData(user: User) {
-        usernameLabel.text = user.username
-        bioLabel.text = user.userBio
+        usernameTF.text = user.username
     }
 }
 

@@ -18,27 +18,32 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(frame: windowScene.coordinateSpace.bounds)
         window?.windowScene = windowScene
-        self.window?.rootViewController = MainTabBar()
-        authoLogin()
-        self.window?.makeKeyAndVisible()
+        userIsLogedIn()
     }
     
     
     // MARK: - Helpers
     
+    func userIsLogedIn() {
+        if Auth.auth().currentUser?.uid != nil && userDefaults.object(forKey: kCURRENTUSER) != nil {
+            self.window?.rootViewController = MainTabBar()
+            self.window?.makeKeyAndVisible()
+        } else {
+            self.window?.rootViewController = UINavigationController(rootViewController: LoginRouter.createModule())
+            self.window?.makeKeyAndVisible()
+        }
+    }
+    
     func authoLogin() {
         authListener = Auth.auth().addStateDidChangeListener({ auth, user in
             Auth.auth().removeStateDidChangeListener(self.authListener!)
-            if user == nil && userDefaults.object(forKey: kCURRENTUSER) == nil {
+            if user == nil || userDefaults.object(forKey: kCURRENTUSER) == nil {
                 DispatchQueue.main.async {
-                    self.rootViewController()
+                    self.window?.rootViewController = UINavigationController(rootViewController: LoginRouter.createModule())
+                    self.window?.makeKeyAndVisible()
                 }
             }
         })
-    }
-    
-    func rootViewController() {
-        window?.rootViewController = UINavigationController(rootViewController: LoginRouter.createModule())
     }
 
 }

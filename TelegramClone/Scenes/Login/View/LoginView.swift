@@ -36,6 +36,7 @@ final class LoginView: UIView {
     private lazy var emailTF: UITextField = {
         let tf = UITextField()
         tf.placeholder = "email"
+        tf.autocapitalizationType = .none
         return tf
     }()
     

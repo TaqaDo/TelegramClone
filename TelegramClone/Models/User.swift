@@ -16,5 +16,5 @@ struct User: Codable, Equatable {
     var userEmail: String? = nil
     var userPushId: String = ""
     var userAvatar: String = ""
-    var userStatus: String = ""
+    var userBio: String = ""
 }

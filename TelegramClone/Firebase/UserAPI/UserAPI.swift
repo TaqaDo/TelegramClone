@@ -10,6 +10,8 @@ import Firebase
 
 
 protocol UserAPIProtocol {
+    func signOut(completion: @escaping(OnResult))
+    func saveUser(user: User)
     func registerUser(email: String, password: String, completion: @escaping(OnResult))
     func loginUser(email: String, password: String, completion: @escaping(OnResult))
 }
@@ -51,6 +53,22 @@ class UserAPI {
 // MARK: - UserAPIProtocol
 
 extension UserAPI: UserAPIProtocol {
+    func signOut(completion: @escaping (OnResult)) {
+        do {
+            try Auth.auth().signOut()
+            userDefaults.removeObject(forKey: kCURRENTUSER)
+            userDefaults.synchronize()
+            completion(.success(nil))
+        } catch let error {
+            completion(.failure(error))
+        }
+    }
+    
+    func saveUser(user: User) {
+        saveUserToFirestore(user: user)
+        saveUserToUserDefaults(user: user)
+    }
+    
     func loginUser(email: String, password: String, completion: @escaping (OnResult)) {
         Auth.auth().signIn(withEmail: email, password: password) { [weak self] result, error in
             if let error = error {
@@ -79,7 +97,7 @@ extension UserAPI: UserAPIProtocol {
                                 userEmail: email,
                                 userPushId: "",
                                 userAvatar: "",
-                                userStatus: "Hello there!!")
+                                userBio: "Hello there!!")
                 self?.saveUserToFirestore(user: user)
                 self?.saveUserToUserDefaults(user: user)
             }

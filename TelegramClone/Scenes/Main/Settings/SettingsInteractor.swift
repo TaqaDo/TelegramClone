@@ -10,11 +10,11 @@
 import UIKit
 
 protocol SettingsInteractorProtocol {
-    
+    func getUserInfoFromDefaults()
 }
 
 protocol SettingsInteractorOutput: AnyObject {
-
+    func getUserInfoResult(user: User)
 }
 
 final class SettingsInteractor {
@@ -27,5 +27,9 @@ final class SettingsInteractor {
 // MARK: - SettingsInteractorProtocol
 
 extension SettingsInteractor: SettingsInteractorProtocol {
-    
+    func getUserInfoFromDefaults() {
+        dataProvider.getUserInfoFromDefaults { [weak self] user in
+            self?.output?.getUserInfoResult(user: user)
+        }
+    }
 }
