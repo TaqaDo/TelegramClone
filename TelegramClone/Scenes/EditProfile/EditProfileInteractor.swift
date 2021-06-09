@@ -10,6 +10,7 @@
 import UIKit
 
 protocol EditProfileInteractorProtocol {
+    func saveFileToDisk(fileData: NSData, fileName: String)
     func uploadAvatar(image: UIImage, directory: String)
     func singOut()
     func getUserInfoFromDefaults()
@@ -17,6 +18,7 @@ protocol EditProfileInteractorProtocol {
 }
 
 protocol EditProfileInteractorOutput: AnyObject {
+    func getSaveFileToDiskResult(result: ResultEnum)
     func getUserInfoResult(user: User)
     func getSignOutResult(result: ResultEnum)
     func getUploadAvatarResult(result: ResultEnum)
@@ -32,6 +34,17 @@ final class EditProfileInteractor {
 // MARK: - EditProfileInteractorProtocol
 
 extension EditProfileInteractor: EditProfileInteractorProtocol {
+    func saveFileToDisk(fileData: NSData, fileName: String) {
+        dataProvider.saveFileToDisk(fileData: fileData, fileName: fileName) { [weak self] result in
+            switch result {
+            case .success(_):
+                self?.output?.getSaveFileToDiskResult(result: .success(nil))
+            case .failure(_):
+                self?.output?.getSaveFileToDiskResult(result: .error)
+            }
+        }
+    }
+    
     func uploadAvatar(image: UIImage, directory: String) {
         dataProvider.uploadAvatarImage(image: image, directory: directory) { [weak self] result in
             switch result {

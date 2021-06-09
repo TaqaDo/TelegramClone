@@ -12,6 +12,7 @@ import UIKit
 import YPImagePicker
 
 protocol EditProfileViewProtocol: AnyObject {
+    func getSaveFileToDiskResult(result: ResultEnum)
     func getUploadImageResult(result: ResultEnum)
     func getUserInfoResult(user: User)
     func getSignOutResult(result: ResultEnum)
@@ -59,6 +60,7 @@ final class EditProfileViewController: UIViewController {
     private func uploadAvatarImage(image: UIImage) {
         let directory = "Avatars/" + "_\(UserSettings.shared.currentUser!.userId)" + ".jpeg"
         presenter?.uploadAvatarImage(image: image, directory: directory)
+        presenter?.saveFileToDisk(fileData: image.jpegData(compressionQuality: 1.0)! as NSData, fileName: UserSettings.shared.currentUser!.userId)
     }
     
     private func signOut() {
@@ -121,6 +123,15 @@ extension EditProfileViewController: EditProfileCellDelegate {
 // MARK: - EditProfileViewProtocol
 
 extension EditProfileViewController: EditProfileViewProtocol {
+    func getSaveFileToDiskResult(result: ResultEnum) {
+        switch result {
+        case .success:
+            print("save file success")
+        case .error:
+            print("save file error")
+        }
+    }
+    
     func getUploadImageResult(result: ResultEnum) {
         switch result {
         case .success(let url):

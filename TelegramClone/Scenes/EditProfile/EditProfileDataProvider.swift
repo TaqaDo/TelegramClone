@@ -10,6 +10,7 @@
 import UIKit
 
 protocol EditProfileDataProviderProtocol {
+    func saveFileToDisk(fileData: NSData, fileName: String, completion: @escaping(OnResult))
     func uploadAvatarImage(image: UIImage, directory: String, completion: @escaping(Result<String?, Error>) -> Void)
     func singOut(completion: @escaping(OnResult))
     func getUserInfoFromDefaults(completion: @escaping (User) -> Void)
@@ -23,6 +24,10 @@ final class EditProfileDataProvider {
 // MARK: - EditProfileDataProviderProtocol
 
 extension EditProfileDataProvider: EditProfileDataProviderProtocol {
+    func saveFileToDisk(fileData: NSData, fileName: String, completion: @escaping(OnResult)) {
+        StorageFile.shared.saveFileToDisk(fileData: fileData, fileName: fileName, completion: completion)
+    }
+    
     func uploadAvatarImage(image: UIImage, directory: String, completion: @escaping (Result<String?, Error>) -> Void) {
         StorageFile.shared.uploadAvatarImage(image: image, directory: directory, completion: completion)
     }
