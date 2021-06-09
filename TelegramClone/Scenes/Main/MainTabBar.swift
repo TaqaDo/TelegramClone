@@ -21,12 +21,12 @@ class MainTabBar: UITabBarController {
         view.backgroundColor = .white
         let messageImage = UIImage(systemName: "bubble.middle.bottom")
         let contactsImage = UIImage(systemName: "person.circle")
-        let callsImage = UIImage(systemName: "phone")
+//        let callsImage = UIImage(systemName: "phone")
         let settingsImage = UIImage(systemName: "gearshape")
         
         let contacts = templateNavigationController(titleName: "Contacts", selectedImage: contactsImage!,
                                                     rootViewController: ContactsRouter.createModule())
-        let calls = templateNavigationController(titleName: "Calls", selectedImage: callsImage!, rootViewController: CallsRouter.createModule())
+//        let calls = templateNavigationController(titleName: "Calls", selectedImage: callsImage!, rootViewController: CallsRouter.createModule())
         let chats = templateNavigationController(titleName: "Chats", selectedImage: messageImage!, rootViewController: ChatsRouter.createModule())
         let settings = templateNavigationController(titleName: "Settings", selectedImage: settingsImage!, rootViewController: SettingsRouter.createModule())
         

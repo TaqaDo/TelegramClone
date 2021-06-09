@@ -10,6 +10,7 @@
 import UIKit
 
 protocol EditProfileDataProviderProtocol {
+    func uploadAvatarImage(image: UIImage, directory: String, completion: @escaping(Result<String?, Error>) -> Void)
     func singOut(completion: @escaping(OnResult))
     func getUserInfoFromDefaults(completion: @escaping (User) -> Void)
     func saveUser(user: User)
@@ -22,6 +23,10 @@ final class EditProfileDataProvider {
 // MARK: - EditProfileDataProviderProtocol
 
 extension EditProfileDataProvider: EditProfileDataProviderProtocol {
+    func uploadAvatarImage(image: UIImage, directory: String, completion: @escaping (Result<String?, Error>) -> Void) {
+        StorageFile.shared.uploadAvatarImage(image: image, directory: directory, completion: completion)
+    }
+    
     func singOut(completion: @escaping(OnResult)) {
         UserAPI.shared.signOut(completion: completion)
     }

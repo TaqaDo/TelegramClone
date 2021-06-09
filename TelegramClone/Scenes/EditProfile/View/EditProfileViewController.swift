@@ -9,8 +9,10 @@
 
 
 import UIKit
+import YPImagePicker
 
 protocol EditProfileViewProtocol: AnyObject {
+    func getUploadImageResult(result: ResultEnum)
     func getUserInfoResult(user: User)
     func getSignOutResult(result: ResultEnum)
 }
@@ -18,19 +20,21 @@ protocol EditProfileViewProtocol: AnyObject {
 final class EditProfileViewController: UIViewController {
     
     // MARK: - Properties
-
+    
+    var picker: YPImagePicker?
+    var user: User? = nil
+    
     var presenter: EditProfilePresenterProtocol?
     lazy var contentView: EditProfileViewLogic = EditProfileView()
     var bioCell: EditCell?
     var profileCell: EditProfileCell?
-    var user: User? = nil
     
     // MARK: - Lifecycle
     
     override func loadView() {
-      view = contentView
+        view = contentView
     }
-  
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configure()
@@ -52,6 +56,11 @@ final class EditProfileViewController: UIViewController {
     
     // MARK: - Requests
     
+    private func uploadAvatarImage(image: UIImage) {
+        let directory = "Avatars/" + "_\(UserSettings.shared.currentUser!.userId)" + ".jpeg"
+        presenter?.uploadAvatarImage(image: image, directory: directory)
+    }
+    
     private func signOut() {
         presenter?.singOut()
     }
@@ -63,7 +72,7 @@ final class EditProfileViewController: UIViewController {
     private func getUserInfoFromDefaults() {
         presenter?.getUserInfoFromDefaults()
     }
-
+    
     
     // MARK: - UI Actions
     
@@ -75,21 +84,59 @@ final class EditProfileViewController: UIViewController {
         navigationController?.navigationBar.prefersLargeTitles = false
     }
     
+    private func pickAvatarImage() {
+        var config = YPImagePickerConfiguration()
+        config.showsCrop = .none
+        config.screens = [.library, .photo]
+        config.startOnScreen = YPPickerScreen.library
+        picker = YPImagePicker(configuration: config)
+        picker?.imagePickerDelegate = self
+        picker?.didFinishPicking { [unowned picker] items, _ in
+            if let photo = items.singlePhoto {
+                self.profileCell?.setupPhoto(image: photo.image)
+                self.uploadAvatarImage(image: photo.image)
+            } else {
+                print("no photo error")
+            }
+            picker?.dismiss(animated: true, completion: nil)
+        }
+        present(picker!, animated: true, completion: nil)
+    }
+    
     private func configure() {
         
     }
-        
+    
+}
+
+// MARK: - EditProfileCellDelegate
+
+extension EditProfileViewController: EditProfileCellDelegate {
+    func addImageTapped() {
+        pickAvatarImage()
+    }
 }
 
 
 // MARK: - EditProfileViewProtocol
 
 extension EditProfileViewController: EditProfileViewProtocol {
+    func getUploadImageResult(result: ResultEnum) {
+        switch result {
+        case .success(let url):
+            if var user = UserSettings.shared.currentUser {
+                user.userAvatar = url as? String ?? ""
+                saveUser(user: user)
+            }
+        case .error:
+            print("upload error")
+        }
+    }
+    
     func getSignOutResult(result: ResultEnum) {
         switch result {
         case .success:
             presenter?.navigateToLogin()
-            print("sign out SUCCESS")
         case .error:
             print("sign out ERROR")
         }
@@ -143,9 +190,10 @@ extension EditProfileViewController: UITableViewDelegate, UITableViewDataSource 
         
         case 0:
             profileCell = tableView.dequeueReusableCell(withIdentifier: EditProfileCell.cellID,
-                                                                      for: indexPath) as? EditProfileCell
+                                                        for: indexPath) as? EditProfileCell
             profileCell?.selectionStyle = .none
             profileCell?.usernameTF.delegate = self
+            profileCell?.delegate = self
             if let user = user {
                 profileCell?.setupData(user: user)
             }
@@ -153,7 +201,7 @@ extension EditProfileViewController: UITableViewDelegate, UITableViewDataSource 
             
         case 1:
             bioCell = tableView.dequeueReusableCell(withIdentifier: EditCell.cellID,
-                                                                      for: indexPath) as? EditCell
+                                                    for: indexPath) as? EditCell
             
             bioCell?.selectionStyle = .none
             bioCell?.bioTF.isHidden = false
@@ -168,7 +216,7 @@ extension EditProfileViewController: UITableViewDelegate, UITableViewDataSource 
             switch (indexPath as NSIndexPath).row {
             case 0:
                 guard let cell = tableView.dequeueReusableCell(withIdentifier: EditCell.cellID,
-                                                                          for: indexPath) as? EditCell else {return UITableViewCell()}
+                                                               for: indexPath) as? EditCell else {return UITableViewCell()}
                 cell.accessoryType = .disclosureIndicator
                 cell.usernameLabel.isHidden = false
                 cell.usernameResultLabel.isHidden = false
@@ -179,7 +227,7 @@ extension EditProfileViewController: UITableViewDelegate, UITableViewDataSource 
                 
             case 1:
                 guard let cell = tableView.dequeueReusableCell(withIdentifier: EditCell.cellID,
-                                                                          for: indexPath) as? EditCell else {return UITableViewCell()}
+                                                               for: indexPath) as? EditCell else {return UITableViewCell()}
                 cell.accessoryType = .disclosureIndicator
                 cell.changeEmailLabel.isHidden = false
                 cell.changeEmailResultLabel.isHidden = false
@@ -195,7 +243,7 @@ extension EditProfileViewController: UITableViewDelegate, UITableViewDataSource 
             
         case 3:
             guard let buttonCell = tableView.dequeueReusableCell(withIdentifier: EditCell.cellID,
-                                                                      for: indexPath) as? EditCell else {return UITableViewCell()}
+                                                                 for: indexPath) as? EditCell else {return UITableViewCell()}
             buttonCell.buttonLabel.isHidden = false
             buttonCell.buttonLabel.text = "Add Account"
             buttonCell.buttonLabel.textColor = .systemBlue
@@ -203,7 +251,7 @@ extension EditProfileViewController: UITableViewDelegate, UITableViewDataSource 
             
         case 4:
             guard let buttonCell = tableView.dequeueReusableCell(withIdentifier: EditCell.cellID,
-                                                                      for: indexPath) as? EditCell else {return UITableViewCell()}
+                                                                 for: indexPath) as? EditCell else {return UITableViewCell()}
             buttonCell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: .greatestFiniteMagnitude)
             buttonCell.buttonLabel.isHidden = false
             buttonCell.buttonLabel.text = "Log Out"
@@ -313,9 +361,16 @@ extension EditProfileViewController: UITableViewDelegate, UITableViewDataSource 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return (indexPath as NSIndexPath).section == 0 ? 138 : 55
     }
+}
 
-    
-
+// MARK: - YPImagePickerDelegate
+extension EditProfileViewController: YPImagePickerDelegate {
+    func noPhotos() {
+        
+    }
+    func shouldAddToSelection(indexPath: IndexPath, numSelections: Int) -> Bool {
+        return true
+    }
 }
 
 

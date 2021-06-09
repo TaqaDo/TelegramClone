@@ -8,6 +8,6 @@
 import Foundation
 
 enum ResultEnum {
-    case success
+    case success(Any?)
     case error
 }

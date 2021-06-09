@@ -10,6 +10,7 @@
 import UIKit
 
 protocol EditProfilePresenterProtocol {
+    func uploadAvatarImage(image: UIImage, directory: String)
     func navigateToLogin()
     func getUserInfoFromDefaults()
     func saveUser(user: User)
@@ -33,6 +34,10 @@ final class EditProfilePresenter {
 // MARK: - EditProfilePresenterProtocol
 
 extension EditProfilePresenter: EditProfilePresenterProtocol {
+    func uploadAvatarImage(image: UIImage, directory: String) {
+        interactor?.uploadAvatar(image: image, directory: directory)
+    }
+    
     func navigateToLogin() {
         router?.navigateToLogin()
     }
@@ -53,6 +58,10 @@ extension EditProfilePresenter: EditProfilePresenterProtocol {
 // MARK: - EditProfileInteractorOutput
 
 extension EditProfilePresenter: EditProfileInteractorOutput {
+    func getUploadAvatarResult(result: ResultEnum) {
+        view?.getUploadImageResult(result: result)
+    }
+    
     func getSignOutResult(result: ResultEnum) {
         view?.getSignOutResult(result: result)
     }

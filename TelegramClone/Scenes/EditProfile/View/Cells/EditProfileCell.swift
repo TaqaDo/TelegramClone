@@ -8,12 +8,17 @@
 
 import UIKit
 
+protocol EditProfileCellDelegate: AnyObject {
+    func addImageTapped()
+}
+
 
 final class EditProfileCell: UITableViewCell {
+    
+    weak var delegate: EditProfileCellDelegate?
+    private lazy var gesture:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(viewTapped))
 
-    
     // MARK: - Views
-    
     
     private lazy var profileImage: UIImageView = {
         let imageView = UIImageView()
@@ -54,6 +59,7 @@ final class EditProfileCell: UITableViewCell {
         view.layer.cornerRadius = 84/2
         view.backgroundColor = .init(hex: "#50000000")
         view.clipsToBounds = true
+        view.addGestureRecognizer(gesture)
         view.addSubview(addImage)
         addImage.snp.makeConstraints { make in
             make.center.equalToSuperview()
@@ -74,6 +80,12 @@ final class EditProfileCell: UITableViewCell {
     
     required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    // MARK: - UI Actions
+    
+    @objc func viewTapped() {
+        delegate?.addImageTapped()
     }
 
     
@@ -106,6 +118,10 @@ final class EditProfileCell: UITableViewCell {
             make.leading.equalToSuperview().inset(20)
             make.size.equalTo(84)
         }
+    }
+    
+    func setupPhoto(image: UIImage) {
+        profileImage.image = image
     }
     
     func setupData(user: User) {

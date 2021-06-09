@@ -58,5 +58,11 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>NSCameraUsageDescription</key>
+	<string>$(PRODUCT_NAME)  would like to use camera</string>
+	<key>NSAppleMusicUsageDescription</key>
+	<string>$(PRODUCT_NAME)  would like to use media</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>$(PRODUCT_NAME)  would like to use Gallery</string>
 </dict>
 </plist>

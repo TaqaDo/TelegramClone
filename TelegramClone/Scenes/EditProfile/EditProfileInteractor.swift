@@ -10,6 +10,7 @@
 import UIKit
 
 protocol EditProfileInteractorProtocol {
+    func uploadAvatar(image: UIImage, directory: String)
     func singOut()
     func getUserInfoFromDefaults()
     func saveUser(user: User)
@@ -18,6 +19,7 @@ protocol EditProfileInteractorProtocol {
 protocol EditProfileInteractorOutput: AnyObject {
     func getUserInfoResult(user: User)
     func getSignOutResult(result: ResultEnum)
+    func getUploadAvatarResult(result: ResultEnum)
 }
 
 final class EditProfileInteractor {
@@ -30,12 +32,23 @@ final class EditProfileInteractor {
 // MARK: - EditProfileInteractorProtocol
 
 extension EditProfileInteractor: EditProfileInteractorProtocol {
+    func uploadAvatar(image: UIImage, directory: String) {
+        dataProvider.uploadAvatarImage(image: image, directory: directory) { [weak self] result in
+            switch result {
+            case .success(let url):
+                self?.output?.getUploadAvatarResult(result: .success(url))
+            case .failure(_):
+                self?.output?.getUploadAvatarResult(result: .error)
+            }
+        }
+    }
+    
     func singOut() {
         dataProvider.singOut { [weak self] result in
             switch result {
             
             case .success(_):
-                self?.output?.getSignOutResult(result: .success)
+                self?.output?.getSignOutResult(result: .success(nil))
             case .failure(_):
                 self?.output?.getSignOutResult(result: .error)
             }

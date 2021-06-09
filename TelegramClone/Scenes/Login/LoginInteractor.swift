@@ -30,7 +30,7 @@ extension LoginInteractor: LoginInteractorProtocol {
             switch result {
             
             case .success(_):
-                self?.output?.loginResult(result: .success)
+                self?.output?.loginResult(result: .success(nil))
             case .failure(_):
                 self?.output?.loginResult(result: .error)
             }

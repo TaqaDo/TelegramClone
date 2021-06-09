@@ -30,7 +30,7 @@ extension RegistrationInteractor: RegistrationInteractorProtocol {
         dataProvider.registerUser(email: email, password: password) { [weak self] result in
             switch result {
             case .success(_):
-                self?.output?.registerResult(result: .success)
+                self?.output?.registerResult(result: .success(nil))
             case .failure(_):
                 self?.output?.registerResult(result: .error)
             }

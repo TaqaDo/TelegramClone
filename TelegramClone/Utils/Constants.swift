@@ -12,10 +12,12 @@ import Firebase
 let currentUID = Auth.auth().currentUser?.uid
 let userCollection = Firestore.firestore().collection("User")
 let recentCollection = Firestore.firestore().collection("Recent")
+let storage = Storage.storage()
 
-//UserDafaults
+//UserDafaults and keys
 let userDefaults = UserDefaults.standard
 let kCURRENTUSER = "currentUser"
+let kFILEDIRECTORY = "gs://telegramclone-29c7c.appspot.com"
 
 
 //Settings Models
