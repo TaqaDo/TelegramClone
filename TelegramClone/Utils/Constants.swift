@@ -9,7 +9,7 @@ import Foundation
 import Firebase
 
 // Firebase
-let currentUID = Auth.auth().currentUser?.uid
+let currentUID = UserSettings.shared.currentUser?.userId ?? ""
 let userCollection = Firestore.firestore().collection("User")
 let recentCollection = Firestore.firestore().collection("Recent")
 let storage = Storage.storage()

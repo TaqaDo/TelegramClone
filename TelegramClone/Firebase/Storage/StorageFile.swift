@@ -11,6 +11,7 @@ import UIKit
 
 
 protocol StorageFileProtocol {
+    func downloadAvatarImage(url: String,  completion: @escaping(Result<UIImage?, Error>) -> Void)
     func uploadAvatarImage(image: UIImage, directory: String, completion: @escaping(Result<String?, Error>) -> Void)
     func saveFileToDisk(fileData: NSData, fileName: String, completion: @escaping(OnResult))
 }
@@ -37,6 +38,32 @@ class StorageFile {
 // MARK: - StorageFileProtocol
 
 extension StorageFile: StorageFileProtocol {
+    func downloadAvatarImage(url: String, completion: @escaping (Result<UIImage?, Error>) -> Void) {
+        let userUrl = UserSettings.shared.currentUser?.userId ?? ""
+        if StorageFile.shared.fileExistsAtPath(path: userUrl) {
+            print("local image")
+            if let fileImage = UIImage(contentsOfFile: StorageFile.shared.fileInDocumentDierectory(fileName: userUrl)) {
+                completion(.success(fileImage))
+            }
+            
+        } else {
+            print("remote image")
+            if url != "" {
+                let downloadQueue = DispatchQueue(label: "imageDownload")
+                downloadQueue.async {
+                    let data = NSData(contentsOf: URL(string: url)!)
+                    if data != nil {
+                        self.saveFileToDisk(fileData: data!, fileName: UserSettings.shared.currentUser!.userId) { result in
+                        }
+                        DispatchQueue.main.async {
+                            completion(.success(UIImage(data: data! as Data)))
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
     func saveFileToDisk(fileData: NSData, fileName: String, completion: @escaping(OnResult)) {
         let docUrl = getdocumentURL().appendingPathComponent(fileName, isDirectory: false)
         do {

@@ -97,7 +97,7 @@ extension UserAPI: UserAPIProtocol {
                                 userEmail: email,
                                 userPushId: "",
                                 userAvatar: "",
-                                userBio: "Hello there!!")
+                                userBio: "Hello there!")
                 self?.saveUserToFirestore(user: user)
                 self?.saveUserToUserDefaults(user: user)
             }

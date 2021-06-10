@@ -10,6 +10,7 @@
 import UIKit
 
 protocol SettingsPresenterProtocol {
+    func downloadAvatarImage(url: String)
     func getUserInfoFromDefaults()
     func navigateToEditProfile()
 }
@@ -31,6 +32,10 @@ final class SettingsPresenter {
 // MARK: - SettingsPresenterProtocol
 
 extension SettingsPresenter: SettingsPresenterProtocol {
+    func downloadAvatarImage(url: String) {
+        interactor?.downloadAvatarImage(url: url)
+    }
+    
     func navigateToEditProfile() {
         router?.navigateToEditProfile()
     }
@@ -43,6 +48,10 @@ extension SettingsPresenter: SettingsPresenterProtocol {
 // MARK: - ChatsInteractorOutput
 
 extension SettingsPresenter: SettingsInteractorOutput {
+    func getdownloadAvatarResult(result: ResultEnum) {
+        view?.getDownloadAvatarResult(result: result)
+    }
+    
     func getUserInfoResult(user: User) {
         view?.getUserInfoResult(user: user)
     }

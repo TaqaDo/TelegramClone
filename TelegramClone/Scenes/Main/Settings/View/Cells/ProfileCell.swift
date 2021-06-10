@@ -18,7 +18,6 @@ final class ProfileCell: UITableViewCell {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
-        imageView.image = #imageLiteral(resourceName: "venom-7")
         imageView.layer.cornerRadius = 84/2
         return imageView
     }()
@@ -92,6 +91,10 @@ final class ProfileCell: UITableViewCell {
     func setupData(user: User) {
         usernameLabel.text = user.username
         bioLabel.text = user.userBio
+    }
+    
+    func setupPhoto(image: UIImage) {
+        profileImage.image = image
     }
 }
 

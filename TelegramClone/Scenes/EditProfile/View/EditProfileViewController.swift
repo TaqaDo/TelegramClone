@@ -10,6 +10,7 @@
 
 import UIKit
 import YPImagePicker
+import Kingfisher
 
 protocol EditProfileViewProtocol: AnyObject {
     func getSaveFileToDiskResult(result: ResultEnum)
@@ -57,10 +58,14 @@ final class EditProfileViewController: UIViewController {
     
     // MARK: - Requests
     
+    private func downloadAvatarImage(url: String){
+        
+    }
+    
     private func uploadAvatarImage(image: UIImage) {
         let directory = "Avatars/" + "_\(UserSettings.shared.currentUser!.userId)" + ".jpeg"
         presenter?.uploadAvatarImage(image: image, directory: directory)
-        presenter?.saveFileToDisk(fileData: image.jpegData(compressionQuality: 1.0)! as NSData, fileName: UserSettings.shared.currentUser!.userId)
+        presenter?.saveFileToDisk(fileData: image.jpegData(compressionQuality: 1.0)! as NSData, fileName: currentUID)
     }
     
     private func signOut() {
@@ -191,6 +196,78 @@ extension EditProfileViewController: UITextFieldDelegate {
     }
 }
 
+// MARK: - Cell Helpers
+
+extension EditProfileViewController {
+    private func profileCell(tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        profileCell = tableView.dequeueReusableCell(withIdentifier: EditProfileCell.cellID,
+                                                    for: indexPath) as? EditProfileCell
+        profileCell?.selectionStyle = .none
+        profileCell?.usernameTF.delegate = self
+        profileCell?.delegate = self
+        if let user = user {
+            profileCell?.setupData(user: user)
+        }
+        return profileCell ?? UITableViewCell()
+    }
+    
+    private func bioCell(tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        bioCell = tableView.dequeueReusableCell(withIdentifier: EditCell.cellID,
+                                                for: indexPath) as? EditCell
+        
+        bioCell?.selectionStyle = .none
+        bioCell?.bioTF.isHidden = false
+        bioCell?.bioTF.delegate = self
+        if let user = user {
+            bioCell?.setupData(user: user)
+        }
+        return bioCell ?? UITableViewCell()
+    }
+    
+    private func usernameCell(tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: EditCell.cellID,
+                                                       for: indexPath) as? EditCell else {return UITableViewCell()}
+        cell.accessoryType = .disclosureIndicator
+        cell.usernameLabel.isHidden = false
+        cell.usernameResultLabel.isHidden = false
+        if let user = user {
+            cell.setupData(user: user)
+        }
+        return cell
+    }
+    
+    private func changeEmailCell(tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: EditCell.cellID,
+                                                       for: indexPath) as? EditCell else {return UITableViewCell()}
+        cell.accessoryType = .disclosureIndicator
+        cell.changeEmailLabel.isHidden = false
+        cell.changeEmailResultLabel.isHidden = false
+        if let user = user {
+            cell.setupData(user: user)
+        }
+        return cell
+    }
+    
+    private func addButtonCell(tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let buttonCell = tableView.dequeueReusableCell(withIdentifier: EditCell.cellID,
+                                                             for: indexPath) as? EditCell else {return UITableViewCell()}
+        buttonCell.buttonLabel.isHidden = false
+        buttonCell.buttonLabel.text = "Add Account"
+        buttonCell.buttonLabel.textColor = .systemBlue
+        return buttonCell
+    }
+    
+    private func logOutCell(tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let buttonCell = tableView.dequeueReusableCell(withIdentifier: EditCell.cellID,
+                                                             for: indexPath) as? EditCell else {return UITableViewCell()}
+        buttonCell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: .greatestFiniteMagnitude)
+        buttonCell.buttonLabel.isHidden = false
+        buttonCell.buttonLabel.text = "Log Out"
+        buttonCell.buttonLabel.textColor = .red
+        return buttonCell
+    }
+}
+
 // MARK: - UITableViewDel|DS
 
 extension EditProfileViewController: UITableViewDelegate, UITableViewDataSource {
@@ -200,52 +277,19 @@ extension EditProfileViewController: UITableViewDelegate, UITableViewDataSource 
         switch (indexPath as NSIndexPath).section {
         
         case 0:
-            profileCell = tableView.dequeueReusableCell(withIdentifier: EditProfileCell.cellID,
-                                                        for: indexPath) as? EditProfileCell
-            profileCell?.selectionStyle = .none
-            profileCell?.usernameTF.delegate = self
-            profileCell?.delegate = self
-            if let user = user {
-                profileCell?.setupData(user: user)
-            }
-            return profileCell ?? UITableViewCell()
+            return profileCell(tableView: tableView, cellForRowAt: indexPath)
             
         case 1:
-            bioCell = tableView.dequeueReusableCell(withIdentifier: EditCell.cellID,
-                                                    for: indexPath) as? EditCell
-            
-            bioCell?.selectionStyle = .none
-            bioCell?.bioTF.isHidden = false
-            bioCell?.bioTF.delegate = self
-            if let user = user {
-                bioCell?.setupData(user: user)
-            }
-            return bioCell ?? UITableViewCell()
+            return bioCell(tableView: tableView, cellForRowAt: indexPath)
             
         case 2:
             
             switch (indexPath as NSIndexPath).row {
             case 0:
-                guard let cell = tableView.dequeueReusableCell(withIdentifier: EditCell.cellID,
-                                                               for: indexPath) as? EditCell else {return UITableViewCell()}
-                cell.accessoryType = .disclosureIndicator
-                cell.usernameLabel.isHidden = false
-                cell.usernameResultLabel.isHidden = false
-                if let user = user {
-                    cell.setupData(user: user)
-                }
-                return cell
+                return usernameCell(tableView: tableView, cellForRowAt: indexPath)
                 
             case 1:
-                guard let cell = tableView.dequeueReusableCell(withIdentifier: EditCell.cellID,
-                                                               for: indexPath) as? EditCell else {return UITableViewCell()}
-                cell.accessoryType = .disclosureIndicator
-                cell.changeEmailLabel.isHidden = false
-                cell.changeEmailResultLabel.isHidden = false
-                if let user = user {
-                    cell.setupData(user: user)
-                }
-                return cell
+                return changeEmailCell(tableView: tableView, cellForRowAt: indexPath)
                 
             default:
                 return UITableViewCell()
@@ -253,21 +297,10 @@ extension EditProfileViewController: UITableViewDelegate, UITableViewDataSource 
             
             
         case 3:
-            guard let buttonCell = tableView.dequeueReusableCell(withIdentifier: EditCell.cellID,
-                                                                 for: indexPath) as? EditCell else {return UITableViewCell()}
-            buttonCell.buttonLabel.isHidden = false
-            buttonCell.buttonLabel.text = "Add Account"
-            buttonCell.buttonLabel.textColor = .systemBlue
-            return buttonCell
+            return addButtonCell(tableView: tableView, cellForRowAt: indexPath)
             
         case 4:
-            guard let buttonCell = tableView.dequeueReusableCell(withIdentifier: EditCell.cellID,
-                                                                 for: indexPath) as? EditCell else {return UITableViewCell()}
-            buttonCell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: .greatestFiniteMagnitude)
-            buttonCell.buttonLabel.isHidden = false
-            buttonCell.buttonLabel.text = "Log Out"
-            buttonCell.buttonLabel.textColor = .red
-            return buttonCell
+            return logOutCell(tableView: tableView, cellForRowAt: indexPath)
             
         default:
             return UITableViewCell()

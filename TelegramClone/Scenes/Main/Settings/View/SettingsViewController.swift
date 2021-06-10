@@ -18,6 +18,7 @@
 import UIKit
 
 protocol SettingsViewProtocol: AnyObject {
+    func getDownloadAvatarResult(result: ResultEnum)
     func getUserInfoResult(user: User)
 }
 
@@ -28,6 +29,7 @@ final class SettingsViewController: UIViewController {
     var presenter: SettingsPresenterProtocol?
     lazy var contentView: SettingsViewLogic = SettingsView()
     var user: User? = nil
+    var avatarImage: UIImage? = nil
     
     
     // MARK: - Lifecycle
@@ -63,6 +65,7 @@ final class SettingsViewController: UIViewController {
     
     private func getUserInfoFromDefaults() {
         presenter?.getUserInfoFromDefaults()
+        presenter?.downloadAvatarImage(url: user?.userAvatar ?? "")
     }
 
     
@@ -104,9 +107,60 @@ final class SettingsViewController: UIViewController {
 // MARK: - LoginViewProtocol
 
 extension SettingsViewController: SettingsViewProtocol {
+    func getDownloadAvatarResult(result: ResultEnum) {
+        switch result {
+        
+        case .success(let image):
+            self.avatarImage = image as? UIImage
+            contentView.getSettingsTableView().reloadData()
+        case .error:
+            print("error downloading image")
+        }
+    }
+    
     func getUserInfoResult(user: User) {
         self.user = user
         contentView.getSettingsTableView().reloadData()
+    }
+}
+
+// MARK: - Cell Helpers
+
+extension SettingsViewController {
+    private func profileCell(tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let profileCell = tableView.dequeueReusableCell(withIdentifier: ProfileCell.cellID,
+                                                              for: indexPath) as? ProfileCell else {return UITableViewCell()}
+        profileCell.accessoryType = .disclosureIndicator
+        profileCell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: .greatestFiniteMagnitude)
+        if let user = user {
+            profileCell.setupData(user: user)
+            profileCell.setupPhoto(image: avatarImage ?? UIImage())
+        }
+        return profileCell
+    }
+    
+    private func sectionFirstCell(tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let sectionCell = tableView.dequeueReusableCell(withIdentifier: SectionCell.cellID,
+                                                       for: indexPath) as? SectionCell else {return UITableViewCell()}
+        sectionCell.accessoryType = .disclosureIndicator
+        sectionCell.setupData(data: firstSection[indexPath.row])
+        return sectionCell
+    }
+    
+    private func sectionSecondCell(tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let sectionCell = tableView.dequeueReusableCell(withIdentifier: SectionCell.cellID,
+                                                       for: indexPath) as? SectionCell else {return UITableViewCell()}
+        sectionCell.accessoryType = .disclosureIndicator
+        sectionCell.setupData(data: secondSection[indexPath.row])
+        return sectionCell
+    }
+    
+    private func sectionThirdCell(tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let sectionCell = tableView.dequeueReusableCell(withIdentifier: SectionCell.cellID,
+                                                       for: indexPath) as? SectionCell else {return UITableViewCell()}
+        sectionCell.setupData(data: thirdSection[indexPath.row])
+        sectionCell.accessoryType = .disclosureIndicator
+        return sectionCell
     }
 }
 
@@ -118,32 +172,13 @@ extension SettingsViewController: UITableViewDelegate, UITableViewDataSource {
         
         switch (indexPath as NSIndexPath).section {
         case 0:
-            guard let profileCell = tableView.dequeueReusableCell(withIdentifier: ProfileCell.cellID,
-                                                                  for: indexPath) as? ProfileCell else {return UITableViewCell()}
-            profileCell.accessoryType = .disclosureIndicator
-            profileCell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: .greatestFiniteMagnitude)
-            if let user = user {
-                profileCell.setupData(user: user)
-            }
-            return profileCell
+            return profileCell(tableView: tableView, cellForRowAt: indexPath)
         case 1:
-            guard let sectionCell = tableView.dequeueReusableCell(withIdentifier: SectionCell.cellID,
-                                                           for: indexPath) as? SectionCell else {return UITableViewCell()}
-            sectionCell.accessoryType = .disclosureIndicator
-            sectionCell.setupData(data: firstSection[indexPath.row])
-            return sectionCell
+            return sectionFirstCell(tableView: tableView, cellForRowAt: indexPath)
         case 2:
-            guard let sectionCell = tableView.dequeueReusableCell(withIdentifier: SectionCell.cellID,
-                                                           for: indexPath) as? SectionCell else {return UITableViewCell()}
-            sectionCell.accessoryType = .disclosureIndicator
-            sectionCell.setupData(data: secondSection[indexPath.row])
-            return sectionCell
+            return sectionSecondCell(tableView: tableView, cellForRowAt: indexPath)
         case 3:
-            guard let sectionCell = tableView.dequeueReusableCell(withIdentifier: SectionCell.cellID,
-                                                           for: indexPath) as? SectionCell else {return UITableViewCell()}
-            sectionCell.setupData(data: thirdSection[indexPath.row])
-            sectionCell.accessoryType = .disclosureIndicator
-            return sectionCell
+            return sectionThirdCell(tableView: tableView, cellForRowAt: indexPath)
         default:
             return UITableViewCell()
         }
