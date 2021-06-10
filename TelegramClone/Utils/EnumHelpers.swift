@@ -11,3 +11,8 @@ enum ResultEnum {
     case success(Any?)
     case error
 }
+
+enum ResultArryEnum {
+    case success([Any?])
+    case error
+}

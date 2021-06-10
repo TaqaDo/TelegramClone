@@ -7,5 +7,6 @@
 
 import Foundation
 
-typealias OnResult = (Result<Void?, Error>) -> ()
-typealias OnLoginResult = (Result<User?, Error>) -> ()
+typealias OnResult = (Result<Void?, Error>) -> Void
+typealias OnLoginResult = (Result<User?, Error>) -> Void
+typealias OnUsersResult = (Result<[User?], Error>) -> Void

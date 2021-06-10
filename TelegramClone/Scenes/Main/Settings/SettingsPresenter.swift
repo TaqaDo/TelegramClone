@@ -8,6 +8,8 @@
 
 
 import UIKit
+import Foundation
+
 
 protocol SettingsPresenterProtocol {
     func downloadAvatarImage(url: String)
@@ -32,6 +34,7 @@ final class SettingsPresenter {
 // MARK: - SettingsPresenterProtocol
 
 extension SettingsPresenter: SettingsPresenterProtocol {
+
     func downloadAvatarImage(url: String) {
         interactor?.downloadAvatarImage(url: url)
     }
@@ -49,7 +52,7 @@ extension SettingsPresenter: SettingsPresenterProtocol {
 
 extension SettingsPresenter: SettingsInteractorOutput {
     func getdownloadAvatarResult(result: ResultEnum) {
-        view?.getDownloadAvatarResult(result: result)
+        
     }
     
     func getUserInfoResult(user: User) {

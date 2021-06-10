@@ -22,6 +22,11 @@ class StorageFile {
     
     // DiskStorage
     
+    func fileNameOfUserUrl(fileUrl: String) -> String {
+        let name = ((fileUrl.components(separatedBy: "_").last)?.components(separatedBy: "?").first)?.components(separatedBy: ".").first
+        return name!
+    }
+    
     func getdocumentURL() -> URL {
         return FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).last!
     }
@@ -39,24 +44,27 @@ class StorageFile {
 
 extension StorageFile: StorageFileProtocol {
     func downloadAvatarImage(url: String, completion: @escaping (Result<UIImage?, Error>) -> Void) {
-        let userUrl = UserSettings.shared.currentUser?.userId ?? ""
-        if StorageFile.shared.fileExistsAtPath(path: userUrl) {
-            print("local image")
-            if let fileImage = UIImage(contentsOfFile: StorageFile.shared.fileInDocumentDierectory(fileName: userUrl)) {
-                completion(.success(fileImage))
-            }
-            
-        } else {
-            print("remote image")
-            if url != "" {
-                let downloadQueue = DispatchQueue(label: "imageDownload")
-                downloadQueue.async {
-                    let data = NSData(contentsOf: URL(string: url)!)
-                    if data != nil {
-                        self.saveFileToDisk(fileData: data!, fileName: UserSettings.shared.currentUser!.userId) { result in
-                        }
-                        DispatchQueue.main.async {
-                            completion(.success(UIImage(data: data! as Data)))
+        
+        let imageQueue = DispatchQueue(label: "imageQueue")
+        imageQueue.async {
+            let userUrl = self.fileNameOfUserUrl(fileUrl: url)
+            if StorageFile.shared.fileExistsAtPath(path: userUrl) {
+                print("local image")
+                if let fileImage = UIImage(contentsOfFile: StorageFile.shared.fileInDocumentDierectory(fileName: userUrl)) {
+                    DispatchQueue.main.async {
+                        completion(.success(fileImage))
+                    }
+                }
+                
+            } else {
+                print("remote image")
+                if url != "" {
+                        let data = NSData(contentsOf: URL(string: url)!)
+                        if data != nil {
+                            self.saveFileToDisk(fileData: data!, fileName: userUrl) { result in
+                            }
+                            DispatchQueue.main.async {
+                                completion(.success(UIImage(data: data! as Data)))
                         }
                     }
                 }

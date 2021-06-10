@@ -66,7 +66,7 @@ final class ChatsViewController: UIViewController {
         searchController.hidesNavigationBarDuringPresentation = false
         searchController.searchBar.placeholder = "Search for messages and users"
         navigationItem.searchController = searchController
-        definesPresentationContext = false
+        definesPresentationContext = true
     }
         
 }

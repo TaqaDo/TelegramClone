@@ -10,6 +10,7 @@ import Firebase
 
 
 protocol UserAPIProtocol {
+    func downloadAllUsers(completion: @escaping(OnUsersResult))
     func signOut(completion: @escaping(OnResult))
     func saveUser(user: User)
     func registerUser(email: String, password: String, completion: @escaping(OnResult))
@@ -53,6 +54,29 @@ class UserAPI {
 // MARK: - UserAPIProtocol
 
 extension UserAPI: UserAPIProtocol {
+    func downloadAllUsers(completion: @escaping (OnUsersResult)) {
+        var users: [User] = []
+        userCollection.getDocuments { querySnapshot, error in
+            if let error = error {
+                completion(.failure(error))
+                return
+            }
+            guard let documets = querySnapshot?.documents else {
+                print("no snapshot for users")
+                return
+            }
+            let allUsers = documets.compactMap({ document -> User? in
+                return try? document.data(as: User.self)
+            })
+            for user in allUsers {
+                if currentUID != user.userId {
+                    users.append(user)
+                }
+            }
+            completion(.success(users))
+        }
+    }
+    
     func signOut(completion: @escaping (OnResult)) {
         do {
             try Auth.auth().signOut()

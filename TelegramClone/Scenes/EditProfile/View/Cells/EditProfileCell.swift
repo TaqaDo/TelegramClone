@@ -7,6 +7,8 @@
 
 
 import UIKit
+import Kingfisher
+
 
 protocol EditProfileCellDelegate: AnyObject {
     func addImageTapped()
@@ -24,7 +26,6 @@ final class EditProfileCell: UITableViewCell {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
-        imageView.image = #imageLiteral(resourceName: "venom-7")
         imageView.layer.cornerRadius = 84/2
         return imageView
     }()
@@ -49,7 +50,6 @@ final class EditProfileCell: UITableViewCell {
     private lazy var labelStack: UIStackView = {
        let stack = UIStackView(arrangedSubviews: [usernameTF])
         stack.axis = .vertical
-        stack.spacing = 5
         stack.distribution = .fillProportionally
         return stack
     }()
@@ -126,6 +126,7 @@ final class EditProfileCell: UITableViewCell {
     
     func setupData(user: User) {
         usernameTF.text = user.username
+        profileImage.kf.setImage(with: URL(string: user.userAvatar))
     }
 }
 

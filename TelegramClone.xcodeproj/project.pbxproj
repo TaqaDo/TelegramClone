@@ -34,6 +34,8 @@
 		A2537309266EC40100C749E3 /* EditProfileInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2537304266EC40100C749E3 /* EditProfileInteractor.swift */; };
 		A253730A266EC40100C749E3 /* EditProfileDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2537305266EC40100C749E3 /* EditProfileDataProvider.swift */; };
 		A253730C266EC81700C749E3 /* EditProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A253730B266EC81700C749E3 /* EditProfileView.swift */; };
+		A260FAE12672488400ABCE6E /* ContactsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A260FAE02672488400ABCE6E /* ContactsCell.swift */; };
+		A260FAE32672663500ABCE6E /* SectionContactCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A260FAE22672663500ABCE6E /* SectionContactCell.swift */; };
 		A29F76AD266FD65F00A051F8 /* EditProfileCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A29F76AC266FD65F00A051F8 /* EditProfileCell.swift */; };
 		A2B36B40266D696900ACF6F7 /* ContactsPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B36B3B266D696900ACF6F7 /* ContactsPresenter.swift */; };
 		A2B36B41266D696900ACF6F7 /* ContactsRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B36B3C266D696900ACF6F7 /* ContactsRouter.swift */; };
@@ -123,6 +125,8 @@
 		A2537304266EC40100C749E3 /* EditProfileInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileInteractor.swift; sourceTree = "<group>"; };
 		A2537305266EC40100C749E3 /* EditProfileDataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileDataProvider.swift; sourceTree = "<group>"; };
 		A253730B266EC81700C749E3 /* EditProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileView.swift; sourceTree = "<group>"; };
+		A260FAE02672488400ABCE6E /* ContactsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsCell.swift; sourceTree = "<group>"; };
+		A260FAE22672663500ABCE6E /* SectionContactCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionContactCell.swift; sourceTree = "<group>"; };
 		A29F76AC266FD65F00A051F8 /* EditProfileCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileCell.swift; sourceTree = "<group>"; };
 		A2B36B3B266D696900ACF6F7 /* ContactsPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsPresenter.swift; sourceTree = "<group>"; };
 		A2B36B3C266D696900ACF6F7 /* ContactsRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsRouter.swift; sourceTree = "<group>"; };
@@ -333,6 +337,15 @@
 			path = View;
 			sourceTree = "<group>";
 		};
+		A260FADF2672487500ABCE6E /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				A260FAE02672488400ABCE6E /* ContactsCell.swift */,
+				A260FAE22672663500ABCE6E /* SectionContactCell.swift */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
 		A29F76AB266FD64500A051F8 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
@@ -421,6 +434,7 @@
 		A2B36B73266D89D400ACF6F7 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				A260FADF2672487500ABCE6E /* Cells */,
 				A2B36B3D266D696900ACF6F7 /* ContactsViewController.swift */,
 				A2B36B71266D89CE00ACF6F7 /* ContactsView.swift */,
 			);
@@ -771,6 +785,7 @@
 				A2238B54266B6B4B00896811 /* Typealiases.swift in Sources */,
 				A2B36B4D266D697800ACF6F7 /* CallsViewController.swift in Sources */,
 				A2460EBB266A6D2E004AD7EA /* RegistrationPresenter.swift in Sources */,
+				A260FAE32672663500ABCE6E /* SectionContactCell.swift in Sources */,
 				A2B36B59266D698500ACF6F7 /* ChatsInteractor.swift in Sources */,
 				A2B36B4F266D697800ACF6F7 /* CallsDataProvider.swift in Sources */,
 				A2238B59266BCD3900896811 /* MainTabBar.swift in Sources */,
@@ -778,6 +793,7 @@
 				A25372FD266EA14700C749E3 /* SectionCell.swift in Sources */,
 				A2460EB4266A6223004AD7EA /* Extensions.swift in Sources */,
 				A2DF4FD3266930C900E4412A /* AppDelegate.swift in Sources */,
+				A260FAE12672488400ABCE6E /* ContactsCell.swift in Sources */,
 				A2B36B56266D698500ACF6F7 /* ChatsPresenter.swift in Sources */,
 				A2238B56266B6C5700896811 /* EnumHelpers.swift in Sources */,
 				A2460EC4266ABD1A004AD7EA /* User.swift in Sources */,

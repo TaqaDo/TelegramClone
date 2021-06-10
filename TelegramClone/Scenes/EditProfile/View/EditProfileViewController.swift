@@ -13,7 +13,6 @@ import YPImagePicker
 import Kingfisher
 
 protocol EditProfileViewProtocol: AnyObject {
-    func getSaveFileToDiskResult(result: ResultEnum)
     func getUploadImageResult(result: ResultEnum)
     func getUserInfoResult(user: User)
     func getSignOutResult(result: ResultEnum)
@@ -25,6 +24,7 @@ final class EditProfileViewController: UIViewController {
     
     var picker: YPImagePicker?
     var user: User? = nil
+    var avatarImage: UIImage? = nil
     
     var presenter: EditProfilePresenterProtocol?
     lazy var contentView: EditProfileViewLogic = EditProfileView()
@@ -58,14 +58,10 @@ final class EditProfileViewController: UIViewController {
     
     // MARK: - Requests
     
-    private func downloadAvatarImage(url: String){
-        
-    }
-    
     private func uploadAvatarImage(image: UIImage) {
         let directory = "Avatars/" + "_\(UserSettings.shared.currentUser!.userId)" + ".jpeg"
         presenter?.uploadAvatarImage(image: image, directory: directory)
-        presenter?.saveFileToDisk(fileData: image.jpegData(compressionQuality: 1.0)! as NSData, fileName: currentUID)
+//        presenter?.saveFileToDisk(fileData: image.jpegData(compressionQuality: 1.0)! as NSData, fileName: currentUID)
     }
     
     private func signOut() {
@@ -128,14 +124,6 @@ extension EditProfileViewController: EditProfileCellDelegate {
 // MARK: - EditProfileViewProtocol
 
 extension EditProfileViewController: EditProfileViewProtocol {
-    func getSaveFileToDiskResult(result: ResultEnum) {
-        switch result {
-        case .success:
-            print("save file success")
-        case .error:
-            print("save file error")
-        }
-    }
     
     func getUploadImageResult(result: ResultEnum) {
         switch result {
@@ -403,7 +391,7 @@ extension EditProfileViewController: UITableViewDelegate, UITableViewDataSource 
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return (indexPath as NSIndexPath).section == 0 ? 138 : 55
+        return (indexPath as NSIndexPath).section == 0 ? 138 : 50
     }
 }
 

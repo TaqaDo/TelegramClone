@@ -11,11 +11,11 @@
 import UIKit
 
 protocol ContactsInteractorProtocol {
-    
+    func downloadAllUsers()
 }
 
 protocol ContactsInteractorOutput: AnyObject {
-
+    func getdownloadAllUsersResult(result: ResultArryEnum)
 }
 
 final class ContactsInteractor {
@@ -28,5 +28,14 @@ final class ContactsInteractor {
 // MARK: - ContactsInteractorProtocol
 
 extension ContactsInteractor: ContactsInteractorProtocol {
-    
+    func downloadAllUsers() {
+        dataProvider.downloadAllUsers { [weak self] result in
+            switch result {
+            case .success(let users):
+                self?.output?.getdownloadAllUsersResult(result: .success(users))
+            case .failure(_):
+                self?.output?.getdownloadAllUsersResult(result: .error)
+            }
+        }
+    }
 }

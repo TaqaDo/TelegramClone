@@ -11,12 +11,23 @@ import SnapKit
 import UIKit
 
 protocol ContactsViewLogic: UIView {
- 
+    func getContactsTableView() -> UITableView
 }
 
 final class ContactsView: UIView {
     
     // MARK: - Views
+    
+    private lazy var contactsTableView: UITableView = {
+        let tableView = UITableView()
+        tableView.tableFooterView = UIView(frame: CGRect.zero)
+        tableView.backgroundColor = .clear
+        tableView.showsVerticalScrollIndicator = false
+        tableView.rowHeight = 55
+        tableView.register(ContactsCell.self, forCellReuseIdentifier: ContactsCell.cellID)
+        tableView.register(SectionContactCell.self, forCellReuseIdentifier: SectionContactCell.cellID)
+        return tableView
+    }()
     
     //
     
@@ -40,18 +51,24 @@ final class ContactsView: UIView {
     }
     
     private func addSubviews() {
-        
+        addSubview(contactsTableView)
     }
     
     private func addConstraints() {
-        
+        contactsTableView.snp.makeConstraints { make in
+            make.top.equalTo(safeArea.top)
+            make.bottom.equalTo(safeArea.bottom)
+            make.leading.trailing.equalToSuperview()
+        }
     }
 }
 
 // MARK: - ContactsViewLogic
 
 extension ContactsView: ContactsViewLogic {
-
+    func getContactsTableView() -> UITableView {
+        return contactsTableView
+    }
 }
 
 

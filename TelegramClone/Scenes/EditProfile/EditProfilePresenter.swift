@@ -10,6 +10,7 @@
 import UIKit
 
 protocol EditProfilePresenterProtocol {
+    func downloadAvatarImage(url: String)
     func saveFileToDisk(fileData: NSData, fileName: String)
     func uploadAvatarImage(image: UIImage, directory: String)
     func navigateToLogin()
@@ -35,6 +36,10 @@ final class EditProfilePresenter {
 // MARK: - EditProfilePresenterProtocol
 
 extension EditProfilePresenter: EditProfilePresenterProtocol {
+    func downloadAvatarImage(url: String) {
+        interactor?.downloadAvatarImage(url: url)
+    }
+    
     func saveFileToDisk(fileData: NSData, fileName: String) {
         interactor?.saveFileToDisk(fileData: fileData, fileName: fileName)
     }
@@ -63,8 +68,10 @@ extension EditProfilePresenter: EditProfilePresenterProtocol {
 // MARK: - EditProfileInteractorOutput
 
 extension EditProfilePresenter: EditProfileInteractorOutput {
+    func getdownloadAvatarResult(result: ResultEnum) {
+    }
+    
     func getSaveFileToDiskResult(result: ResultEnum) {
-        view?.getSaveFileToDiskResult(result: result)
     }
     
     func getUploadAvatarResult(result: ResultEnum) {

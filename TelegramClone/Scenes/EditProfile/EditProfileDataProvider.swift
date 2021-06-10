@@ -10,6 +10,7 @@
 import UIKit
 
 protocol EditProfileDataProviderProtocol {
+    func downloadAvatarImage(url: String, completion: @escaping (Result<UIImage?, Error>) -> Void)
     func saveFileToDisk(fileData: NSData, fileName: String, completion: @escaping(OnResult))
     func uploadAvatarImage(image: UIImage, directory: String, completion: @escaping(Result<String?, Error>) -> Void)
     func singOut(completion: @escaping(OnResult))
@@ -24,6 +25,10 @@ final class EditProfileDataProvider {
 // MARK: - EditProfileDataProviderProtocol
 
 extension EditProfileDataProvider: EditProfileDataProviderProtocol {
+    func downloadAvatarImage(url: String, completion: @escaping (Result<UIImage?, Error>) -> Void) {
+        StorageFile.shared.downloadAvatarImage(url: url, completion: completion)
+    }
+    
     func saveFileToDisk(fileData: NSData, fileName: String, completion: @escaping(OnResult)) {
         StorageFile.shared.saveFileToDisk(fileData: fileData, fileName: fileName, completion: completion)
     }

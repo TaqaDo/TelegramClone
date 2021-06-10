@@ -10,7 +10,7 @@
 import UIKit
 
 protocol ContactsPresenterProtocol {
-    
+    func downloadAllUsers()
 }
 
 final class ContactsPresenter {
@@ -30,11 +30,15 @@ final class ContactsPresenter {
 // MARK: - ContactsPresenterProtocol
 
 extension ContactsPresenter: ContactsPresenterProtocol {
-    
+    func downloadAllUsers() {
+        interactor?.downloadAllUsers()
+    }
 }
 
 // MARK: - ContactsInteractorOutput
 
 extension ContactsPresenter: ContactsInteractorOutput {
-    
+    func getdownloadAllUsersResult(result: ResultArryEnum) {
+        view?.getDownloadAllUsersResult(result: result)
+    }
 }

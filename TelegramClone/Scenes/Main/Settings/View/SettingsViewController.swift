@@ -18,7 +18,6 @@
 import UIKit
 
 protocol SettingsViewProtocol: AnyObject {
-    func getDownloadAvatarResult(result: ResultEnum)
     func getUserInfoResult(user: User)
 }
 
@@ -65,7 +64,6 @@ final class SettingsViewController: UIViewController {
     
     private func getUserInfoFromDefaults() {
         presenter?.getUserInfoFromDefaults()
-        presenter?.downloadAvatarImage(url: user?.userAvatar ?? "")
     }
 
     
@@ -107,16 +105,6 @@ final class SettingsViewController: UIViewController {
 // MARK: - LoginViewProtocol
 
 extension SettingsViewController: SettingsViewProtocol {
-    func getDownloadAvatarResult(result: ResultEnum) {
-        switch result {
-        
-        case .success(let image):
-            self.avatarImage = image as? UIImage
-            contentView.getSettingsTableView().reloadData()
-        case .error:
-            print("error downloading image")
-        }
-    }
     
     func getUserInfoResult(user: User) {
         self.user = user
@@ -134,7 +122,6 @@ extension SettingsViewController {
         profileCell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: .greatestFiniteMagnitude)
         if let user = user {
             profileCell.setupData(user: user)
-            profileCell.setupPhoto(image: avatarImage ?? UIImage())
         }
         return profileCell
     }
@@ -167,6 +154,21 @@ extension SettingsViewController {
 // MARK: - UITableViewDel|DS
 
 extension SettingsViewController: UITableViewDelegate, UITableViewDataSource {
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        switch section {
+        case 0:
+            return 1
+        case 1:
+            return firstSection.count
+        case 2:
+            return secondSection.count
+        case 3:
+            return thirdSection.count
+        default:
+            return 0
+        }
+    }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
@@ -240,20 +242,6 @@ extension SettingsViewController: UITableViewDelegate, UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         return 4
     }
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        switch section {
-        case 0:
-            return 1
-        case 1:
-            return firstSection.count
-        case 2:
-            return secondSection.count
-        case 3:
-            return thirdSection.count
-        default:
-            return 0
-        }
-    }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return section == 0 ? nil : " "
@@ -264,7 +252,7 @@ extension SettingsViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return (indexPath as NSIndexPath).section == 0 ? 138 : 55
+        return (indexPath as NSIndexPath).section == 0 ? 138 : 50
     }
 
     

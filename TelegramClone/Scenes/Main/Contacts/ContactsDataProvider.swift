@@ -10,17 +10,19 @@
 import UIKit
 
 protocol ContactsDataProviderProtocol {
-
+    func downloadAllUsers(completion: @escaping(OnUsersResult))
 }
 
 final class ContactsDataProvider {
-
+    
 }
 
 // MARK: - ContactsDataProviderProtocol
 
 extension ContactsDataProvider: ContactsDataProviderProtocol {
-    
+    func downloadAllUsers(completion: @escaping (OnUsersResult)) {
+        UserAPI.shared.downloadAllUsers(completion: completion)
+    }
 }
 
 
