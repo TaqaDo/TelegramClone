@@ -12,7 +12,7 @@ import UIKit
 protocol EditProfilePresenterProtocol {
     func downloadAvatarImage(url: String)
     func saveFileToDisk(fileData: NSData, fileName: String)
-    func uploadAvatarImage(image: UIImage, directory: String)
+    func uploadAvatarImage(image: UIImage)
     func navigateToLogin()
     func getUserInfoFromDefaults()
     func saveUser(user: User)
@@ -44,7 +44,8 @@ extension EditProfilePresenter: EditProfilePresenterProtocol {
         interactor?.saveFileToDisk(fileData: fileData, fileName: fileName)
     }
     
-    func uploadAvatarImage(image: UIImage, directory: String) {
+    func uploadAvatarImage(image: UIImage) {
+        let directory = "Avatars/" + "_\(UserSettings.shared.currentUser!.userId)" + ".jpeg"
         interactor?.uploadAvatar(image: image, directory: directory)
     }
     

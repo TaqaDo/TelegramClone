@@ -10,6 +10,8 @@
 import UIKit
 
 protocol ContactsPresenterProtocol {
+    func startChat(user1: User, user2: User) -> String
+    func navigateToDetail(user: User)
     func downloadAllUsers()
 }
 
@@ -30,6 +32,12 @@ final class ContactsPresenter {
 // MARK: - ContactsPresenterProtocol
 
 extension ContactsPresenter: ContactsPresenterProtocol {
+    func startChat(user1: User, user2: User) -> String {
+        interactor?.startChat(user1: user1, user2: user2) ?? ""
+    }
+    func navigateToDetail(user: User) {
+        router?.navigateToDetail(user: user)
+    }
     func downloadAllUsers() {
         interactor?.downloadAllUsers()
     }

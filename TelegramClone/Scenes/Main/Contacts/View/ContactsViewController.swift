@@ -21,7 +21,7 @@ final class ContactsViewController: UIViewController {
     var presenter: ContactsPresenterProtocol?
     lazy var contentView: ContactsViewLogic = ContactsView()
     
-    var users: [User] = []
+    var users: [User] = [] 
     var filteredUsers: [User] = []
     
     
@@ -53,6 +53,14 @@ final class ContactsViewController: UIViewController {
     
     // MARK: - Requests
     
+    private func startChat(user2: User) {
+        presenter?.startChat(user1: UserSettings.shared.currentUser!, user2: user2)
+    }
+    
+    private func navigateToDetail(user: User) {
+        presenter?.navigateToDetail(user: user)
+    }
+    
     private func downloadAllUsers() {
         presenter?.downloadAllUsers()
     }
@@ -74,11 +82,11 @@ final class ContactsViewController: UIViewController {
     }
     
     func configureSearchController() {
-        navigationItem.searchController = searchController
         searchController.searchResultsUpdater = self
         searchController.obscuresBackgroundDuringPresentation =  false
         searchController.hidesNavigationBarDuringPresentation = false
         searchController.searchBar.placeholder = "Search for users"
+        navigationItem.searchController = searchController
         definesPresentationContext = true
     }
     
@@ -155,6 +163,11 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        let user = searchController.isActive ? filteredUsers[indexPath.row] : users[indexPath.row]
+        
+        if indexPath.section == 1 {
+            startChat(user2: user)
+        }
     }
     
     // Sections

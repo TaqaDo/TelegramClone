@@ -56,9 +56,7 @@ final class ContactsView: UIView {
     
     private func addConstraints() {
         contactsTableView.snp.makeConstraints { make in
-            make.top.equalTo(safeArea.top)
-            make.bottom.equalTo(safeArea.bottom)
-            make.leading.trailing.equalToSuperview()
+            make.edges.equalToSuperview()
         }
     }
 }

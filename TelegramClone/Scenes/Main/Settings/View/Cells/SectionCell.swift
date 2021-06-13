@@ -16,18 +16,26 @@ final class SectionCell: UITableViewCell {
     private lazy var itemImage: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
-        imageView.image = #imageLiteral(resourceName: "food")
-        imageView.layer.cornerRadius = 10
-        imageView.clipsToBounds = true
         return imageView
     }()
     
     private lazy var itemLabel: UILabel = {
         let label = UILabel()
-        label.text = "Data Storage"
-        label.font = UIFont.systemFont(ofSize: 17, weight: .regular)
+        label.font = UIFont.systemFont(ofSize: 15, weight: .regular)
         label.textColor = .black
         return label
+    }()
+    
+    private lazy var backView: UIView = {
+        let view = UIView()
+        view.layer.cornerRadius = 10
+        view.clipsToBounds = true
+        view.addSubview(itemImage)
+        itemImage.snp.makeConstraints { make in
+            make.center.equalToSuperview()
+            make.size.equalTo(18)
+        }
+        return view
     }()
 
     
@@ -55,15 +63,15 @@ final class SectionCell: UITableViewCell {
     }
     
     private func addSubviews() {
-        contentView.addSubview(itemImage)
+        contentView.addSubview(backView)
         contentView.addSubview(itemLabel)
     }
     
     private func addConstraints() {
-        itemImage.snp.makeConstraints { make in
+        backView.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
             make.leading.equalToSuperview().inset(20)
-            make.size.equalTo(42)
+            make.size.equalTo(34)
         }
         itemLabel.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
@@ -73,6 +81,8 @@ final class SectionCell: UITableViewCell {
     
     func setupData(data: SectionModel) {
         itemLabel.text = data.itemLabel
+        backView.backgroundColor = data.itemBackColor
+        itemImage.image = UIImage(systemName: data.itemImage!)?.withRenderingMode(.alwaysOriginal).withTintColor(.white)
     }
 }
 

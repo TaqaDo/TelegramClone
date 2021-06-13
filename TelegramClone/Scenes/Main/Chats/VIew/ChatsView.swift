@@ -10,12 +10,22 @@ import SnapKit
 import UIKit
 
 protocol ChatsViewLogic: UIView {
-    
+    func getChatsTableView() -> UITableView
 }
 
 final class ChatsView: UIView {
     
     // MARK: - Views
+    
+    private lazy var chatsTableView: UITableView = {
+       let tableView = UITableView()
+        tableView.tableFooterView = UIView(frame: CGRect.zero)
+        tableView.backgroundColor = .clear
+        tableView.showsVerticalScrollIndicator = false
+        tableView.rowHeight = 82
+        tableView.register(ChatCell.self, forCellReuseIdentifier: ChatCell.cellID)
+        return tableView
+    }()
     
     //
     
@@ -39,17 +49,21 @@ final class ChatsView: UIView {
     }
     
     private func addSubviews() {
-        
+        addSubview(chatsTableView)
     }
     
     private func addConstraints() {
-        
+        chatsTableView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
     }
 }
 
 // MARK: - ChatsViewLogic
 
 extension ChatsView: ChatsViewLogic {
-    
+    func getChatsTableView() -> UITableView {
+        return chatsTableView
+    }
 }
 

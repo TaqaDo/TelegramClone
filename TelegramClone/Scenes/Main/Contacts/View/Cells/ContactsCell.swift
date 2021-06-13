@@ -20,7 +20,6 @@ final class ContactsCell: UITableViewCell {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
-        imageView.image = #imageLiteral(resourceName: "venom-7")
         imageView.layer.cornerRadius = 42/2
         return imageView
     }()
@@ -29,7 +28,6 @@ final class ContactsCell: UITableViewCell {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         label.textColor = .black
-        label.text = "Tala Osmonov"
         return label
     }()
     
@@ -83,7 +81,6 @@ final class ContactsCell: UITableViewCell {
             make.bottom.equalTo(profileImage.snp.bottom)
             make.leading.equalTo(profileImage.snp.trailing).offset(20)
             make.trailing.equalToSuperview().inset(20)
-            make.height.equalTo(74)
         }
         profileImage.snp.makeConstraints { make in
             make.centerY.equalToSuperview()

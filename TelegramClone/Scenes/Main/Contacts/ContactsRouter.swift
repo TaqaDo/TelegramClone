@@ -10,7 +10,7 @@
 import UIKit
 
 protocol ContactsRouterProtocol {
-    
+    func navigateToDetail(user: User)
 }
 
 final class ContactsRouter {
@@ -33,5 +33,10 @@ final class ContactsRouter {
 // MARK: - ContactsRouterProtocol
 
 extension ContactsRouter: ContactsRouterProtocol {
-    
+    func navigateToDetail(user: User) {
+        let detailVC = ContactDetailRouter.createModule()
+        detailVC.user = user
+        view?.navigationController?.pushViewController(detailVC, animated: true)
+        
+    }
 }

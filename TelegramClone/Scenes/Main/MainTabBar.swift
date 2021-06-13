@@ -31,7 +31,7 @@ class MainTabBar: UITabBarController {
         let settings = templateNavigationController(titleName: "Settings", selectedImage: settingsImage!, rootViewController: SettingsRouter.createModule())
         
         self.viewControllers = [contacts, chats, settings]
-        self.selectedIndex = 0
+        self.selectedIndex = 1
         self.delegate = self
         self.tabBar.barTintColor = .white
     }

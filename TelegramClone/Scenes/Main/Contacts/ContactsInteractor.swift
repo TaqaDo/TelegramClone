@@ -11,6 +11,7 @@
 import UIKit
 
 protocol ContactsInteractorProtocol {
+    func startChat(user1: User, user2: User) -> String
     func downloadAllUsers()
 }
 
@@ -28,6 +29,9 @@ final class ContactsInteractor {
 // MARK: - ContactsInteractorProtocol
 
 extension ContactsInteractor: ContactsInteractorProtocol {
+    func startChat(user1: User, user2: User) -> String {
+        dataProvider.startChat(user1: user1, user2: user2)
+    }
     func downloadAllUsers() {
         dataProvider.downloadAllUsers { [weak self] result in
             switch result {

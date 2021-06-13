@@ -9,11 +9,11 @@
 import UIKit
 
 protocol ChatsInteractorProtocol {
-    
+    func downloadChats()
 }
 
 protocol ChatsInteractorOutput: AnyObject {
-
+    func downloadChatsResult(result: ResultArryEnum)
 }
 
 final class ChatsInteractor {
@@ -26,5 +26,14 @@ final class ChatsInteractor {
 // MARK: - ChatsInteractorProtocol
 
 extension ChatsInteractor: ChatsInteractorProtocol {
-    
+    func downloadChats() {
+        dataProvider.downloadChats { [weak self] result in
+            switch result {
+            case .success(let chats):
+                self?.output?.downloadChatsResult(result: .success(chats))
+            case .failure(_):
+                self?.output?.downloadChatsResult(result: .error)
+            }
+        }
+    }
 }

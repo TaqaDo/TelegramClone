@@ -33,18 +33,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             self.window?.makeKeyAndVisible()
         }
     }
-    
-    func authoLogin() {
-        authListener = Auth.auth().addStateDidChangeListener({ auth, user in
-            Auth.auth().removeStateDidChangeListener(self.authListener!)
-            if user == nil || userDefaults.object(forKey: kCURRENTUSER) == nil {
-                DispatchQueue.main.async {
-                    self.window?.rootViewController = UINavigationController(rootViewController: LoginRouter.createModule())
-                    self.window?.makeKeyAndVisible()
-                }
-            }
-        })
-    }
 
 }
 

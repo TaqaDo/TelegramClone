@@ -10,13 +10,18 @@ import FirebaseStorage
 import UIKit
 
 
+
+protocol StorageFileHelperProtocol {
+    
+}
+
 protocol StorageFileProtocol {
     func downloadAvatarImage(url: String,  completion: @escaping(Result<UIImage?, Error>) -> Void)
     func uploadAvatarImage(image: UIImage, directory: String, completion: @escaping(Result<String?, Error>) -> Void)
     func saveFileToDisk(fileData: NSData, fileName: String, completion: @escaping(OnResult))
 }
 
-class StorageFile {
+class StorageFile: StorageFileHelperProtocol {
     static let shared = StorageFile()
     
     

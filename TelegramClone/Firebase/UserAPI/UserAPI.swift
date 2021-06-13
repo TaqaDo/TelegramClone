@@ -9,6 +9,12 @@ import Foundation
 import Firebase
 
 
+protocol UserAPIHelperProtocol {
+    func downloadUserFromFirestore(userId: String, email: String?)
+    func saveUserToFirestore(user: User)
+    func saveUserToUserDefaults(user: User)
+}
+
 protocol UserAPIProtocol {
     func downloadAllUsers(completion: @escaping(OnUsersResult))
     func signOut(completion: @escaping(OnResult))
@@ -17,13 +23,13 @@ protocol UserAPIProtocol {
     func loginUser(email: String, password: String, completion: @escaping(OnResult))
 }
 
-class UserAPI {
+class UserAPI: UserAPIHelperProtocol {
     static let shared = UserAPI()
     
     
     // MARK: - Helpers
     
-    private func downloadUserFromFirestore(userId: String, email: String? = nil) {
+    func downloadUserFromFirestore(userId: String, email: String? = nil) {
         userCollection.document(userId).getDocument { snapshot, error in
             guard let document =  try? snapshot?.data(as: User.self) else {return}
             let result = Result {document}
@@ -37,7 +43,7 @@ class UserAPI {
         }
     }
     
-    private func saveUserToFirestore(user: User) {
+    func saveUserToFirestore(user: User) {
         do {
             try userCollection.document(user.userId).setData(from: user)
         } catch {
@@ -45,7 +51,7 @@ class UserAPI {
         }
     }
     
-    private func saveUserToUserDefaults(user: User) {
+    func saveUserToUserDefaults(user: User) {
         UserSettings.shared.saveUserLocally(user: user)
     }
 }

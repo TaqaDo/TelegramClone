@@ -59,9 +59,7 @@ final class EditProfileViewController: UIViewController {
     // MARK: - Requests
     
     private func uploadAvatarImage(image: UIImage) {
-        let directory = "Avatars/" + "_\(UserSettings.shared.currentUser!.userId)" + ".jpeg"
-        presenter?.uploadAvatarImage(image: image, directory: directory)
-//        presenter?.saveFileToDisk(fileData: image.jpegData(compressionQuality: 1.0)! as NSData, fileName: currentUID)
+        presenter?.uploadAvatarImage(image: image)
     }
     
     private func signOut() {

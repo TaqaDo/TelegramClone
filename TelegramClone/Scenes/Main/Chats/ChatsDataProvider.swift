@@ -9,17 +9,19 @@
 import UIKit
 
 protocol ChatsDataProviderProtocol {
-
+    func downloadChats(completion: @escaping (OnChatsResult))
 }
 
 final class ChatsDataProvider {
-
+    
 }
 
 // MARK: - ChatsDataProviderProtocol
 
 extension ChatsDataProvider: ChatsDataProviderProtocol {
-    
+    func downloadChats(completion: @escaping (OnChatsResult)) {
+        ChatAPI.shared.downloadChats(completion: completion)
+    }
 }
 
 

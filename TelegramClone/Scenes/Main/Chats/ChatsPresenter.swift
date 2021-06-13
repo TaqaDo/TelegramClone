@@ -9,7 +9,7 @@
 import UIKit
 
 protocol ChatsPresenterProtocol {
-    
+    func downloadChats()
 }
 
 final class ChatsPresenter {
@@ -29,11 +29,15 @@ final class ChatsPresenter {
 // MARK: - ChatsPresenterProtocol
 
 extension ChatsPresenter: ChatsPresenterProtocol {
-    
+    func downloadChats() {
+        interactor?.downloadChats()
+    }
 }
 
 // MARK: - ChatsInteractorOutput
 
 extension ChatsPresenter: ChatsInteractorOutput {
-    
+    func downloadChatsResult(result: ResultArryEnum) {
+        view?.downloadChatsResult(result: result)
+    }
 }
