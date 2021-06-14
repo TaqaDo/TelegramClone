@@ -151,11 +151,18 @@ final class ChatCell: SwipeTableViewCell {
     
     func setupData(chat: Chat) {
         usernameLabel.text = chat.receiverName
-        lastMessageLabel.text = "\(chat.lastMessage)                                                          "
-        profileImage.kf.setImage(with: URL(string: chat.avatarImage))
+        lastMessageLabel.text = String(chat.lastMessage) + "                                                         "
         dateLabel.text = timestamp(date: chat.date ?? Date())
+        profileImage.kf.setImage(
+            with: URL(string: chat.avatarImage),
+            options: [
+                .backgroundDecode,
+                .scaleFactor(UIScreen.main.scale),
+                .cacheOriginalImage
+            ])
+
         if chat.unreadCounter != 0 {
-            counterLabel.text = "\(chat.unreadCounter) "
+            counterLabel.text = String(chat.unreadCounter) + " "
             counterView.isHidden = false
         } else {
             counterView.isHidden = true

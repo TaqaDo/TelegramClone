@@ -20,6 +20,7 @@ protocol ChatAPIHelperProtocol {
 protocol ChatAPIProtocol {
     func startChat(user1: User, user2: User) -> String
     func downloadChats(completion: @escaping(OnChatsResult))
+    func deleteChat(chat: Chat, completion: @escaping(Error) -> Void)
 }
 
 
@@ -73,7 +74,7 @@ class ChatAPI: ChatAPIHelperProtocol {
             for userId in membersToCreateChat {
                 let senderUser = userId == currentUID ? UserSettings.shared.currentUser! : self?.getReceiverFrom(users: users)
                 let receiverUser = userId == currentUID ? self?.getReceiverFrom(users: users) : UserSettings.shared.currentUser!
-                let chatObject = Chat(id: UUID().uuidString, chatRoomId: chatRoomId, senderId: senderUser!.userId, senderName: (senderUser?.username)!, receiverId: receiverUser!.userId, receiverName: (receiverUser?.username)!, date: Date(), memberIds: [senderUser!.userId, receiverUser!.userId], lastMessage: "", unreadCounter: 0, avatarImage: receiverUser!.userAvatar)
+                let chatObject = Chat(id: UUID().uuidString, chatRoomId: chatRoomId, senderId: senderUser!.userId, senderName: (senderUser?.username)!, receiverId: receiverUser!.userId, receiverName: (receiverUser?.username)!, date: Date(), memberIds: [senderUser!.userId, receiverUser!.userId], lastMessage: "asdfasd", unreadCounter: 0, avatarImage: receiverUser!.userAvatar)
                 self?.addChat(chat: chatObject)
             }
         }
@@ -82,6 +83,15 @@ class ChatAPI: ChatAPIHelperProtocol {
 }
 
 extension ChatAPI: ChatAPIProtocol {
+    
+    func deleteChat(chat: Chat, completion: @escaping(Error) -> Void) {
+        chatCollection.document(chat.id).delete { error in
+            if let error = error {
+                completion(error)
+            }
+        }
+    }
+    
     func downloadChats(completion: @escaping (OnChatsResult)) {
         
         chatCollection.whereField(kSENDERID, isEqualTo: currentUID).addSnapshotListener { snapshot, error in

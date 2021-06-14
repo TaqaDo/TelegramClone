@@ -18,7 +18,7 @@ protocol EditProfileCellDelegate: AnyObject {
 final class EditProfileCell: UITableViewCell {
     
     weak var delegate: EditProfileCellDelegate?
-    private lazy var gesture:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(viewTapped))
+    private lazy var gesture: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(viewTapped))
 
     // MARK: - Views
     
@@ -126,7 +126,14 @@ final class EditProfileCell: UITableViewCell {
     
     func setupData(user: User) {
         usernameTF.text = user.username
-        profileImage.kf.setImage(with: URL(string: user.userAvatar))
+        profileImage.kf.setImage(
+            with: URL(string: user.userAvatar),
+            options: [
+                .backgroundDecode,
+                .scaleFactor(UIScreen.main.scale),
+                .cacheOriginalImage
+            ])
+
     }
 }
 

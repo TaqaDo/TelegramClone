@@ -91,7 +91,14 @@ final class ProfileCell: UITableViewCell {
     func setupData(user: User) {
         usernameLabel.text = user.username
         bioLabel.text = user.userBio
-        profileImage.kf.setImage(with: URL(string: user.userAvatar))
+        profileImage.kf.setImage(
+            with: URL(string: user.userAvatar),
+            options: [
+                .backgroundDecode,
+                .scaleFactor(UIScreen.main.scale),
+                .cacheOriginalImage
+            ])
+
     }
 }
 

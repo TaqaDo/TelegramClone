@@ -10,10 +10,12 @@ import UIKit
 
 protocol ChatsInteractorProtocol {
     func downloadChats()
+    func deleteChat(chat: Chat)
 }
 
 protocol ChatsInteractorOutput: AnyObject {
     func downloadChatsResult(result: ResultArryEnum)
+    func deleteChatError()
 }
 
 final class ChatsInteractor {
@@ -26,6 +28,11 @@ final class ChatsInteractor {
 // MARK: - ChatsInteractorProtocol
 
 extension ChatsInteractor: ChatsInteractorProtocol {
+    func deleteChat(chat: Chat) {
+        dataProvider.deleteChat(chat: chat) { [weak self] error in
+            self?.output?.deleteChatError()
+        }
+    }
     func downloadChats() {
         dataProvider.downloadChats { [weak self] result in
             switch result {

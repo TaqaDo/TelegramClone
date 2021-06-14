@@ -14,6 +14,7 @@ import SwipeCellKit
 
 protocol ChatsViewProtocol: AnyObject {
     func downloadChatsResult(result: ResultArryEnum)
+    func deleteChatError()
 }
 
 final class ChatsViewController: UIViewController {
@@ -62,6 +63,10 @@ final class ChatsViewController: UIViewController {
     
     // MARK: - Requests
     
+    private func deleteChat(chat: Chat) {
+        presenter?.deleteChat(chat: chat)
+    }
+    
     private func downloadChats() {
         presenter?.downloadChats()
     }
@@ -69,20 +74,33 @@ final class ChatsViewController: UIViewController {
     
     // MARK: - UI Actions
     
+    @objc func handleEdit() {
+        print("edit")
+    }
+    
+    @objc func handleNewMessage() {
+        presenter?.navigateToNewMessage()
+    }
+    
     
     // MARK: - Helpers
     
     private func navigationBar() {
         navigationItem.title = "Chats"
         navigationController?.navigationBar.prefersLargeTitles = false
-        
     }
     
     private func configure() {
         configureSearchController()
+        configureUI()
     }
     
-    func configureSearchController() {
+    private func configureUI() {
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .compose, target: self, action: #selector(handleNewMessage))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .compose, target: self, action: #selector(handleEdit))
+    }
+    
+    private func configureSearchController() {
         searchController.searchResultsUpdater = self
         searchController.obscuresBackgroundDuringPresentation =  false
         searchController.hidesNavigationBarDuringPresentation = false
@@ -97,6 +115,10 @@ final class ChatsViewController: UIViewController {
 // MARK: - ChatsViewProtocol
 
 extension ChatsViewController: ChatsViewProtocol {
+    func deleteChatError() {
+        print("deleting chat error")
+    }
+    
     func downloadChatsResult(result: ResultArryEnum) {
         switch result {
         case .success(let chats):
@@ -130,21 +152,27 @@ extension ChatsViewController: UITableViewDelegate, UITableViewDataSource {
 //MARK: - SwipeTableViewCellDelegate
 
 extension ChatsViewController: SwipeTableViewCellDelegate {
+
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
+        let chat = searchController.isActive ? filteredChats[indexPath.row] : allChats[indexPath.row]
+        
         let archiveAction = SwipeAction(style: .destructive, title: "Archive") { action, indexPath in
                 print("archive cell")
             }
         archiveAction.backgroundColor = .systemBlue
-        let deleteAction = SwipeAction(style: .destructive, title: "Delete") { action, indexPath in
-                print("delete cell")
-            }
+        
+        let deleteAction = SwipeAction(style: .destructive, title: "Delete") { [weak self] action, indexPath in
+            self?.deleteChat(chat: chat)
+            action.fulfill(with: .delete)
+        }
         deleteAction.backgroundColor = .red
+        
         let muteAction = SwipeAction(style: .destructive, title: "Mute") { action, indexPath in
                 print("mute cell")
             }
         muteAction.backgroundColor = .systemOrange
 
-            return [archiveAction, deleteAction, muteAction]
+        return [archiveAction, deleteAction, muteAction]
     }
     
     func tableView(_ tableView: UITableView, editActionsOptionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> SwipeOptions {

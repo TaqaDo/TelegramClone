@@ -10,6 +10,7 @@ import UIKit
 
 protocol ChatsDataProviderProtocol {
     func downloadChats(completion: @escaping (OnChatsResult))
+    func deleteChat(chat: Chat, completion: @escaping(Error) -> Void)
 }
 
 final class ChatsDataProvider {
@@ -19,6 +20,9 @@ final class ChatsDataProvider {
 // MARK: - ChatsDataProviderProtocol
 
 extension ChatsDataProvider: ChatsDataProviderProtocol {
+    func deleteChat(chat: Chat, completion: @escaping (Error) -> Void) {
+        ChatAPI.shared.deleteChat(chat: chat, completion: completion)
+    }
     func downloadChats(completion: @escaping (OnChatsResult)) {
         ChatAPI.shared.downloadChats(completion: completion)
     }

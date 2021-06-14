@@ -9,6 +9,7 @@
 import UIKit
 
 protocol ChatsRouterProtocol {
+    func navigateToNewMessage()
 }
 
 final class ChatsRouter {
@@ -31,5 +32,8 @@ final class ChatsRouter {
 // MARK: - ChatsRouterProtocol
 
 extension ChatsRouter: ChatsRouterProtocol {
-    
+    func navigateToNewMessage() {
+        let newMessageVC = UINavigationController(rootViewController: ContactsRouter.createModule())
+        view?.navigationController?.present(newMessageVC, animated: true, completion: nil)
+    }
 }

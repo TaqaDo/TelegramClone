@@ -10,6 +10,8 @@ import UIKit
 
 protocol ChatsPresenterProtocol {
     func downloadChats()
+    func deleteChat(chat: Chat)
+    func navigateToNewMessage()
 }
 
 final class ChatsPresenter {
@@ -29,6 +31,12 @@ final class ChatsPresenter {
 // MARK: - ChatsPresenterProtocol
 
 extension ChatsPresenter: ChatsPresenterProtocol {
+    func navigateToNewMessage() {
+        router?.navigateToNewMessage()
+    }
+    func deleteChat(chat: Chat) {
+        interactor?.deleteChat(chat: chat)
+    }
     func downloadChats() {
         interactor?.downloadChats()
     }
@@ -37,6 +45,10 @@ extension ChatsPresenter: ChatsPresenterProtocol {
 // MARK: - ChatsInteractorOutput
 
 extension ChatsPresenter: ChatsInteractorOutput {
+    func deleteChatError() {
+        view?.deleteChatError()
+    }
+    
     func downloadChatsResult(result: ResultArryEnum) {
         view?.downloadChatsResult(result: result)
     }
