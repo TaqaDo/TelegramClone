@@ -53,8 +53,8 @@ final class ContactsViewController: UIViewController {
     
     // MARK: - Requests
     
-    private func startChat(user2: User) {
-        presenter?.startChat(user1: UserSettings.shared.currentUser!, user2: user2)
+    private func startChat(user2: User) -> String {
+        presenter?.startChat(user1: UserSettings.shared.currentUser!, user2: user2) ?? ""
     }
     
     private func navigateToDetail(user: User) {
@@ -166,7 +166,9 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource {
         let user = searchController.isActive ? filteredUsers[indexPath.row] : users[indexPath.row]
         
         if indexPath.section == 1 {
-            startChat(user2: user)
+            let chatRoomId = startChat(user2: user)
+            presenter?.navigateToMessageVC(chatRoomId: chatRoomId, user: user)
+            
         }
     }
     

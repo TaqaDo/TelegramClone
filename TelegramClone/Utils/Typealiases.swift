@@ -9,5 +9,5 @@ import Foundation
 
 typealias OnResult = (Result<Void?, Error>) -> Void
 typealias OnLoginResult = (Result<User?, Error>) -> Void
-typealias OnUsersResult = (Result<[User?], Error>) -> Void
-typealias OnChatsResult = (Result<[Chat?], Error>) -> Void
+typealias OnUsersResult = (Result<[User]?, Error>) -> Void
+typealias OnChatsResult = (Result<[Chat]?, Error>) -> Void

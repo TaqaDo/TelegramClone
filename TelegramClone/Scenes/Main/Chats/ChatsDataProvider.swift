@@ -11,6 +11,8 @@ import UIKit
 protocol ChatsDataProviderProtocol {
     func downloadChats(completion: @escaping (OnChatsResult))
     func deleteChat(chat: Chat, completion: @escaping(Error) -> Void)
+    func clearUnreadCounter(chat: Chat)
+    func restartChat(chatRoomId: String, membersId: [String])
 }
 
 final class ChatsDataProvider {
@@ -20,6 +22,12 @@ final class ChatsDataProvider {
 // MARK: - ChatsDataProviderProtocol
 
 extension ChatsDataProvider: ChatsDataProviderProtocol {
+    func restartChat(chatRoomId: String, membersId: [String]) {
+        ChatAPI.shared.restartChat(chatRoomId: chatRoomId, membersId: membersId)
+    }
+    func clearUnreadCounter(chat: Chat) {
+        ChatAPI.shared.clearUnreadCounter(chat: chat)
+    }
     func deleteChat(chat: Chat, completion: @escaping (Error) -> Void) {
         ChatAPI.shared.deleteChat(chat: chat, completion: completion)
     }

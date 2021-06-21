@@ -11,6 +11,8 @@ import UIKit
 protocol ChatsInteractorProtocol {
     func downloadChats()
     func deleteChat(chat: Chat)
+    func clearUnreadCounter(chat: Chat)
+    func restartChat(chatRoomId: String, membersId: [String])
 }
 
 protocol ChatsInteractorOutput: AnyObject {
@@ -28,6 +30,13 @@ final class ChatsInteractor {
 // MARK: - ChatsInteractorProtocol
 
 extension ChatsInteractor: ChatsInteractorProtocol {
+    func restartChat(chatRoomId: String, membersId: [String]) {
+        dataProvider.restartChat(chatRoomId: chatRoomId, membersId: membersId)
+    }
+    
+    func clearUnreadCounter(chat: Chat) {
+        dataProvider.clearUnreadCounter(chat: chat)
+    }
     func deleteChat(chat: Chat) {
         dataProvider.deleteChat(chat: chat) { [weak self] error in
             self?.output?.deleteChatError()
@@ -37,7 +46,7 @@ extension ChatsInteractor: ChatsInteractorProtocol {
         dataProvider.downloadChats { [weak self] result in
             switch result {
             case .success(let chats):
-                self?.output?.downloadChatsResult(result: .success(chats))
+                self?.output?.downloadChatsResult(result: .success(chats ?? []))
             case .failure(_):
                 self?.output?.downloadChatsResult(result: .error)
             }

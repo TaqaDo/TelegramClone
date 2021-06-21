@@ -23,13 +23,12 @@ final class ChatsViewController: UIViewController {
     private let searchController = UISearchController(searchResultsController: nil)
     var presenter: ChatsPresenterProtocol?
     lazy var contentView: ChatsViewLogic = ChatsView()
-    
+    var filteredChats: [Chat] = []
     var allChats: [Chat] = [] {
         didSet {
             contentView.getChatsTableView().reloadData()
         }
     }
-    var filteredChats: [Chat] = []
     
     
     // MARK: - Lifecycle
@@ -62,6 +61,14 @@ final class ChatsViewController: UIViewController {
     }
     
     // MARK: - Requests
+    
+    private func restartChat(chatRoomId: String, membersId: [String]) {
+        presenter?.restartChat(chatRoomId: chatRoomId, membersId: membersId)
+    }
+    
+    private func clearUnreadCounter(chat: Chat) {
+        presenter?.clearUnreadCounter(chat: chat)
+    }
     
     private func deleteChat(chat: Chat) {
         presenter?.deleteChat(chat: chat)
@@ -97,7 +104,7 @@ final class ChatsViewController: UIViewController {
     
     private func configureUI() {
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .compose, target: self, action: #selector(handleNewMessage))
-        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .compose, target: self, action: #selector(handleEdit))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(handleEdit))
     }
     
     private func configureSearchController() {
@@ -139,13 +146,18 @@ extension ChatsViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: ChatCell.cellID, for: indexPath) as? ChatCell else {return UITableViewCell()}
         cell.delegate = self
-        let chats = searchController.isActive ? filteredChats[indexPath.row] : allChats[indexPath.row]
-        cell.setupData(chat: chats)
+        let chat = searchController.isActive ? filteredChats[indexPath.row] : allChats[indexPath.row]
+        cell.setupData(chat: chat)
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        let chat = searchController.isActive ? filteredChats[indexPath.row] : allChats[indexPath.row]
+        restartChat(chatRoomId: chat.chatRoomId, membersId: chat.memberIds)
+        clearUnreadCounter(chat: chat)
+        presenter?.navigateToMessage(chat: chat)
+        
     }
 }
 

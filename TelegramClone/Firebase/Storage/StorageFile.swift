@@ -23,7 +23,7 @@ protocol StorageFileProtocol {
 
 class StorageFile: StorageFileHelperProtocol {
     static let shared = StorageFile()
-    
+    private let queue = DispatchQueue(label: "storageApiQueue")
     
     // DiskStorage
     
@@ -49,9 +49,7 @@ class StorageFile: StorageFileHelperProtocol {
 
 extension StorageFile: StorageFileProtocol {
     func downloadAvatarImage(url: String, completion: @escaping (Result<UIImage?, Error>) -> Void) {
-        
-        let imageQueue = DispatchQueue(label: "imageQueue")
-        imageQueue.async {
+        queue.async {
             let userUrl = self.fileNameOfUserUrl(fileUrl: url)
             if StorageFile.shared.fileExistsAtPath(path: userUrl) {
                 print("local image")
@@ -93,22 +91,29 @@ extension StorageFile: StorageFileProtocol {
         let storageRef = storage.reference(forURL: kFILEDIRECTORY).child(directory)
         let imageData = image.jpegData(compressionQuality: 0.6)
         var task: StorageUploadTask?
-        task = storageRef.putData(imageData!, metadata: nil, completion: { metaData, error in
-            task?.removeAllObservers()
-            
-            if error != nil {
-                completion(.failure(error!))
-                print("upload image error \(error?.localizedDescription)")
-                return
-            }
-            
-            storageRef.downloadURL { url, error in
-                guard let imageUrl = url else {
+        queue.async {
+            task = storageRef.putData(imageData!, metadata: nil, completion: { metaData, error in
+                task?.removeAllObservers()
+                
+                if error != nil {
+                    DispatchQueue.main.async {
+                        completion(.failure(error!))
+                    }
+                    print("upload image error \(error?.localizedDescription)")
                     return
                 }
-                completion(.success(imageUrl.absoluteString))
-            }
-        })
+                
+                storageRef.downloadURL { url, error in
+                    guard let imageUrl = url else {
+                        return
+                    }
+                    DispatchQueue.main.async {
+                        completion(.success(imageUrl.absoluteString))
+                    }
+                }
+            })
+        }
+        
         
         task?.observe(StorageTaskStatus.progress, handler: { snapshot in
             let progress = snapshot.progress!.completedUnitCount / snapshot.progress!.totalUnitCount

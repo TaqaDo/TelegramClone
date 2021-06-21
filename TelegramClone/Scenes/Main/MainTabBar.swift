@@ -70,7 +70,7 @@ extension MainTabBar: UITabBarControllerDelegate {
             }, completion: { transitionContext.completeTransition($0) })
         }
        func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
-            return 0.1
+            return 0.09
         }
 
     }

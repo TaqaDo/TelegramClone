@@ -11,6 +11,7 @@ import UIKit
 
 protocol ContactsRouterProtocol {
     func navigateToDetail(user: User)
+    func navigateToMessageVC(chatRoomId: String, user: User)
 }
 
 final class ContactsRouter {
@@ -33,6 +34,11 @@ final class ContactsRouter {
 // MARK: - ContactsRouterProtocol
 
 extension ContactsRouter: ContactsRouterProtocol {
+    func navigateToMessageVC(chatRoomId: String, user: User) {
+        let messageVC = MessageRouter.createModule(chatId: chatRoomId, receiverId: user.userId, receiverName: user.username!)
+        messageVC.hidesBottomBarWhenPushed = true
+        view?.navigationController?.pushViewController(messageVC, animated: true)
+    }
     func navigateToDetail(user: User) {
         let detailVC = ContactDetailRouter.createModule()
         detailVC.user = user
