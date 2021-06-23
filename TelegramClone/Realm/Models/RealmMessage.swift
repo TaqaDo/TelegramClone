@@ -18,7 +18,7 @@ class RealmMessage: Object, Codable {
     @objc dynamic var senderInitials = ""
     @objc dynamic var readDate = Date()
     @objc dynamic var type = ""
-    @objc dynamic var bio = ""
+    @objc dynamic var status = ""
     @objc dynamic var message = ""
     @objc dynamic var audioUrl = ""
     @objc dynamic var videoUrl = ""

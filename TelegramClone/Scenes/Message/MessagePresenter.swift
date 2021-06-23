@@ -12,7 +12,7 @@ import UIKit
 
 
 protocol MessagePresenterProtocol {
-    
+    func sendMessage(chatId: String, text: String, membersId: [String])
 }
 
 final class MessagePresenter {
@@ -32,11 +32,19 @@ final class MessagePresenter {
 // MARK: - MessagePresenterProtocol
 
 extension MessagePresenter: MessagePresenterProtocol {
-    
+    func sendMessage(chatId: String, text: String, membersId: [String]) {
+        interactor?.sendMessage(chatId: chatId, text: text, membersId: membersId)
+    }
 }
 
 // MARK: - MessageInteractorOutput
 
 extension MessagePresenter: MessageInteractorOutput {
+    func sendMessageRealmResult(realmResult: ResultEnum) {
+        view?.sendMessageRealmResult(result: realmResult)
+    }
     
+    func sendMessageFirestoreResult(firestoreResult: ResultEnum) {
+        view?.sendMessageFirestoreResult(result: firestoreResult)
+    }
 }

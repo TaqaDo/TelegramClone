@@ -51,7 +51,7 @@ class ChatAPI: ChatAPIHelperProtocol {
     
     func removeMemberWhoHasChat(snapshot: QuerySnapshot, memberIds: [String]) -> [String] {
         var memberIdsToCreateChat = memberIds
-        for chatData in snapshot.documents {
+        snapshot.documents.map { chatData in
             let currentChat = chatData.data() as Dictionary
             if let currentUserId = currentChat[kSENDERID] {
                 if memberIdsToCreateChat.contains(currentUserId as! String) {
@@ -77,7 +77,7 @@ class ChatAPI: ChatAPIHelperProtocol {
             if !snapshot.isEmpty {
                 membersToCreateChat = self!.removeMemberWhoHasChat(snapshot: snapshot, memberIds: membersToCreateChat)
             }
-            for userId in membersToCreateChat {
+            membersToCreateChat.map { userId in
                 let senderUser = userId == currentUID ? UserSettings.shared.currentUser! : self?.getReceiverFrom(users: users)
                 let receiverUser = userId == currentUID ? self?.getReceiverFrom(users: users) : UserSettings.shared.currentUser!
                 let chatObject = Chat(id: UUID().uuidString, chatRoomId: chatRoomId, senderId: senderUser!.userId, senderName: (senderUser?.username)!, receiverId: receiverUser!.userId, receiverName: (receiverUser?.username)!, date: Date(), memberIds: [senderUser!.userId, receiverUser!.userId], lastMessage: "asdfasd", unreadCounter: 0, avatarImage: receiverUser!.userAvatar)
@@ -133,7 +133,7 @@ extension ChatAPI: ChatAPIProtocol {
                 let allChats = documents.compactMap { document in
                     return try? document.data(as: Chat.self)
                 }
-                for chat in allChats {
+                allChats.map { chat in
                     if chat.lastMessage != "" {
                         chats.append(chat)
                     }

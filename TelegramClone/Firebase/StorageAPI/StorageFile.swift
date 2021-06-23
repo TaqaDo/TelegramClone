@@ -88,10 +88,10 @@ extension StorageFile: StorageFileProtocol {
     }
     
     func uploadAvatarImage(image: UIImage, directory: String, completion: @escaping (Result<String?, Error>) -> Void) {
-        let storageRef = storage.reference(forURL: kFILEDIRECTORY).child(directory)
-        let imageData = image.jpegData(compressionQuality: 0.6)
-        var task: StorageUploadTask?
         queue.async {
+            let storageRef = storage.reference(forURL: kFILEDIRECTORY).child(directory)
+            let imageData = image.jpegData(compressionQuality: 0.6)
+            var task: StorageUploadTask?
             task = storageRef.putData(imageData!, metadata: nil, completion: { metaData, error in
                 task?.removeAllObservers()
                 
@@ -112,12 +112,11 @@ extension StorageFile: StorageFileProtocol {
                     }
                 }
             })
+            
+            task?.observe(StorageTaskStatus.progress, handler: { snapshot in
+                let progress = snapshot.progress!.completedUnitCount / snapshot.progress!.totalUnitCount
+                print("Show progress \(progress)")
+            })
         }
-        
-        
-        task?.observe(StorageTaskStatus.progress, handler: { snapshot in
-            let progress = snapshot.progress!.completedUnitCount / snapshot.progress!.totalUnitCount
-            print("Show progress \(progress)")
-        })
     }
 }

@@ -11,31 +11,48 @@ import RealmSwift
 
 protocol MessageStorageProtocol {
     func saveToRealm<T>(object: T, completion: @escaping (OnResult)) where T : Object
+    func fetchMessages(chatId: String, completion: @escaping(OnMessagesResult))
 }
 
 class MessageStorage {
     static let shared = MessageStorage()
     private let queue = DispatchQueue(label: "messageStorageQueue")
-    let realm = try? Realm()
 }
 
 
 // MARK: - MessageStorageProtocol
 
 extension MessageStorage: MessageStorageProtocol {
+    func fetchMessages(chatId: String, completion: @escaping(OnMessagesResult)) {
+        let result: Result<Results<RealmMessage>?, StorageError>
+        defer {
+            completion(result)
+        }
+        let predicate = NSPredicate(format: "chatRoomId = %@", chatId)
+        let realm = try? Realm()
+        if let realmLists = realm?.objects(RealmMessage.self).filter(predicate).sorted(byKeyPath: "date", ascending: true) {
+            result = .success(realmLists)
+        } else {
+            result = .failure(.cannotFetch)
+        }
+    }
+    
     func saveToRealm<T>(object: T, completion: @escaping (OnResult)) where T : Object {
         queue.async {
-            do {
-                try self.realm?.write {
-                    self.realm?.add(object, update: .all)
-                    DispatchQueue.main.async {
-                        completion(.success(nil))
-                    }
-                }
-            } catch {
+            let result: Result<Void?, Error>
+            defer {
                 DispatchQueue.main.async {
-                    completion(.failure(error))
+                    completion(result)
                 }
+            }
+            let realm = try? Realm()
+            do {
+                try realm?.write {
+                    realm?.add(object, update: .all)
+                }
+                result = .success(nil)
+            } catch {
+                result = .failure(error)
             }
         }
     }

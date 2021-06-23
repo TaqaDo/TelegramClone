@@ -13,7 +13,8 @@ import InputBarAccessoryView
 
 
 protocol MessageViewProtocol: AnyObject {
-    
+    func sendMessageRealmResult(result: ResultEnum)
+    func sendMessageFirestoreResult(result: ResultEnum)
 }
 
 final class MessageViewController: MessagesViewController {
@@ -56,6 +57,7 @@ final class MessageViewController: MessagesViewController {
         super.viewDidLoad()
         configure()
         delegates()
+        fetchMessages()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -64,9 +66,24 @@ final class MessageViewController: MessagesViewController {
     }
     
     // MARK: - Requests
+    
+    private func fetchMessages() {
+        MessageStorage.shared.fetchMessages(chatId: chatId) { result in
+            switch result {
+            case .success(let data):
+                print("messages \(data?.count)")
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
+    }
 
     
     // MARK: - UI Actions
+    
+    private func sendMessage(text: String? = nil) {
+        presenter?.sendMessage(chatId: chatId, text: text!, membersId: [currentUID, receiverId])
+    }
     
     
     // MARK: - Helpers
@@ -112,20 +129,16 @@ final class MessageViewController: MessagesViewController {
         messageInputBar.inputTextView.textContainerInset = UIEdgeInsets(top: 4, left: 10, bottom: 10, right: 10)
         messageInputBar.inputTextView.placeholderLabelInsets = UIEdgeInsets(top: 4, left: 10, bottom: 10, right: 10)
         messageInputBar.inputTextView.clipsToBounds = true
-        
-        
-        
-        
     }
     
     // MARK: - InputBarButton
     
     private func micButton() -> InputBarButtonItem {
         let micButton = InputBarButtonItem()
-        micButton.image = UIImage(systemName: "mic")
+        micButton.image = UIImage(systemName: "mic")?.withRenderingMode(.alwaysOriginal).withConfiguration(UIImage.SymbolConfiguration(pointSize: 20))
         micButton.setSize(CGSize(width: 40, height: 40), animated: false)
         micButton.onTouchUpInside { item in
-            
+            print("mic...")
         }
         return micButton
     }
@@ -133,7 +146,7 @@ final class MessageViewController: MessagesViewController {
     
     private func attachButton() -> InputBarButtonItem {
         let attachButton = InputBarButtonItem()
-        attachButton.image = UIImage(systemName: "paperclip")?.withRenderingMode(.alwaysOriginal)
+        attachButton.image = UIImage(systemName: "paperclip")?.withRenderingMode(.alwaysOriginal).withConfiguration(UIImage.SymbolConfiguration(pointSize: 20))
         attachButton.setSize(CGSize(width: 40, height: 40), animated: false)
         attachButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 10)
         attachButton.onTouchUpInside { item in
@@ -148,7 +161,23 @@ final class MessageViewController: MessagesViewController {
 // MARK: - MessageViewProtocol
 
 extension MessageViewController: MessageViewProtocol {
-
+    func sendMessageRealmResult(result: ResultEnum) {
+        switch result {
+        case .success(_):
+            print("save message realm success")
+        case .error:
+            print("save message realm error")
+        }
+    }
+    
+    func sendMessageFirestoreResult(result: ResultEnum) {
+        switch result {
+        case .success(_):
+            print("save message firestore success")
+        case .error:
+            print("save message firestore error")
+        }
+    }
 }
 
 
@@ -200,7 +229,7 @@ extension MessageViewController: InputBarAccessoryViewDelegate {
     func inputBar(_ inputBar: InputBarAccessoryView, didPressSendButtonWith text: String) {
         for component in inputBar.inputTextView.components {
             if let text = component as? String {
-                print("send message \(text)")
+                sendMessage(text: text)
             }
         }
         messageInputBar.inputTextView.text = ""

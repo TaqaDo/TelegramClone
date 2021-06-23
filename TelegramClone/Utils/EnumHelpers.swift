@@ -16,3 +16,11 @@ enum ResultArryEnum {
     case success([Any?])
     case error
 }
+
+enum StorageError: Error {
+    case cannotCreate
+    case cannotFetch
+    case cannotDelete
+    case cannotUpdate
+    case internalError
+}

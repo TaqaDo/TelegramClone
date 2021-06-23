@@ -10,7 +10,9 @@
 		358196701FAE520F4E3FF372 /* Pods_TelegramClone_TelegramCloneUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B42FA32B854ED6DEB804C49 /* Pods_TelegramClone_TelegramCloneUITests.framework */; };
 		67D964D58053F8F044570157 /* Pods_TelegramCloneTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 660A8A724902EAA0E298C352 /* Pods_TelegramCloneTests.framework */; };
 		96CA18B5FD8E33E03849D853 /* Pods_TelegramClone.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BA2456CAD3A10FC1C7839D9A /* Pods_TelegramClone.framework */; };
+		A206EFFE268348B60041BCCB /* MessageAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = A206EFFD268348B60041BCCB /* MessageAPI.swift */; };
 		A20907FF26700424002935DE /* EditCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20907FE26700424002935DE /* EditCell.swift */; };
+		A20DC6D426821E9300FBB293 /* MessageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20DC6D326821E9300FBB293 /* MessageService.swift */; };
 		A211516A267CACED0065C8CE /* MKSender.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2115169267CACED0065C8CE /* MKSender.swift */; };
 		A211516C267CFAC70065C8CE /* RealmMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A211516B267CFAC70065C8CE /* RealmMessage.swift */; };
 		A2238B54266B6B4B00896811 /* Typealiases.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2238B53266B6B4B00896811 /* Typealiases.swift */; };
@@ -120,7 +122,9 @@
 		660A8A724902EAA0E298C352 /* Pods_TelegramCloneTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TelegramCloneTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6D33AACFAC54C88C5705FA27 /* Pods-TelegramClone-TelegramCloneUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TelegramClone-TelegramCloneUITests.debug.xcconfig"; path = "Target Support Files/Pods-TelegramClone-TelegramCloneUITests/Pods-TelegramClone-TelegramCloneUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		9E0F8F2BBCABF17DF8EC2B26 /* Pods-TelegramClone.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TelegramClone.debug.xcconfig"; path = "Target Support Files/Pods-TelegramClone/Pods-TelegramClone.debug.xcconfig"; sourceTree = "<group>"; };
+		A206EFFD268348B60041BCCB /* MessageAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageAPI.swift; sourceTree = "<group>"; };
 		A20907FE26700424002935DE /* EditCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCell.swift; sourceTree = "<group>"; };
+		A20DC6D326821E9300FBB293 /* MessageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageService.swift; sourceTree = "<group>"; };
 		A2115169267CACED0065C8CE /* MKSender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MKSender.swift; sourceTree = "<group>"; };
 		A211516B267CFAC70065C8CE /* RealmMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmMessage.swift; sourceTree = "<group>"; };
 		A2238B53266B6B4B00896811 /* Typealiases.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Typealiases.swift; sourceTree = "<group>"; };
@@ -266,6 +270,14 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
+		A206EFFC268348AB0041BCCB /* MessageAPI */ = {
+			isa = PBXGroup;
+			children = (
+				A206EFFD268348B60041BCCB /* MessageAPI.swift */,
+			);
+			path = MessageAPI;
+			sourceTree = "<group>";
+		};
 		A2238B57266BCD0F00896811 /* Main */ = {
 			isa = PBXGroup;
 			children = (
@@ -323,9 +335,10 @@
 		A2460EC8266AC219004AD7EA /* Firebase */ = {
 			isa = PBXGroup;
 			children = (
+				A206EFFC268348AB0041BCCB /* MessageAPI */,
 				A2B305D5267555AE009E11EE /* ChatAPI */,
 				A2460EC9266AC232004AD7EA /* UserAPI */,
-				A2F9021D2670E7DD0096CDBD /* Storage */,
+				A2F9021D2670E7DD0096CDBD /* StorageAPI */,
 			);
 			path = Firebase;
 			sourceTree = "<group>";
@@ -367,6 +380,7 @@
 			isa = PBXGroup;
 			children = (
 				A24F98A92680DE3D005AC9B7 /* Models */,
+				A20DC6D326821E9300FBB293 /* MessageService.swift */,
 			);
 			path = MessageKit;
 			sourceTree = "<group>";
@@ -668,12 +682,12 @@
 			path = View;
 			sourceTree = "<group>";
 		};
-		A2F9021D2670E7DD0096CDBD /* Storage */ = {
+		A2F9021D2670E7DD0096CDBD /* StorageAPI */ = {
 			isa = PBXGroup;
 			children = (
 				A2F9021E2670E82D0096CDBD /* StorageFile.swift */,
 			);
-			path = Storage;
+			path = StorageAPI;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -947,6 +961,7 @@
 				A29F76AD266FD65F00A051F8 /* EditProfileCell.swift in Sources */,
 				A260FAEB2672C9C600ABCE6E /* ContactDetailRouter.swift in Sources */,
 				A2E04D8E266945950075C640 /* LoginDataProvider.swift in Sources */,
+				A20DC6D426821E9300FBB293 /* MessageService.swift in Sources */,
 				A2B36B65266D699300ACF6F7 /* SettingsDataProvider.swift in Sources */,
 				A253730C266EC81700C749E3 /* EditProfileView.swift in Sources */,
 				A2B36B40266D696900ACF6F7 /* ContactsPresenter.swift in Sources */,
@@ -956,6 +971,7 @@
 				A2460EBD266A6D2E004AD7EA /* RegistrationViewController.swift in Sources */,
 				A2460EBC266A6D2E004AD7EA /* RegistrationRouter.swift in Sources */,
 				A26A05912673B70500204F93 /* ChatCell.swift in Sources */,
+				A206EFFE268348B60041BCCB /* MessageAPI.swift in Sources */,
 				A2B36B43266D696900ACF6F7 /* ContactsInteractor.swift in Sources */,
 				A24F98E026814104005AC9B7 /* MessageStorage.swift in Sources */,
 				A2B36B63266D699300ACF6F7 /* SettingsViewController.swift in Sources */,

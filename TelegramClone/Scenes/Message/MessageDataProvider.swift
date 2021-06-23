@@ -11,17 +11,19 @@ import UIKit
 
 
 protocol MessageDataProviderProtocol {
-
+    func sendMessage(chatId: String, text: String, membersId: [String], realmCompletion: @escaping(OnResult), firestoreCompletion: @escaping(OnResult))
 }
 
 final class MessageDataProvider {
-
+    
 }
 
 // MARK: - MessageDataProviderProtocol
 
 extension MessageDataProvider: MessageDataProviderProtocol {
-    
+    func sendMessage(chatId: String, text: String, membersId: [String], realmCompletion: @escaping(OnResult), firestoreCompletion: @escaping(OnResult)) {
+        MessageService.shared.sendMessage(chatId: chatId, text: text, membersId: membersId, realmCompletion: realmCompletion, firestoreCompletion: firestoreCompletion)
+    }
 }
 
 

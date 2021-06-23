@@ -67,7 +67,7 @@ extension UserAPI: UserAPIProtocol {
     func downloadUsers(withIds: [String], completion: @escaping (OnUsersResult)) {
         
         queue.async {
-            for userId in withIds {
+            withIds.map { userId in
                 userCollection.document(userId).getDocument { snapshot, error in
                     var count = 0
                     var allUsers: [User] = []
@@ -111,7 +111,7 @@ extension UserAPI: UserAPIProtocol {
                 let allUsers = documets.compactMap({ document -> User? in
                     return try? document.data(as: User.self)
                 })
-                for user in allUsers {
+                allUsers.map { user in
                     if currentUID != user.userId {
                         users.append(user)
                     }

@@ -12,6 +12,7 @@ import Firebase
 let currentUID = Auth.auth().currentUser?.uid ?? ""
 let userCollection = Firestore.firestore().collection("User")
 let chatCollection = Firestore.firestore().collection("Chat")
+let messageCollection = Firestore.firestore().collection("Message")
 let storage = Storage.storage()
 
 //UserDafaults and keys
@@ -20,6 +21,9 @@ let kCURRENTUSER = "currentUser"
 let kFILEDIRECTORY = "gs://telegramclone-29c7c.appspot.com"
 let kCHATROOMID = "chatRoomId"
 let kSENDERID = "senderId"
+let kSENT = "Sent"
+let kREAD = "Read"
+let kTEXT = "text"
 
 
 //Settings Models
