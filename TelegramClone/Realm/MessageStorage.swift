@@ -24,35 +24,33 @@ class MessageStorage {
 
 extension MessageStorage: MessageStorageProtocol {
     func fetchMessages(chatId: String, completion: @escaping(OnMessagesResult)) {
-        let result: Result<Results<RealmMessage>?, StorageError>
-        defer {
-            completion(result)
-        }
         let predicate = NSPredicate(format: "chatRoomId = %@", chatId)
         let realm = try? Realm()
         if let realmLists = realm?.objects(RealmMessage.self).filter(predicate).sorted(byKeyPath: "date", ascending: true) {
-            result = .success(realmLists)
+            DispatchQueue.main.async {
+                completion(.success(realmLists))
+            }
         } else {
-            result = .failure(.cannotFetch)
+            DispatchQueue.main.async {
+                completion(.failure(.cannotFetch))
+            }
         }
     }
     
     func saveToRealm<T>(object: T, completion: @escaping (OnResult)) where T : Object {
         queue.async {
-            let result: Result<Void?, Error>
-            defer {
-                DispatchQueue.main.async {
-                    completion(result)
-                }
-            }
             let realm = try? Realm()
             do {
                 try realm?.write {
                     realm?.add(object, update: .all)
                 }
-                result = .success(nil)
+                DispatchQueue.main.async {
+                    completion(.success(nil))
+                }
             } catch {
-                result = .failure(error)
+                DispatchQueue.main.async {
+                    completion(.failure(error))
+                }
             }
         }
     }

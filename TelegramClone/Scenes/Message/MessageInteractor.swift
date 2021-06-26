@@ -13,9 +13,12 @@ import UIKit
 
 protocol MessageInteractorProtocol {
     func sendMessage(chatId: String, text: String, membersId: [String])
+    func fetchMessages(chatId: String)
+    func createMessage(message: RealmMessage) -> MKMessage?
 }
 
 protocol MessageInteractorOutput: AnyObject {
+    func fetchMessageResult(result: ResultRealmMessages)
     func sendMessageRealmResult(realmResult: ResultEnum)
     func sendMessageFirestoreResult(firestoreResult: ResultEnum)
 }
@@ -30,6 +33,21 @@ final class MessageInteractor {
 // MARK: - MessageInteractorProtocol
 
 extension MessageInteractor: MessageInteractorProtocol {
+    func createMessage(message: RealmMessage) -> MKMessage? {
+        dataProvider.createMeessage(message: message)
+    }
+    
+    func fetchMessages(chatId: String) {
+        dataProvider.fetchMessages(chatId: chatId) { [weak self] result in
+            switch result {
+            case .success(let data):
+                self?.output?.fetchMessageResult(result: .success(data))
+            case .failure(_):
+                self?.output?.fetchMessageResult(result: .error)
+            }
+        }
+    }
+    
     func sendMessage(chatId: String, text: String, membersId: [String]) {
         dataProvider.sendMessage(chatId: chatId, text: text, membersId: membersId) { [weak self] result in
             switch result {

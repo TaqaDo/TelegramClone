@@ -5,6 +5,7 @@
 //  Created by talgar osmonov on 5/6/21.
 //
 
+import RealmSwift
 import Foundation
 
 enum ResultEnum {
@@ -13,7 +14,12 @@ enum ResultEnum {
 }
 
 enum ResultArryEnum {
-    case success([Any?])
+    case success([Any]? = nil)
+    case error
+}
+
+enum ResultRealmMessages {
+    case success(Results<RealmMessage>? = nil)
     case error
 }
 

@@ -12,7 +12,9 @@ import UIKit
 
 
 protocol MessagePresenterProtocol {
+    func fetchMessages(chatId: String)
     func sendMessage(chatId: String, text: String, membersId: [String])
+    func createMessage(message: RealmMessage) -> MKMessage?
 }
 
 final class MessagePresenter {
@@ -32,6 +34,14 @@ final class MessagePresenter {
 // MARK: - MessagePresenterProtocol
 
 extension MessagePresenter: MessagePresenterProtocol {
+    func createMessage(message: RealmMessage) -> MKMessage? {
+        interactor?.createMessage(message: message)
+    }
+    
+    func fetchMessages(chatId: String) {
+        interactor?.fetchMessages(chatId: chatId)
+    }
+    
     func sendMessage(chatId: String, text: String, membersId: [String]) {
         interactor?.sendMessage(chatId: chatId, text: text, membersId: membersId)
     }
@@ -40,6 +50,10 @@ extension MessagePresenter: MessagePresenterProtocol {
 // MARK: - MessageInteractorOutput
 
 extension MessagePresenter: MessageInteractorOutput {
+    func fetchMessageResult(result: ResultRealmMessages) {
+        view?.fetchMessgaesResult(result: result)
+    }
+    
     func sendMessageRealmResult(realmResult: ResultEnum) {
         view?.sendMessageRealmResult(result: realmResult)
     }

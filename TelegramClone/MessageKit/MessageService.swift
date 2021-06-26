@@ -12,6 +12,7 @@ import FirebaseFirestoreSwift
 
 protocol OutgoingMessageProtocol {
     func sendMessage(chatId: String, text: String, membersId: [String], realmCompletion: @escaping(OnResult), firestoreCompletion: @escaping(OnResult))
+    func createMessage(message: RealmMessage) -> MKMessage?
 }
 
 class MessageService {
@@ -36,7 +37,7 @@ class MessageService {
             switch result {
             case .success(_):
                 realmCompletion(.success(nil))
-                membersId.map { id in
+                _ = membersId.map { id in
                     self?.saveMessageToFirestore(message: message, memberId: id, completion: firestoreCompletion)
                 }
             case .failure(let error):
@@ -54,6 +55,10 @@ class MessageService {
 }
 
 extension MessageService: OutgoingMessageProtocol {
+    func createMessage(message: RealmMessage) -> MKMessage? {
+        MKMessage(message: message)
+    }
+    
     func sendMessage(chatId: String, text: String, membersId: [String], realmCompletion: @escaping(OnResult), firestoreCompletion: @escaping(OnResult)) {
         let currentUser = UserSettings.shared.currentUser
         let message = RealmMessage()

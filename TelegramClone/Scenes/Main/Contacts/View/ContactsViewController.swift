@@ -28,9 +28,9 @@ final class ContactsViewController: UIViewController {
     // MARK: - Lifecycle
     
     override func loadView() {
-      view = contentView
+        view = contentView
     }
-  
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configure()
@@ -64,9 +64,13 @@ final class ContactsViewController: UIViewController {
     private func downloadAllUsers() {
         presenter?.downloadAllUsers()
     }
-
+    
     
     // MARK: - UI Actions
+    
+    @objc func handleAddContact() {
+        print("add contact")
+    }
     
     
     // MARK: - Helpers
@@ -91,8 +95,8 @@ final class ContactsViewController: UIViewController {
     }
     
     private func configureUI() {
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(handleAddContact))
     }
-        
 }
 
 
@@ -124,13 +128,13 @@ extension ContactsViewController {
         
         if indexPath.row == 0 {
             guard let sectionCell = tableView.dequeueReusableCell(withIdentifier: SectionContactCell.cellID,
-                                                           for: indexPath) as? SectionContactCell else {return UITableViewCell()}
+                                                                  for: indexPath) as? SectionContactCell else {return UITableViewCell()}
             sectionCell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: .greatestFiniteMagnitude)
             sectionCell.setupData(data: contactsSection[indexPath[0]])
             return sectionCell
         } else {
             guard let sectionCell = tableView.dequeueReusableCell(withIdentifier: SectionContactCell.cellID,
-                                                           for: indexPath) as? SectionContactCell else {return UITableViewCell()}
+                                                                  for: indexPath) as? SectionContactCell else {return UITableViewCell()}
             sectionCell.setupData(data: contactsSection[indexPath[1]])
             return sectionCell
         }

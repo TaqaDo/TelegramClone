@@ -43,9 +43,9 @@ class MainTabBar: UITabBarController {
         nav.tabBarItem.image = selectedImage
         nav.tabBarItem.title = titleName
         nav.navigationBar.barTintColor = .white
-        nav.tabBarItem.imageInsets = UIEdgeInsets(top: 0,
+        nav.tabBarItem.imageInsets = UIEdgeInsets(top: -100,
                                                   left: 0,
-                                                  bottom: -7,
+                                                  bottom:0,
                                                   right: 0)
         return nav
     }

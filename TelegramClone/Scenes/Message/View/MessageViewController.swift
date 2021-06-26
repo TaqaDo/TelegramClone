@@ -10,9 +10,11 @@
 import UIKit
 import MessageKit
 import InputBarAccessoryView
+import RealmSwift
 
 
 protocol MessageViewProtocol: AnyObject {
+    func fetchMessgaesResult(result: ResultRealmMessages)
     func sendMessageRealmResult(result: ResultEnum)
     func sendMessageFirestoreResult(result: ResultEnum)
 }
@@ -27,7 +29,8 @@ final class MessageViewController: MessagesViewController {
     
     let currentUser = MKSender(senderId: currentUID, displayName: (UserSettings.shared.currentUser?.username)!)
     var mkMessages: [MKMessage] = []
-    
+    var allRealmMessages: Results<RealmMessage>?
+    var notificationToken: NotificationToken?
 
     var presenter: MessagePresenterProtocol?
     lazy var contentView: MessageViewLogic = MessageView()
@@ -58,6 +61,7 @@ final class MessageViewController: MessagesViewController {
         configure()
         delegates()
         fetchMessages()
+        observeMessages()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -65,28 +69,68 @@ final class MessageViewController: MessagesViewController {
         navigationBar()
     }
     
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        self.messagesCollectionView.scrollToBottom()
+    }
+    
     // MARK: - Requests
     
+    private func createMessage(message: RealmMessage) {
+        guard let data = presenter?.createMessage(message: message) else {return}
+        mkMessages.append(data)
+    }
+    
     private func fetchMessages() {
-        MessageStorage.shared.fetchMessages(chatId: chatId) { result in
-            switch result {
-            case .success(let data):
-                print("messages \(data?.count)")
-            case .failure(let error):
-                print(error.localizedDescription)
-            }
-        }
+        presenter?.fetchMessages(chatId: chatId)
+    }
+    
+    private func sendMessage(text: String? = nil) {
+        presenter?.sendMessage(chatId: chatId, text: text!, membersId: [currentUID, receiverId])
     }
 
     
     // MARK: - UI Actions
     
-    private func sendMessage(text: String? = nil) {
-        presenter?.sendMessage(chatId: chatId, text: text!, membersId: [currentUID, receiverId])
+    
+    // MARK: - Observres
+    
+    private func observeMessages() {
+        notificationToken = allRealmMessages?.observe({ [weak self] (changes: RealmCollectionChange) in
+            switch changes {
+            case .initial(_):
+                self?.insertMessages()
+            case .update(_, deletions: _, insertions: let insertions, modifications: _):
+                for index in insertions {
+                    self?.insertMessage(index: index)
+                }
+            case .error(let error):
+                print("error \(error.localizedDescription)")
+            }
+        })
     }
     
-    
     // MARK: - Helpers
+    
+    private func insertMessage(index: Int) {
+        if let messages = self.allRealmMessages {
+            self.createMessage(message: messages[index])
+            self.messagesCollectionView.reloadData()
+            self.messagesCollectionView.scrollToBottom(animated: true)
+        }
+    }
+    
+    private func insertMessages() {
+        if let messages = allRealmMessages {
+            for message in messages {
+                createMessage(message: message)
+            }
+        }
+        self.messagesCollectionView.reloadData()
+    }
+
+    
+    // MARK: - Configure
     
     private func delegates() {
         messagesCollectionView.messagesDataSource = self
@@ -135,7 +179,7 @@ final class MessageViewController: MessagesViewController {
     
     private func micButton() -> InputBarButtonItem {
         let micButton = InputBarButtonItem()
-        micButton.image = UIImage(systemName: "mic")?.withRenderingMode(.alwaysOriginal).withConfiguration(UIImage.SymbolConfiguration(pointSize: 20))
+        micButton.image = UIImage(systemName: "mic")?.withRenderingMode(.alwaysOriginal).withConfiguration(UIImage.SymbolConfiguration(pointSize: 18))
         micButton.setSize(CGSize(width: 40, height: 40), animated: false)
         micButton.onTouchUpInside { item in
             print("mic...")
@@ -146,7 +190,7 @@ final class MessageViewController: MessagesViewController {
     
     private func attachButton() -> InputBarButtonItem {
         let attachButton = InputBarButtonItem()
-        attachButton.image = UIImage(systemName: "paperclip")?.withRenderingMode(.alwaysOriginal).withConfiguration(UIImage.SymbolConfiguration(pointSize: 20))
+        attachButton.image = UIImage(systemName: "paperclip")?.withRenderingMode(.alwaysOriginal).withConfiguration(UIImage.SymbolConfiguration(pointSize: 18))
         attachButton.setSize(CGSize(width: 40, height: 40), animated: false)
         attachButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 10)
         attachButton.onTouchUpInside { item in
@@ -161,6 +205,16 @@ final class MessageViewController: MessagesViewController {
 // MARK: - MessageViewProtocol
 
 extension MessageViewController: MessageViewProtocol {
+    func fetchMessgaesResult(result: ResultRealmMessages) {
+        switch result {
+        case .success(let data):
+            print("messages \(data?.count)")
+            allRealmMessages = data
+        case .error:
+            print("messages fetch error")
+        }
+    }
+    
     func sendMessageRealmResult(result: ResultEnum) {
         switch result {
         case .success(_):
