@@ -27,31 +27,21 @@ extension MessageStorage: MessageStorageProtocol {
         let predicate = NSPredicate(format: "chatRoomId = %@", chatId)
         let realm = try? Realm()
         if let realmLists = realm?.objects(RealmMessage.self).filter(predicate).sorted(byKeyPath: "date", ascending: true) {
-            DispatchQueue.main.async {
-                completion(.success(realmLists))
-            }
+            completion(.success(realmLists))
         } else {
-            DispatchQueue.main.async {
-                completion(.failure(.cannotFetch))
-            }
+            completion(.failure(.cannotFetch))
         }
     }
     
     func saveToRealm<T>(object: T, completion: @escaping (OnResult)) where T : Object {
-        queue.async {
-            let realm = try? Realm()
-            do {
-                try realm?.write {
-                    realm?.add(object, update: .all)
-                }
-                DispatchQueue.main.async {
-                    completion(.success(nil))
-                }
-            } catch {
-                DispatchQueue.main.async {
-                    completion(.failure(error))
-                }
+        let realm = try? Realm()
+        do {
+            try realm?.write {
+                realm?.add(object, update: .all)
             }
+            completion(.success(nil))
+        } catch {
+            completion(.failure(error))
         }
     }
 }

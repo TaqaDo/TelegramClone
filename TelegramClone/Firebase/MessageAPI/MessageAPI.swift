@@ -26,19 +26,12 @@ class MessageAPI: MessageAPIHelperProtocol {
 
 extension MessageAPI: MessageAPIProtocol {
     func addMessage(message: RealmMessage, memberId: String, completion: @escaping(OnResult)) {
-        queue.async {
-            do {
-                let _ = try messageCollection.document(memberId).collection(message.chatRoomId).document(message.id).setData(from: message)
-                DispatchQueue.main.async {
-                    completion(.success(nil))
-                }
-            } catch {
-                DispatchQueue.main.async {
-                    print("\(error.localizedDescription)")
-                    completion(.failure(error))
-                }
-            }
-            
+        do {
+            let _ = try messageCollection.document(memberId).collection(message.chatRoomId).document(message.id).setData(from: message)
+            completion(.success(nil))
+        } catch {
+            print("\(error.localizedDescription)")
+            completion(.failure(error))
             
         }
     }

@@ -17,6 +17,7 @@ protocol OutgoingMessageProtocol {
 
 class MessageService {
     static let shared = MessageService()
+    private let queue = DispatchQueue(label: "MessageServiceQueue")
     
     
     // MARK: - Helpers
@@ -33,11 +34,12 @@ class MessageService {
     }
     
     func saveMessageToRealmAndFirestore(message: RealmMessage, membersId: [String], realmCompletion: @escaping(OnResult), firestoreCompletion: @escaping(OnResult)) {
+        
         MessageStorage.shared.saveToRealm(object: message) { [weak self] result in
             switch result {
             case .success(_):
                 realmCompletion(.success(nil))
-                _ = membersId.map { id in
+                for id in membersId {
                     self?.saveMessageToFirestore(message: message, memberId: id, completion: firestoreCompletion)
                 }
             case .failure(let error):
