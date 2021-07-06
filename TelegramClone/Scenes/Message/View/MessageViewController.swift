@@ -249,6 +249,26 @@ extension MessageViewController: MessagesDataSource {
     func numberOfSections(in messagesCollectionView: MessagesCollectionView) -> Int {
         return mkMessages.count
     }
+    
+    func cellTopLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
+        if indexPath.section % 3 == 0 {
+            let showLoadMore = false
+            let text = showLoadMore ? "Pull to load more" : MessageKitDateFormatter.shared.string(from: message.sentDate)
+            let font = showLoadMore ? UIFont.systemFont(ofSize: 13) : UIFont.boldSystemFont(ofSize: 10)
+            let color = showLoadMore ? UIColor.systemBlue : UIColor.darkGray
+            return NSAttributedString(string: text, attributes: [.font: font, .foregroundColor : color ])
+        }
+        return nil
+    }
+    
+    func cellBottomLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
+        if isFromCurrentSender(message: message) {
+            let message = mkMessages[indexPath.section]
+            let status = message.status + " " + message.readDate.time()
+            return NSAttributedString(string: status, attributes: [.font : UIFont.systemFont(ofSize: 10), .foregroundColor : UIColor.darkGray])
+        }
+        return nil
+    }
 
 
 }
@@ -268,7 +288,24 @@ extension MessageViewController: MessagesDisplayDelegate {
 // MARK: - MessagesLayoutDelegate
 
 extension MessageViewController: MessagesLayoutDelegate {
-
+    func cellTopLabelHeight(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
+        if indexPath.section % 3 == 0 {
+            return 30
+        }
+        return 0
+    }
+    
+    func cellBottomLabelHeight(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
+        return isFromCurrentSender(message: message) ? 10 : 0
+    }
+    
+    func messageBottomLabelHeight(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
+        return 10
+    }
+    
+    func configureAvatarView(_ avatarView: AvatarView, for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
+        avatarView.set(avatar: Avatar(initials: mkMessages[indexPath.section].senderInitials))
+    }
 }
 
 // MARK: - InputBarAccessoryViewDelegate

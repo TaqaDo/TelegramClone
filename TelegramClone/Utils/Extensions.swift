@@ -10,6 +10,20 @@ import UIKit
 import SnapKit
 
 
+extension Date {
+    func loadDate() -> String {
+        let dateFormater = DateFormatter()
+        dateFormater.dateFormat = "MMM d"
+        return dateFormater.string(from: self)
+    }
+    
+    func time() -> String {
+        let dateFormater = DateFormatter()
+        dateFormater.dateFormat = "HH:mm"
+        return dateFormater.string(from: self)
+    }
+}
+
 extension UITableViewCell {
     static var cellID: String {
         return className
