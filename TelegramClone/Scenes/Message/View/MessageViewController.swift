@@ -31,7 +31,7 @@ final class MessageViewController: MessagesViewController {
     var mkMessages: [MKMessage] = []
     var allRealmMessages: Results<RealmMessage>?
     var notificationToken: NotificationToken?
-
+    
     var presenter: MessagePresenterProtocol?
     lazy var contentView: MessageViewLogic = MessageView()
     let refreshControll = UIRefreshControl()
@@ -53,9 +53,9 @@ final class MessageViewController: MessagesViewController {
     // MARK: - Lifecycle
     
     override func loadView() {
-      view = contentView
+        view = contentView
     }
-  
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configure()
@@ -71,7 +71,7 @@ final class MessageViewController: MessagesViewController {
     
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
-        self.messagesCollectionView.scrollToBottom()
+        scrollCollectionToBottom()
     }
     
     // MARK: - Requests
@@ -88,7 +88,7 @@ final class MessageViewController: MessagesViewController {
     private func sendMessage(text: String? = nil) {
         presenter?.sendMessage(chatId: chatId, text: text!, membersId: [currentUID, receiverId])
     }
-
+    
     
     // MARK: - UI Actions
     
@@ -112,6 +112,15 @@ final class MessageViewController: MessagesViewController {
     
     // MARK: - Helpers
     
+    private func scrollCollectionToBottom() {
+        self.messagesCollectionView.scrollToItem(at: IndexPath(row: 0, section: self.mkMessages.count - 1), at: .top, animated: false)
+    }
+    
+    func isNextMessageSameSender(at indexPath: IndexPath) -> Bool {
+        guard indexPath.section + 1 < mkMessages.count else { return false }
+        return mkMessages[indexPath.section].sender.displayName == mkMessages[indexPath.section + 1].sender.displayName
+    }
+    
     private func insertMessage(index: Int) {
         if let messages = self.allRealmMessages {
             self.createMessage(message: messages[index])
@@ -128,11 +137,16 @@ final class MessageViewController: MessagesViewController {
         }
         self.messagesCollectionView.reloadData()
     }
-
+    
     
     // MARK: - Configure
     
     private func delegates() {
+        let viewIm = UIView()
+        viewIm.backgroundColor = .init(hex: "b5e2ff")
+        messagesCollectionView.backgroundView = viewIm
+        messagesCollectionView.register(MessageDateReusableView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader)
+        messagesCollectionView.showsVerticalScrollIndicator = false
         messagesCollectionView.messagesDataSource = self
         messagesCollectionView.messageCellDelegate = self
         messagesCollectionView.messagesDisplayDelegate = self
@@ -186,7 +200,7 @@ final class MessageViewController: MessagesViewController {
         }
         return micButton
     }
-
+    
     
     private func attachButton() -> InputBarButtonItem {
         let attachButton = InputBarButtonItem()
@@ -198,7 +212,7 @@ final class MessageViewController: MessagesViewController {
         }
         return attachButton
     }
-        
+    
 }
 
 
@@ -238,61 +252,128 @@ extension MessageViewController: MessageViewProtocol {
 // MARK: - MessagesDataSource
 
 extension MessageViewController: MessagesDataSource {
-    func currentSender() -> SenderType {
-        return currentUser
-    }
-
-    func messageForItem(at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> MessageType {
-        return mkMessages[indexPath.section]
-    }
-
     func numberOfSections(in messagesCollectionView: MessagesCollectionView) -> Int {
         return mkMessages.count
     }
     
-    func cellTopLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
-        if indexPath.section % 3 == 0 {
-            let showLoadMore = false
-            let text = showLoadMore ? "Pull to load more" : MessageKitDateFormatter.shared.string(from: message.sentDate)
-            let font = showLoadMore ? UIFont.systemFont(ofSize: 13) : UIFont.boldSystemFont(ofSize: 10)
-            let color = showLoadMore ? UIColor.systemBlue : UIColor.darkGray
-            return NSAttributedString(string: text, attributes: [.font: font, .foregroundColor : color ])
+    func currentSender() -> SenderType {
+        return currentUser
+    }
+    
+    func messageForItem(at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> MessageType {
+        return mkMessages[indexPath.section]
+    }
+    
+    func messageTopLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
+        
+        if !isFromCurrentSender(message: message) {
+            let name = message.sender.displayName
+            return NSAttributedString(
+              string: name,
+              attributes: [
+                .font: UIFont.systemFont(ofSize: 12, weight: .bold),
+                .foregroundColor: UIColor(white: 0.3, alpha: 1)
+              ]
+            )
+        } else {
+            return nil
         }
-        return nil
     }
     
     func cellBottomLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
         if isFromCurrentSender(message: message) {
             let message = mkMessages[indexPath.section]
-            let status = message.status + " " + message.readDate.time()
-            return NSAttributedString(string: status, attributes: [.font : UIFont.systemFont(ofSize: 10), .foregroundColor : UIColor.darkGray])
+            let status = message.sentDate.time() + "  " + message
+                .status
+            return NSAttributedString(string: status, attributes: [.font : UIFont.systemFont(ofSize: 10), .foregroundColor : UIColor.darkText])
         }
         return nil
     }
-
-
+    
+    
 }
 
 // MARK: - MessageCellDelegate
 
 extension MessageViewController: MessageCellDelegate {
-
+    
 }
 
 // MARK: - MessagesDisplayDelegate
 
 extension MessageViewController: MessagesDisplayDelegate {
-
+    func messageStyle(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> MessageStyle {
+        if isNextMessageSameSender(at: indexPath) {
+            return .bubble
+        } else {
+            return .bubbleTail(.bottomRight, .pointedEdge)
+        }
+    }
+    
+    func shouldDisplayHeader(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> Bool {
+        
+        if indexPath.section == 0 {
+            return true
+        }
+        let previousIndexPath = IndexPath(row: 0, section: indexPath.section - 1)
+        let previousMessage = messageForItem(at: previousIndexPath, in: messagesCollectionView)
+        
+        if message.sentDate.isInSameDayOf(date: previousMessage.sentDate){
+            return false
+        }
+        
+        return true
+    }
+    
+    func headerViewSize(for section: Int, in messagesCollectionView: MessagesCollectionView) -> CGSize {
+        let size = CGSize(width: messagesCollectionView.frame.width, height: 30)
+        if section == 0 {
+            return size
+        }
+        
+        let currentIndexPath = IndexPath(row: 0, section: section)
+        let lastIndexPath = IndexPath(row: 0, section: section - 1)
+        let lastMessage = messageForItem(at: lastIndexPath, in: messagesCollectionView)
+        let currentMessage = messageForItem(at: currentIndexPath, in: messagesCollectionView)
+        
+        if currentMessage.sentDate.isInSameDayOf(date: lastMessage.sentDate) {
+            return .zero
+        }
+        
+        return size
+    }
+    
+    func messageHeaderView(
+        for indexPath: IndexPath,
+        in messagesCollectionView: MessagesCollectionView
+    ) -> MessageReusableView {
+        let messsage = messageForItem(at: indexPath, in: messagesCollectionView)
+        let header = messagesCollectionView.dequeueReusableHeaderView(MessageDateReusableView.self, for: indexPath)
+        header.label.text = MessageKitDateFormatter.shared.string(from: messsage.sentDate)
+        return header
+    }
+    
+    func configureAvatarView(_ avatarView: AvatarView, for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
+        avatarView.set(avatar: Avatar(initials: mkMessages[indexPath.section].senderInitials))
+        if isFromCurrentSender(message: message) {
+            avatarView.isHidden = true
+        } else {
+            avatarView.isHidden = isNextMessageSameSender(at: indexPath)
+        }
+    }
 }
+
 
 // MARK: - MessagesLayoutDelegate
 
 extension MessageViewController: MessagesLayoutDelegate {
-    func cellTopLabelHeight(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
-        if indexPath.section % 3 == 0 {
-            return 30
+    
+    func messageTopLabelHeight(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
+        if isFromCurrentSender(message: message) {
+            return 0
+        } else {
+            return 10
         }
-        return 0
     }
     
     func cellBottomLabelHeight(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
@@ -300,11 +381,7 @@ extension MessageViewController: MessagesLayoutDelegate {
     }
     
     func messageBottomLabelHeight(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
-        return 10
-    }
-    
-    func configureAvatarView(_ avatarView: AvatarView, for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
-        avatarView.set(avatar: Avatar(initials: mkMessages[indexPath.section].senderInitials))
+        return 5
     }
 }
 

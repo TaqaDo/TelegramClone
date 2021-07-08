@@ -11,6 +11,18 @@ import SnapKit
 
 
 extension Date {
+    func isToday() -> Bool {
+        return Calendar.current.isDateInToday(self)
+    }
+    
+    func wasYesterday() -> Bool {
+        return Calendar.current.isDateInYesterday(self)
+    }
+    
+    func isInSameDayOf(date: Date) -> Bool {
+        return Calendar.current.isDate(self, inSameDayAs:date)
+    }
+    
     func loadDate() -> String {
         let dateFormater = DateFormatter()
         dateFormater.dateFormat = "MMM d"

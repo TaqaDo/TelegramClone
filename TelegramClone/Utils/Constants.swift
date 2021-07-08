@@ -21,8 +21,8 @@ let kCURRENTUSER = "currentUser"
 let kFILEDIRECTORY = "gs://telegramclone-29c7c.appspot.com"
 let kCHATROOMID = "chatRoomId"
 let kSENDERID = "senderId"
-let kSENT = "Sent"
-let kREAD = "Read"
+let kSENT = "○○"
+let kREAD = "●●"
 let kTEXT = "text"
 
 

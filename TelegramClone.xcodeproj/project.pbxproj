@@ -95,6 +95,7 @@
 		A2E04D8E266945950075C640 /* LoginDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2E04D89266945950075C640 /* LoginDataProvider.swift */; };
 		A2E04D90266948F40075C640 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2E04D8F266948F40075C640 /* LoginView.swift */; };
 		A2E04D93266949D60075C640 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A2E04D92266949D60075C640 /* LaunchScreen.storyboard */; };
+		A2E507C926971F9E00B4BFB5 /* MessageDateReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2E507C826971F9E00B4BFB5 /* MessageDateReusableView.swift */; };
 		A2F9021F2670E82D0096CDBD /* StorageFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2F9021E2670E82D0096CDBD /* StorageFile.swift */; };
 /* End PBXBuildFile section */
 
@@ -213,6 +214,7 @@
 		A2E04D89266945950075C640 /* LoginDataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginDataProvider.swift; sourceTree = "<group>"; };
 		A2E04D8F266948F40075C640 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		A2E04D92266949D60075C640 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
+		A2E507C826971F9E00B4BFB5 /* MessageDateReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageDateReusableView.swift; sourceTree = "<group>"; };
 		A2F9021E2670E82D0096CDBD /* StorageFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageFile.swift; sourceTree = "<group>"; };
 		A7321948D2860B8F9E8420BC /* Pods-TelegramCloneTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TelegramCloneTests.release.xcconfig"; path = "Target Support Files/Pods-TelegramCloneTests/Pods-TelegramCloneTests.release.xcconfig"; sourceTree = "<group>"; };
 		BA2456CAD3A10FC1C7839D9A /* Pods_TelegramClone.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TelegramClone.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -487,6 +489,7 @@
 		A2AB0090267B6B7600296844 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				A2E507C726971D6700B4BFB5 /* Cells */,
 				A2AB0086267B68FE00296844 /* MessageViewController.swift */,
 				A2AB008E267B6B6F00296844 /* MessageView.swift */,
 			);
@@ -680,6 +683,14 @@
 				A2E04D8F266948F40075C640 /* LoginView.swift */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		A2E507C726971D6700B4BFB5 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				A2E507C826971F9E00B4BFB5 /* MessageDateReusableView.swift */,
+			);
+			path = Cells;
 			sourceTree = "<group>";
 		};
 		A2F9021D2670E7DD0096CDBD /* StorageAPI */ = {
@@ -973,6 +984,7 @@
 				A26A05912673B70500204F93 /* ChatCell.swift in Sources */,
 				A206EFFE268348B60041BCCB /* MessageAPI.swift in Sources */,
 				A2B36B43266D696900ACF6F7 /* ContactsInteractor.swift in Sources */,
+				A2E507C926971F9E00B4BFB5 /* MessageDateReusableView.swift in Sources */,
 				A24F98E026814104005AC9B7 /* MessageStorage.swift in Sources */,
 				A2B36B63266D699300ACF6F7 /* SettingsViewController.swift in Sources */,
 				A2460EDA266ACC76004AD7EA /* UserSettings.swift in Sources */,
