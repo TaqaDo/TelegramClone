@@ -113,7 +113,7 @@ final class MessageViewController: MessagesViewController {
     // MARK: - Helpers
     
     private func scrollCollectionToBottom() {
-        self.messagesCollectionView.scrollToItem(at: IndexPath(row: 0, section: self.mkMessages.count - 1), at: .top, animated: false)
+        messagesCollectionView.scrollToBottom()
     }
     
     func isNextMessageSameSender(at indexPath: IndexPath) -> Bool {
@@ -143,9 +143,11 @@ final class MessageViewController: MessagesViewController {
     
     private func delegates() {
         let viewIm = UIView()
-        viewIm.backgroundColor = .init(hex: "b5e2ff")
+        viewIm.backgroundColor = .init(hex: "#BBE3F1")
         messagesCollectionView.backgroundView = viewIm
         messagesCollectionView.register(MessageDateReusableView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader)
+        messagesCollectionView.messagesCollectionViewFlowLayout.textMessageSizeCalculator.incomingMessageLabelInsets = UIEdgeInsets(top: 7, left: 18, bottom: 7, right: 14)
+        messagesCollectionView.messagesCollectionViewFlowLayout.textMessageSizeCalculator.outgoingMessageLabelInsets =  UIEdgeInsets(top: 7, left: 14, bottom: 22, right: 42)
         messagesCollectionView.showsVerticalScrollIndicator = false
         messagesCollectionView.messagesDataSource = self
         messagesCollectionView.messageCellDelegate = self
@@ -161,7 +163,6 @@ final class MessageViewController: MessagesViewController {
     
     private func configure() {
         configureKayboard()
-        configureRefreshControll()
         configureMessageInputBar()
     }
     
@@ -269,11 +270,11 @@ extension MessageViewController: MessagesDataSource {
         if !isFromCurrentSender(message: message) {
             let name = message.sender.displayName
             return NSAttributedString(
-              string: name,
-              attributes: [
-                .font: UIFont.systemFont(ofSize: 12, weight: .bold),
-                .foregroundColor: UIColor(white: 0.3, alpha: 1)
-              ]
+                string: name,
+                attributes: [
+                    .font: UIFont.systemFont(ofSize: 12, weight: .bold),
+                    .foregroundColor: UIColor(white: 0.3, alpha: 1)
+                ]
             )
         } else {
             return nil
@@ -283,9 +284,9 @@ extension MessageViewController: MessagesDataSource {
     func cellBottomLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
         if isFromCurrentSender(message: message) {
             let message = mkMessages[indexPath.section]
-            let status = message.sentDate.time() + "  " + message
+            let status = message.sentDate.time() + " " + message
                 .status
-            return NSAttributedString(string: status, attributes: [.font : UIFont.systemFont(ofSize: 10), .foregroundColor : UIColor.darkText])
+            return NSAttributedString(string: status, attributes: [.font : UIFont.systemFont(ofSize: 10), .foregroundColor : UIColor.gray])
         }
         return nil
     }
@@ -302,12 +303,26 @@ extension MessageViewController: MessageCellDelegate {
 // MARK: - MessagesDisplayDelegate
 
 extension MessageViewController: MessagesDisplayDelegate {
+    
     func messageStyle(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> MessageStyle {
         if isNextMessageSameSender(at: indexPath) {
-            return .bubble
+            return .custom { view in
+                    let path = UIBezierPath(shouldRoundRect: view.bounds, topLeftRadius: 5, topRightRadius: 5, bottomLeftRadius: 5, bottomRightRadius: 5)
+                    let mask = CAShapeLayer()
+                    mask.path = path.cgPath
+                    view.layer.mask = mask
+                }
         } else {
-            return .bubbleTail(.bottomRight, .pointedEdge)
+            return .bubbleTail(isFromCurrentSender(message: message) ? .bottomRight : .bottomLeft, .pointedEdge)
         }
+    }
+    
+    func backgroundColor(for message: MessageType, at  indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UIColor {
+        return isFromCurrentSender(message: message) ? .init(hex: "#D2FDBB") : .white
+    }
+    
+    func textColor(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UIColor {
+        return .darkText
     }
     
     func shouldDisplayHeader(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> Bool {
@@ -369,11 +384,7 @@ extension MessageViewController: MessagesDisplayDelegate {
 extension MessageViewController: MessagesLayoutDelegate {
     
     func messageTopLabelHeight(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
-        if isFromCurrentSender(message: message) {
-            return 0
-        } else {
-            return 10
-        }
+        return isFromCurrentSender(message: message) ? 0 : 10
     }
     
     func cellBottomLabelHeight(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
@@ -381,7 +392,8 @@ extension MessageViewController: MessagesLayoutDelegate {
     }
     
     func messageBottomLabelHeight(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
-        return 5
+        return -10
+        
     }
 }
 

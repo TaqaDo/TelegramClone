@@ -49,6 +49,7 @@
 		A260FAF02672C9D600ABCE6E /* ContactDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A260FAEF2672C9D600ABCE6E /* ContactDetailView.swift */; };
 		A26A058E2673B53300204F93 /* Chat.swift in Sources */ = {isa = PBXBuildFile; fileRef = A26A058D2673B53300204F93 /* Chat.swift */; };
 		A26A05912673B70500204F93 /* ChatCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A26A05902673B70500204F93 /* ChatCell.swift */; };
+		A289A3AF2698CFB3008A256B /* MyCustomCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A289A3AE2698CFB3008A256B /* MyCustomCell.swift */; };
 		A29F76AD266FD65F00A051F8 /* EditProfileCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A29F76AC266FD65F00A051F8 /* EditProfileCell.swift */; };
 		A2A2867726807CFA00FA08E3 /* MKMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2A2867626807CFA00FA08E3 /* MKMessage.swift */; };
 		A2AB0089267B68FE00296844 /* MessagePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2AB0084267B68FE00296844 /* MessagePresenter.swift */; };
@@ -162,6 +163,7 @@
 		A260FAEF2672C9D600ABCE6E /* ContactDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactDetailView.swift; sourceTree = "<group>"; };
 		A26A058D2673B53300204F93 /* Chat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chat.swift; sourceTree = "<group>"; };
 		A26A05902673B70500204F93 /* ChatCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatCell.swift; sourceTree = "<group>"; };
+		A289A3AE2698CFB3008A256B /* MyCustomCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCustomCell.swift; sourceTree = "<group>"; };
 		A29F76AC266FD65F00A051F8 /* EditProfileCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileCell.swift; sourceTree = "<group>"; };
 		A2A2867626807CFA00FA08E3 /* MKMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MKMessage.swift; sourceTree = "<group>"; };
 		A2AB0084267B68FE00296844 /* MessagePresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagePresenter.swift; sourceTree = "<group>"; };
@@ -689,6 +691,7 @@
 			isa = PBXGroup;
 			children = (
 				A2E507C826971F9E00B4BFB5 /* MessageDateReusableView.swift */,
+				A289A3AE2698CFB3008A256B /* MyCustomCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -971,6 +974,7 @@
 				A2B36B4E266D697800ACF6F7 /* CallsInteractor.swift in Sources */,
 				A29F76AD266FD65F00A051F8 /* EditProfileCell.swift in Sources */,
 				A260FAEB2672C9C600ABCE6E /* ContactDetailRouter.swift in Sources */,
+				A289A3AF2698CFB3008A256B /* MyCustomCell.swift in Sources */,
 				A2E04D8E266945950075C640 /* LoginDataProvider.swift in Sources */,
 				A20DC6D426821E9300FBB293 /* MessageService.swift in Sources */,
 				A2B36B65266D699300ACF6F7 /* SettingsDataProvider.swift in Sources */,
@@ -1091,6 +1095,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = B8FL364G6H;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
@@ -1153,6 +1158,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = B8FL364G6H;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
