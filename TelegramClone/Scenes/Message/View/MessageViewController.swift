@@ -142,12 +142,6 @@ final class MessageViewController: MessagesViewController {
     // MARK: - Configure
     
     private func delegates() {
-        let viewIm = UIView()
-        viewIm.backgroundColor = .init(hex: "#BBE3F1")
-        messagesCollectionView.backgroundView = viewIm
-        messagesCollectionView.register(MessageDateReusableView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader)
-        messagesCollectionView.messagesCollectionViewFlowLayout.textMessageSizeCalculator.incomingMessageLabelInsets = UIEdgeInsets(top: 7, left: 18, bottom: 7, right: 14)
-        messagesCollectionView.messagesCollectionViewFlowLayout.textMessageSizeCalculator.outgoingMessageLabelInsets =  UIEdgeInsets(top: 7, left: 14, bottom: 22, right: 42)
         messagesCollectionView.showsVerticalScrollIndicator = false
         messagesCollectionView.messagesDataSource = self
         messagesCollectionView.messageCellDelegate = self
@@ -162,8 +156,21 @@ final class MessageViewController: MessagesViewController {
     }
     
     private func configure() {
+        configureMessageCollVIew()
         configureKayboard()
         configureMessageInputBar()
+    }
+    
+    private func configureMessageCollVIew() {
+        let viewIm = UIView()
+        viewIm.backgroundColor = .init(hex: "#BBE3F1")
+        messagesCollectionView.backgroundView = viewIm
+        messagesCollectionView.register(MessageDateReusableView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader)
+        messagesCollectionView.messagesCollectionViewFlowLayout.textMessageSizeCalculator.incomingMessageLabelInsets = UIEdgeInsets(top: 7, left: 18, bottom: 7, right: 14)
+        messagesCollectionView.messagesCollectionViewFlowLayout.textMessageSizeCalculator.outgoingMessageLabelInsets =  UIEdgeInsets(top: 7, left: 14, bottom: 22, right: 42)
+        if let layout = messagesCollectionView.collectionViewLayout as? MessagesCollectionViewFlowLayout {
+          layout.setMessageOutgoingAvatarSize(.zero)
+        }
     }
     
     private func configureKayboard() {
