@@ -23,7 +23,7 @@ class NavBarCenterView: UIView {
     lazy var subTitleLabel: UILabel = {
        let label = UILabel()
         label.textAlignment = .center
-        label.font = UIFont.systemFont(ofSize: 12, weight: .regular)
+        label.font = UIFont.systemFont(ofSize: 14, weight: .regular)
         label.adjustsFontSizeToFitWidth = true
         label.textColor = .gray
         return label
@@ -33,6 +33,7 @@ class NavBarCenterView: UIView {
        let stack = UIStackView(arrangedSubviews: [titleLabel, subTitleLabel])
         stack.axis = .vertical
         stack.distribution = .fillProportionally
+        stack.spacing = 3
         return stack
     }()
     

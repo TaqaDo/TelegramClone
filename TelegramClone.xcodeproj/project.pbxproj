@@ -493,7 +493,7 @@
 		A2AB0090267B6B7600296844 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				A2E507C726971D6700B4BFB5 /* Cells */,
+				A2E507C726971D6700B4BFB5 /* CellsAndViews */,
 				A2AB0086267B68FE00296844 /* MessageViewController.swift */,
 				A2AB008E267B6B6F00296844 /* MessageView.swift */,
 			);
@@ -689,14 +689,14 @@
 			path = View;
 			sourceTree = "<group>";
 		};
-		A2E507C726971D6700B4BFB5 /* Cells */ = {
+		A2E507C726971D6700B4BFB5 /* CellsAndViews */ = {
 			isa = PBXGroup;
 			children = (
 				A2E507C826971F9E00B4BFB5 /* MessageDateReusableView.swift */,
 				A289A3AE2698CFB3008A256B /* MyCustomCell.swift */,
 				A2493C7D269A30B5006F0938 /* NavBarCenterView.swift */,
 			);
-			path = Cells;
+			path = CellsAndViews;
 			sourceTree = "<group>";
 		};
 		A2F9021D2670E7DD0096CDBD /* StorageAPI */ = {
