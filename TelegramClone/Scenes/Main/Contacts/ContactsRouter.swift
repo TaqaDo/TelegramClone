@@ -35,7 +35,7 @@ final class ContactsRouter {
 
 extension ContactsRouter: ContactsRouterProtocol {
     func navigateToMessageVC(chatRoomId: String, user: User) {
-        let messageVC = MessageRouter.createModule(chatId: chatRoomId, receiverId: user.userId, receiverName: user.username!)
+        let messageVC = MessageRouter.createModule(chatId: chatRoomId, receiverId: user.userId, receiverName: user.username!, receiverImage: user.userAvatar)
         messageVC.hidesBottomBarWhenPushed = true
         view?.navigationController?.pushViewController(messageVC, animated: true)
     }

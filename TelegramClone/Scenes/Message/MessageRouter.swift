@@ -19,8 +19,8 @@ final class MessageRouter {
 
     weak var view: MessageViewController?
 
-    static func createModule(chatId: String, receiverId: String, receiverName: String) -> MessageViewController {
-        let view = MessageViewController(chatId: chatId, receiverId: receiverId, receiverName: receiverName)
+    static func createModule(chatId: String, receiverId: String, receiverName: String, receiverImage: String) -> MessageViewController {
+        let view = MessageViewController(chatId: chatId, receiverId: receiverId, receiverName: receiverName, receiverImage: receiverImage)
         let interactor = MessageInteractor()
         let router = MessageRouter()
         let presenter = MessagePresenter(interactor: interactor, router: router, view: view)

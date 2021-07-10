@@ -33,7 +33,6 @@ class MainTabBar: UITabBarController {
         self.viewControllers = [contacts, chats, settings]
         self.selectedIndex = 1
         self.delegate = self
-        self.tabBar.barTintColor = .white
     }
     
     func templateNavigationController(titleName: String,
@@ -42,7 +41,6 @@ class MainTabBar: UITabBarController {
         let nav = UINavigationController(rootViewController: rootViewController)
         nav.tabBarItem.image = selectedImage
         nav.tabBarItem.title = titleName
-        nav.navigationBar.barTintColor = .white
         nav.tabBarItem.imageInsets = UIEdgeInsets(top: -100,
                                                   left: 0,
                                                   bottom:0,

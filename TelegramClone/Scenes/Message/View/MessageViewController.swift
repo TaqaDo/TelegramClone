@@ -11,6 +11,7 @@ import UIKit
 import MessageKit
 import InputBarAccessoryView
 import RealmSwift
+import Kingfisher
 
 
 protocol MessageViewProtocol: AnyObject {
@@ -24,6 +25,7 @@ final class MessageViewController: MessagesViewController {
     private var chatId: String = ""
     private var receiverId: String = ""
     private var receiverName: String = ""
+    private var receiverImage: String = ""
     
     // MARK: - Properties
     
@@ -38,11 +40,12 @@ final class MessageViewController: MessagesViewController {
     
     // MARK: - Init
     
-    init(chatId: String, receiverId: String, receiverName: String) {
+    init(chatId: String, receiverId: String, receiverName: String, receiverImage: String) {
         super.init(nibName: nil, bundle: nil)
         self.chatId = chatId
         self.receiverId = receiverId
         self.receiverName = receiverName
+        self.receiverImage = receiverImage
     }
     
     required init?(coder: NSCoder) {
@@ -151,26 +154,41 @@ final class MessageViewController: MessagesViewController {
     }
     
     private func navigationBar() {
-        navigationItem.title = receiverName
         navigationController?.navigationBar.prefersLargeTitles = false
     }
     
+    private func centerBarView() {
+        let navViewCenter = NavBarCenterView()
+        navViewCenter.titleLabel.text = receiverName
+        navViewCenter.subTitleLabel.text = receiverId
+        navigationItem.titleView = navViewCenter
+    }
+    
+    private func rightBarButton() {
+        let profileImageView = UIImageView()
+        profileImageView.setDimensions(width: 34, height: 34)
+        profileImageView.layer.cornerRadius = 34/2
+        profileImageView.layer.masksToBounds = true
+        profileImageView.kf.setImage(with: URL(string: receiverImage))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: profileImageView )
+    }
+    
     private func configure() {
+        rightBarButton()
+        centerBarView()
         configureMessageCollVIew()
         configureKayboard()
         configureMessageInputBar()
     }
     
     private func configureMessageCollVIew() {
-        let viewIm = UIView()
-        viewIm.backgroundColor = .init(hex: "#BBE3F1")
-        messagesCollectionView.backgroundView = viewIm
+        if let layout = messagesCollectionView.collectionViewLayout as? MessagesCollectionViewFlowLayout {
+            layout.sectionHeadersPinToVisibleBounds = true
+        }
+        messagesCollectionView.backgroundColor = .init(hex: "#BBE3F1")
         messagesCollectionView.register(MessageDateReusableView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader)
         messagesCollectionView.messagesCollectionViewFlowLayout.textMessageSizeCalculator.incomingMessageLabelInsets = UIEdgeInsets(top: 7, left: 18, bottom: 7, right: 14)
-        messagesCollectionView.messagesCollectionViewFlowLayout.textMessageSizeCalculator.outgoingMessageLabelInsets =  UIEdgeInsets(top: 7, left: 14, bottom: 22, right: 42)
-        if let layout = messagesCollectionView.collectionViewLayout as? MessagesCollectionViewFlowLayout {
-          layout.setMessageOutgoingAvatarSize(.zero)
-        }
+        messagesCollectionView.messagesCollectionViewFlowLayout.textMessageSizeCalculator.outgoingMessageLabelInsets =  UIEdgeInsets(top: 7, left: 14, bottom: 22, right: 62)
     }
     
     private func configureKayboard() {
@@ -183,10 +201,14 @@ final class MessageViewController: MessagesViewController {
     }
     
     private func configureMessageInputBar() {
+        messageInputBar.sendButton.image = UIImage(systemName: "play.fill")?.withConfiguration(UIImage.SymbolConfiguration(pointSize: 22))
+        messageInputBar.sendButton.title = nil
+        messageInputBar.sendButton.setSize(CGSize(width: 40, height: 40), animated: false)
         messageInputBar.setStackViewItems([attachButton()], forStack: .left, animated: false)
         messageInputBar.setLeftStackViewWidthConstant(to: 38, animated: false)
+        messageInputBar.setRightStackViewWidthConstant(to: 30, animated: false)
+        messageInputBar.backgroundView.backgroundColor = .clear
         messageInputBar.inputTextView.isImagePasteEnabled = false
-        messageInputBar.backgroundView.backgroundColor = .systemGroupedBackground
         messageInputBar.inputTextView.layer.cornerRadius = 30 / 2
         messageInputBar.inputTextView.layer.borderColor = UIColor.lightGray.cgColor
         messageInputBar.inputTextView.layer.borderWidth = 1
@@ -230,7 +252,7 @@ extension MessageViewController: MessageViewProtocol {
     func fetchMessgaesResult(result: ResultRealmMessages) {
         switch result {
         case .success(let data):
-            print("messages \(data?.count)")
+            print("messages \(String(describing: data?.count))")
             allRealmMessages = data
         case .error:
             print("messages fetch error")
@@ -293,7 +315,7 @@ extension MessageViewController: MessagesDataSource {
             let message = mkMessages[indexPath.section]
             let status = message.sentDate.time() + " " + message
                 .status
-            return NSAttributedString(string: status, attributes: [.font : UIFont.systemFont(ofSize: 10), .foregroundColor : UIColor.gray])
+            return NSAttributedString(string: status, attributes: [.font : UIFont.systemFont(ofSize: 11, weight: .light), .foregroundColor : UIColor.gray])
         }
         return nil
     }
@@ -314,13 +336,14 @@ extension MessageViewController: MessagesDisplayDelegate {
     func messageStyle(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> MessageStyle {
         if isNextMessageSameSender(at: indexPath) {
             return .custom { view in
-                    let path = UIBezierPath(shouldRoundRect: view.bounds, topLeftRadius: 5, topRightRadius: 5, bottomLeftRadius: 5, bottomRightRadius: 5)
-                    let mask = CAShapeLayer()
-                    mask.path = path.cgPath
-                    view.layer.mask = mask
-                }
+                let bezierPath = UIBezierPath()
+                bezierPath.messageCustomBody(view: view)
+            }
         } else {
-            return .bubbleTail(isFromCurrentSender(message: message) ? .bottomRight : .bottomLeft, .pointedEdge)
+            return .custom { view in
+                let bezierPath = UIBezierPath()
+                bezierPath.messageCustomTailBody(view: view)
+            }
         }
     }
     
@@ -378,7 +401,10 @@ extension MessageViewController: MessagesDisplayDelegate {
     func configureAvatarView(_ avatarView: AvatarView, for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
         avatarView.set(avatar: Avatar(initials: mkMessages[indexPath.section].senderInitials))
         if isFromCurrentSender(message: message) {
-            avatarView.isHidden = true
+            avatarView.isHidden = false
+            if let layout = messagesCollectionView.collectionViewLayout as? MessagesCollectionViewFlowLayout {
+                layout.setMessageOutgoingAvatarSize(.zero)
+            }
         } else {
             avatarView.isHidden = isNextMessageSameSender(at: indexPath)
         }
@@ -399,7 +425,7 @@ extension MessageViewController: MessagesLayoutDelegate {
     }
     
     func messageBottomLabelHeight(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
-        return -10
+        return -11
         
     }
 }

@@ -145,6 +145,8 @@ extension ContactsViewController {
 // MARK: - UITableViewDel|DS
 
 extension ContactsViewController: UITableViewDelegate, UITableViewDataSource {
+    
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 0 {
             return 2

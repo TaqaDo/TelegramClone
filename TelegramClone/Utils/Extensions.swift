@@ -11,6 +11,35 @@ import SnapKit
 import MessageKit
 
 extension UIBezierPath {
+    func messageCustomBody(view: UIView) {
+        self.move(to: CGPoint(x: view.bounds.minX, y: view.bounds.minY))
+        self.addLine(to: CGPoint(x: view.bounds.maxX - 8, y: view.bounds.minY))
+        self.addLine(to: CGPoint(x: view.bounds.maxX - 8, y: view.bounds.maxY))
+        self.addLine(to: CGPoint(x: view.bounds.minX, y: view.bounds.maxY))
+        self.addLine(to: CGPoint(x: view.bounds.minX, y: view.bounds.minY))
+        let mask = CAShapeLayer()
+        mask.path = self.cgPath
+        view.layer.mask = mask
+    }
+    
+    func messageCustomTailBody(view: UIView) {
+        //Draw main body
+        self.move(to: CGPoint(x: view.bounds.minX, y: view.bounds.minY))
+        self.addLine(to: CGPoint(x: view.bounds.maxX - 8, y: view.bounds.minY))
+        self.addLine(to: CGPoint(x: view.bounds.maxX - 8, y: view.bounds.maxY))
+        self.addLine(to: CGPoint(x: view.bounds.minX, y: view.bounds.maxY))
+        self.addLine(to: CGPoint(x: view.bounds.minX, y: view.bounds.minY))
+        //Draw the tail
+        self.move(to: CGPoint(x: view.bounds.maxX - 8, y: view.bounds.maxY - 10))
+        self.addLine(to: CGPoint(x: view.bounds.maxX, y: view.bounds.maxY))
+        self.addLine(to: CGPoint(x: view.bounds.maxX - 8, y: view.bounds.maxY))
+        let mask = CAShapeLayer()
+        mask.path = self.cgPath
+        view.layer.mask = mask
+    }
+}
+
+extension UIBezierPath {
 
     convenience init(shouldRoundRect rect: CGRect, topLeftRadius: CGFloat, topRightRadius: CGFloat, bottomLeftRadius: CGFloat, bottomRightRadius: CGFloat){
 
@@ -135,6 +164,12 @@ extension UIColor {
 }
 
 extension UIView {
+    
+    func setDimensions(width: CGFloat, height: CGFloat) {
+        translatesAutoresizingMaskIntoConstraints = false
+        widthAnchor.constraint(equalToConstant: width).isActive = true
+        heightAnchor.constraint(equalToConstant: height).isActive = true
+    }
     
     var safeArea: ConstraintBasicAttributesDSL {
         if #available(iOS 11.0, *) {
