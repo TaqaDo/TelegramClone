@@ -67,6 +67,7 @@ final class MessageViewController: MessagesViewController {
         delegates()
         fetchMessages()
         observeMessages()
+        listernForNewChats()
         scrollCollectionToBottom()
     }
     
@@ -76,6 +77,18 @@ final class MessageViewController: MessagesViewController {
     }
     
     // MARK: - Requests
+    
+    private func listernForNewChats() {
+        guard let lastMessage = Calendar.current.date(byAdding: .second, value: 1, to: allRealmMessages?.last?.date ?? Date()) else { return  }
+        MessageAPI.shared.listenForNewChats(documentId: currentUID, collectionId: chatId, lastMessageDate: lastMessage) { result in
+            switch result {
+            case .success(_):
+                break
+            case .failure(_):
+                print("listen for new chats error")
+            }
+        }
+    }
     
     private func getForOldChats() {
         presenter?.getForOldChats(documentId: currentUID, collectionId: chatId)
@@ -216,7 +229,7 @@ final class MessageViewController: MessagesViewController {
         }
         messagesCollectionView.backgroundColor = .init(hex: "#BBE3F1")
         messagesCollectionView.register(MessageDateReusableView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader)
-        messagesCollectionView.messagesCollectionViewFlowLayout.textMessageSizeCalculator.incomingMessageLabelInsets = UIEdgeInsets(top: 7, left: 20, bottom: 22, right: 10)
+        messagesCollectionView.messagesCollectionViewFlowLayout.textMessageSizeCalculator.incomingMessageLabelInsets = UIEdgeInsets(top: 7, left: 20, bottom: 22, right: 20)
         messagesCollectionView.messagesCollectionViewFlowLayout.textMessageSizeCalculator.outgoingMessageLabelInsets =  UIEdgeInsets(top: 7, left: 14, bottom: 22, right: 52)
         messagesCollectionView.messagesCollectionViewFlowLayout.textMessageSizeCalculator.incomingCellBottomLabelAlignment = .init(textAlignment: .left, textInsets: UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 0))
         messagesCollectionView.messagesCollectionViewFlowLayout.textMessageSizeCalculator.outgoingCellBottomLabelAlignment = .init(textAlignment: .right, textInsets: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 20))
@@ -366,11 +379,15 @@ extension MessageViewController: MessagesDisplayDelegate {
                 return .custom { view in
                     let bezierPath = UIBezierPath()
                     bezierPath.messageCustomBody(view: view)
+                    view.layer.cornerRadius = 10
+                    view.clipsToBounds = true
                 }
             } else {
                 return .custom { view in
                     let bezierPath = UIBezierPath()
                     bezierPath.messageCustomLeftBody(view: view)
+                    view.layer.cornerRadius = 10
+                    view.clipsToBounds = true
                 }
             }
         } else {
@@ -378,11 +395,15 @@ extension MessageViewController: MessagesDisplayDelegate {
                 return  .custom { view in
                     let bezierPath = UIBezierPath()
                     bezierPath.messageCustomTailBody(view: view)
+                    view.layer.cornerRadius = 10
+                    view.clipsToBounds = true
                 }
             } else {
                 return  .custom { view in
                     let bezierPath = UIBezierPath()
                     bezierPath.messageCustomTailLeftBody(view: view)
+                    view.layer.cornerRadius = 10
+                    view.clipsToBounds = true
                 }
             }
         }

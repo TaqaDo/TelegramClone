@@ -41,7 +41,7 @@ extension UIBezierPath {
         self.addLine(to: CGPoint(x: view.bounds.minX, y: view.bounds.maxY))
         self.addLine(to: CGPoint(x: view.bounds.minX, y: view.bounds.minY))
         //Draw the tail
-        self.move(to: CGPoint(x: view.bounds.maxX - 8, y: view.bounds.maxY - 10))
+        self.move(to: CGPoint(x: view.bounds.maxX - 8, y: view.bounds.maxY - 5))
         self.addLine(to: CGPoint(x: view.bounds.maxX, y: view.bounds.maxY))
         self.addLine(to: CGPoint(x: view.bounds.maxX - 8, y: view.bounds.maxY))
         let mask = CAShapeLayer()
@@ -57,7 +57,7 @@ extension UIBezierPath {
         self.addLine(to: CGPoint(x: view.bounds.minX, y: view.bounds.maxY))
         self.addLine(to: CGPoint(x: view.bounds.minX, y: view.bounds.minY))
         //Draw the tail
-        self.move(to: CGPoint(x: view.bounds.maxX - 8, y: view.bounds.maxY - 10))
+        self.move(to: CGPoint(x: view.bounds.maxX - 8, y: view.bounds.maxY - 5))
         self.addLine(to: CGPoint(x: view.bounds.maxX, y: view.bounds.maxY))
         self.addLine(to: CGPoint(x: view.bounds.maxX - 8, y: view.bounds.maxY))
         let rect = self.bounds
