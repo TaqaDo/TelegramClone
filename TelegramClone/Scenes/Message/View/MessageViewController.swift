@@ -18,6 +18,7 @@ protocol MessageViewProtocol: AnyObject {
     func fetchMessgaesResult(result: ResultRealmMessages)
     func sendMessageRealmResult(result: ResultEnum)
     func sendMessageFirestoreResult(result: ResultEnum)
+    func getForOldChatsResult(result: ResultEnum)
 }
 
 final class MessageViewController: MessagesViewController {
@@ -66,6 +67,7 @@ final class MessageViewController: MessagesViewController {
         delegates()
         fetchMessages()
         observeMessages()
+        scrollCollectionToBottom()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -73,22 +75,10 @@ final class MessageViewController: MessagesViewController {
         navigationBar()
     }
     
-    override func viewWillLayoutSubviews() {
-        super.viewWillLayoutSubviews()
-        scrollCollectionToBottom()
-    }
-    
     // MARK: - Requests
     
     private func getForOldChats() {
-        MessageAPI.shared.getForOldChats(documentId: currentUID, collectionId: chatId) { result in
-            switch result {
-            case .success(_):
-                self.messagesCollectionView.reloadData()
-            case .failure(let error):
-                print(error.localizedDescription)
-            }
-        }
+        presenter?.getForOldChats(documentId: currentUID, collectionId: chatId)
     }
     
     private func createMessage(message: RealmMessage) {
@@ -122,6 +112,7 @@ final class MessageViewController: MessagesViewController {
                 for index in insertions {
                     self?.insertMessage(index: index)
                 }
+                self?.scrollCollectionToBottom()
             case .error(let error):
                 print("error \(error.localizedDescription)")
             }
@@ -168,8 +159,8 @@ final class MessageViewController: MessagesViewController {
             for message in messages {
                 createMessage(message: message)
             }
+            self.messagesCollectionView.reloadData()
         }
-        self.messagesCollectionView.reloadData()
     }
     
     
@@ -199,7 +190,13 @@ final class MessageViewController: MessagesViewController {
         profileImageView.setDimensions(width: 34, height: 34)
         profileImageView.layer.cornerRadius = 34/2
         profileImageView.layer.masksToBounds = true
-        profileImageView.kf.setImage(with: URL(string: receiverImage))
+        profileImageView.kf.setImage(
+            with: URL(string: receiverImage),
+            options: [
+                .backgroundDecode,
+                .scaleFactor(UIScreen.main.scale),
+                .cacheOriginalImage
+            ])
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: profileImageView )
     }
     
@@ -215,11 +212,14 @@ final class MessageViewController: MessagesViewController {
         if let layout = messagesCollectionView.collectionViewLayout as? MessagesCollectionViewFlowLayout {
             layout.sectionHeadersPinToVisibleBounds = true
             layout.setMessageOutgoingAvatarSize(.zero)
+            layout.setMessageIncomingAvatarSize(.zero)
         }
         messagesCollectionView.backgroundColor = .init(hex: "#BBE3F1")
         messagesCollectionView.register(MessageDateReusableView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader)
-        messagesCollectionView.messagesCollectionViewFlowLayout.textMessageSizeCalculator.incomingMessageLabelInsets = UIEdgeInsets(top: 30, left: 14, bottom: 22, right: 52)
+        messagesCollectionView.messagesCollectionViewFlowLayout.textMessageSizeCalculator.incomingMessageLabelInsets = UIEdgeInsets(top: 7, left: 20, bottom: 22, right: 10)
         messagesCollectionView.messagesCollectionViewFlowLayout.textMessageSizeCalculator.outgoingMessageLabelInsets =  UIEdgeInsets(top: 7, left: 14, bottom: 22, right: 52)
+        messagesCollectionView.messagesCollectionViewFlowLayout.textMessageSizeCalculator.incomingCellBottomLabelAlignment = .init(textAlignment: .left, textInsets: UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 0))
+        messagesCollectionView.messagesCollectionViewFlowLayout.textMessageSizeCalculator.outgoingCellBottomLabelAlignment = .init(textAlignment: .right, textInsets: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 20))
     }
     
     private func configureKayboard() {
@@ -241,7 +241,8 @@ final class MessageViewController: MessagesViewController {
         messageInputBar.inputTextView.layer.cornerRadius = 40 / 2
         messageInputBar.inputTextView.layer.borderColor = UIColor.lightGray.cgColor
         messageInputBar.inputTextView.layer.borderWidth = 1
-        messageInputBar.inputTextView.placeholder = "Message..."
+        messageInputBar.inputTextView.placeholder = " Message..."
+        messageInputBar.inputTextView.textContainerInset = UIEdgeInsets(top: 8, left: 10, bottom: 0, right: 0)
         messageInputBar.inputTextView.clipsToBounds = true
     }
     
@@ -249,7 +250,7 @@ final class MessageViewController: MessagesViewController {
     
     private func micButton() -> InputBarButtonItem {
         let micButton = InputBarButtonItem()
-        micButton.image = UIImage(systemName: "mic.fill")?.withConfiguration(UIImage.SymbolConfiguration(pointSize: 22))
+        micButton.image = UIImage(systemName: "mic")?.withConfiguration(UIImage.SymbolConfiguration(pointSize: 22)).withTintColor(.gray, renderingMode: .alwaysOriginal)
         micButton.setSize(CGSize(width: 40, height: 40), animated: false)
         micButton.onTouchUpInside { item in
             print("mic...")
@@ -260,7 +261,7 @@ final class MessageViewController: MessagesViewController {
     
     private func attachButton() -> InputBarButtonItem {
         let attachButton = InputBarButtonItem()
-        attachButton.image = UIImage(systemName: "paperclip")?.withConfiguration(UIImage.SymbolConfiguration(pointSize: 18))
+        attachButton.image = UIImage(systemName: "paperclip")?.withConfiguration(UIImage.SymbolConfiguration(pointSize: 22)).withTintColor(.gray, renderingMode: .alwaysOriginal)
         attachButton.setSize(CGSize(width: 40, height: 40), animated: false)
         attachButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 10)
         attachButton.onTouchUpInside { item in
@@ -275,6 +276,15 @@ final class MessageViewController: MessagesViewController {
 // MARK: - MessageViewProtocol
 
 extension MessageViewController: MessageViewProtocol {
+    func getForOldChatsResult(result: ResultEnum) {
+        switch result {
+        case .success(_):
+            break
+        case .error:
+            print("get for old chats error")
+        }
+    }
+    
     func fetchMessgaesResult(result: ResultRealmMessages) {
         switch result {
         case .success(let data):
@@ -321,19 +331,7 @@ extension MessageViewController: MessagesDataSource {
     }
     
     func messageTopLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
-        
-        if !isFromCurrentSender(message: message) {
-            let name = message.sender.displayName
-            return NSAttributedString(
-                string: "  " + name,
-                attributes: [
-                    .font: UIFont.systemFont(ofSize: 14, weight: .semibold),
-                    .foregroundColor: UIColor.black
-                ]
-            )
-        } else {
-            return nil
-        }
+        return nil
     }
     
     func cellBottomLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
@@ -364,14 +362,28 @@ extension MessageViewController: MessagesDisplayDelegate {
     
     func messageStyle(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> MessageStyle {
         if isNextMessageSameSender(at: indexPath) {
-            return .custom { view in
-                let bezierPath = UIBezierPath()
-                bezierPath.messageCustomBody(view: view)
+            if isFromCurrentSender(message: message) {
+                return .custom { view in
+                    let bezierPath = UIBezierPath()
+                    bezierPath.messageCustomBody(view: view)
+                }
+            } else {
+                return .custom { view in
+                    let bezierPath = UIBezierPath()
+                    bezierPath.messageCustomLeftBody(view: view)
+                }
             }
         } else {
-            return .custom { view in
-                let bezierPath = UIBezierPath()
-                bezierPath.messageCustomTailBody(view: view)
+            if isFromCurrentSender(message: message) {
+                return  .custom { view in
+                    let bezierPath = UIBezierPath()
+                    bezierPath.messageCustomTailBody(view: view)
+                }
+            } else {
+                return  .custom { view in
+                    let bezierPath = UIBezierPath()
+                    bezierPath.messageCustomTailLeftBody(view: view)
+                }
             }
         }
     }
@@ -429,11 +441,7 @@ extension MessageViewController: MessagesDisplayDelegate {
     
     func configureAvatarView(_ avatarView: AvatarView, for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
         avatarView.set(avatar: Avatar(initials: mkMessages[indexPath.section].senderInitials))
-        if isFromCurrentSender(message: message) {
-            avatarView.isHidden = true
-        } else {
-            avatarView.isHidden = isNextMessageSameSender(at: indexPath)
-        }
+        avatarView.isHidden = true
     }
 }
 
@@ -453,10 +461,8 @@ extension MessageViewController: InputBarAccessoryViewDelegate {
                 sendMessage(text: text)
             }
         }
-        messagesCollectionView.scrollToLastItem()
         messageInputBar.inputTextView.text = ""
         messageInputBar.invalidatePlugins()
-        
     }
 }
 
@@ -468,7 +474,7 @@ extension MessageViewController: MessagesLayoutDelegate {
     }
     
     func messageTopLabelHeight(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
-        return isFromCurrentSender(message: message) ? 0 : 10
+        return isFromCurrentSender(message: message) ? 0 : 0
     }
     
     func cellBottomLabelHeight(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
@@ -476,7 +482,7 @@ extension MessageViewController: MessagesLayoutDelegate {
     }
     
     func messageBottomLabelHeight(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
-        return isFromCurrentSender(message: message) ? -11 : -21
+        return isFromCurrentSender(message: message) ? -11 : -11
         
     }
 }

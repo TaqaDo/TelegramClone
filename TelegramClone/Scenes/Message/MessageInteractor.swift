@@ -15,12 +15,14 @@ protocol MessageInteractorProtocol {
     func sendMessage(chatId: String, text: String, membersId: [String])
     func fetchMessages(chatId: String)
     func createMessage(message: RealmMessage) -> MKMessage?
+    func getForOldChats(documentId: String, collectionId: String)
 }
 
 protocol MessageInteractorOutput: AnyObject {
     func fetchMessageResult(result: ResultRealmMessages)
     func sendMessageRealmResult(realmResult: ResultEnum)
     func sendMessageFirestoreResult(firestoreResult: ResultEnum)
+    func getForOldChatsResult(result: ResultEnum)
 }
 
 final class MessageInteractor {
@@ -33,6 +35,16 @@ final class MessageInteractor {
 // MARK: - MessageInteractorProtocol
 
 extension MessageInteractor: MessageInteractorProtocol {
+    func getForOldChats(documentId: String, collectionId: String) {
+        dataProvider.getForOldChats(documentId: documentId, collectionId: collectionId) { [weak self] result in
+            switch result {
+            case .success(_):
+                self?.output?.getForOldChatsResult(result: .success(nil))
+            case .failure(_):
+                self?.output?.getForOldChatsResult(result: .error)
+            }
+        }
+    }
     func createMessage(message: RealmMessage) -> MKMessage? {
         dataProvider.createMeessage(message: message)
     }

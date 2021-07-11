@@ -14,6 +14,8 @@ import SwipeCellKit
 
 final class ChatCell: SwipeTableViewCell {
     
+    private let formatter = DateFormatter()
+    
     
     // MARK: - Views
     
@@ -109,6 +111,26 @@ final class ChatCell: SwipeTableViewCell {
         
     }
     
+    func configureDateFormatter(for date: Date) -> String {
+        switch true {
+        case Calendar.current.isDateInToday(date):
+            formatter.dateFormat = "HH:mm"
+        case Calendar.current.isDate(date, equalTo: Date(), toGranularity: .yearForWeekOfYear):
+            formatter.dateFormat = "E"
+        case Calendar.current.isDate(date, equalTo: Date(), toGranularity: .weekOfMonth):
+            formatter.dateFormat = "MMMM d"
+        case Calendar.current.isDate(date, equalTo: Date(), toGranularity: .weekOfYear):
+            formatter.dateFormat = "MMMM d"
+        case Calendar.current.isDate(date, equalTo: Date(), toGranularity: .year):
+            formatter.dateFormat = "dd.MM.yy"
+        default:
+            formatter.dateFormat = "dd.MM.yy"
+        }
+        
+        return formatter.string(from: date)
+    }
+
+    
     
     // MARK: - Private Methods
     
@@ -152,7 +174,7 @@ final class ChatCell: SwipeTableViewCell {
     func setupData(chat: Chat) {
         usernameLabel.text = chat.receiverName
         lastMessageLabel.text = String(chat.lastMessage) + "                                                         "
-        dateLabel.text = timestamp(date: chat.date ?? Date())
+        dateLabel.text = configureDateFormatter(for: chat.date ?? Date())
         profileImage.kf.setImage(
             with: URL(string: chat.avatarImage),
             options: [

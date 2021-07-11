@@ -14,6 +14,7 @@ protocol MessageDataProviderProtocol {
     func fetchMessages(chatId: String, completion: @escaping(OnMessagesResult))
     func sendMessage(chatId: String, text: String, membersId: [String], realmCompletion: @escaping(OnResult), firestoreCompletion: @escaping(OnResult))
     func createMeessage(message: RealmMessage) -> MKMessage?
+    func getForOldChats(documentId: String, collectionId: String, completion: @escaping(OnResult))
 }
 
 final class MessageDataProvider {
@@ -23,6 +24,9 @@ final class MessageDataProvider {
 // MARK: - MessageDataProviderProtocol
 
 extension MessageDataProvider: MessageDataProviderProtocol {
+    func getForOldChats(documentId: String, collectionId: String, completion: @escaping (OnResult)) {
+        MessageAPI.shared.getForOldChats(documentId: documentId, collectionId: collectionId, completion: completion)
+    }
     func createMeessage(message: RealmMessage) -> MKMessage? {
         MessageService.shared.createMessage(message: message)
     }

@@ -22,6 +22,17 @@ extension UIBezierPath {
         view.layer.mask = mask
     }
     
+    func messageCustomLeftBody(view: UIView) {
+        self.move(to: CGPoint(x: view.bounds.minX + 8, y: view.bounds.minY))
+        self.addLine(to: CGPoint(x: view.bounds.maxX, y: view.bounds.minY))
+        self.addLine(to: CGPoint(x: view.bounds.maxX, y: view.bounds.maxY))
+        self.addLine(to: CGPoint(x: view.bounds.minX + 8, y: view.bounds.maxY))
+        self.addLine(to: CGPoint(x: view.bounds.minX + 8, y: view.bounds.minY))
+        let mask = CAShapeLayer()
+        mask.path = self.cgPath
+        view.layer.mask = mask
+    }
+    
     func messageCustomTailBody(view: UIView) {
         //Draw main body
         self.move(to: CGPoint(x: view.bounds.minX, y: view.bounds.minY))
@@ -33,6 +44,26 @@ extension UIBezierPath {
         self.move(to: CGPoint(x: view.bounds.maxX - 8, y: view.bounds.maxY - 10))
         self.addLine(to: CGPoint(x: view.bounds.maxX, y: view.bounds.maxY))
         self.addLine(to: CGPoint(x: view.bounds.maxX - 8, y: view.bounds.maxY))
+        let mask = CAShapeLayer()
+        mask.path = self.cgPath
+        view.layer.mask = mask
+    }
+    
+    func messageCustomTailLeftBody(view: UIView) {
+        //Draw main body
+        self.move(to: CGPoint(x: view.bounds.minX, y: view.bounds.minY))
+        self.addLine(to: CGPoint(x: view.bounds.maxX - 8, y: view.bounds.minY))
+        self.addLine(to: CGPoint(x: view.bounds.maxX - 8, y: view.bounds.maxY))
+        self.addLine(to: CGPoint(x: view.bounds.minX, y: view.bounds.maxY))
+        self.addLine(to: CGPoint(x: view.bounds.minX, y: view.bounds.minY))
+        //Draw the tail
+        self.move(to: CGPoint(x: view.bounds.maxX - 8, y: view.bounds.maxY - 10))
+        self.addLine(to: CGPoint(x: view.bounds.maxX, y: view.bounds.maxY))
+        self.addLine(to: CGPoint(x: view.bounds.maxX - 8, y: view.bounds.maxY))
+        let rect = self.bounds
+        self.apply(CGAffineTransform(translationX: -rect.origin.x, y: 0))
+        self.apply(CGAffineTransform(scaleX: -1, y: 1))
+        self.apply(CGAffineTransform(translationX: rect.origin.x + rect.width, y: 0))
         let mask = CAShapeLayer()
         mask.path = self.cgPath
         view.layer.mask = mask

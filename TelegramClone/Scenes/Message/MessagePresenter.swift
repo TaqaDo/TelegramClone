@@ -15,6 +15,7 @@ protocol MessagePresenterProtocol {
     func fetchMessages(chatId: String)
     func sendMessage(chatId: String, text: String, membersId: [String])
     func createMessage(message: RealmMessage) -> MKMessage?
+    func getForOldChats(documentId: String, collectionId: String)
 }
 
 final class MessagePresenter {
@@ -34,6 +35,9 @@ final class MessagePresenter {
 // MARK: - MessagePresenterProtocol
 
 extension MessagePresenter: MessagePresenterProtocol {
+    func getForOldChats(documentId: String, collectionId: String) {
+        interactor?.getForOldChats(documentId: documentId, collectionId: collectionId)
+    }
     func createMessage(message: RealmMessage) -> MKMessage? {
         interactor?.createMessage(message: message)
     }
@@ -50,6 +54,10 @@ extension MessagePresenter: MessagePresenterProtocol {
 // MARK: - MessageInteractorOutput
 
 extension MessagePresenter: MessageInteractorOutput {
+    func getForOldChatsResult(result: ResultEnum) {
+        view?.getForOldChatsResult(result: result)
+    }
+    
     func fetchMessageResult(result: ResultRealmMessages) {
         view?.fetchMessgaesResult(result: result)
     }
